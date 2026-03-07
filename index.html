@@ -893,6 +893,446 @@
       white-space: nowrap;
       box-shadow: var(--shadow);
     }
+
+    /* ══ PHASE 4 ══════════════════════════════════════════════ */
+
+    /* tx delete button */
+    .tx-item {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tx-del-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 64px;
+      background: var(--red);
+      border: none;
+      color: #fff;
+      border-radius: 0 12px 12px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .tx-del-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .tx-item.show-del .tx-del-btn {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .tx-item.show-del .tx-amount {
+      padding-right: 68px;
+    }
+
+    /* month nav */
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 14px;
+      margin-bottom: 16px;
+    }
+
+    .month-nav-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 22px;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .month-nav-btn:active {
+      background: var(--accent-s);
+    }
+
+    .month-nav span {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* budget overview */
+    .budget-overview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .bov-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .bov-ring {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+
+    .bov-ring svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    .bov-ring-pct {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .bov-info .bov-title {
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 6px;
+    }
+
+    .bov-info .bov-val {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .bov-info .bov-sub {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .bov-stats {
+      display: flex;
+      gap: 8px;
+    }
+
+    .bov-stat {
+      flex: 1;
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .bov-stat .sv {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .bov-stat .sl {
+      font-size: 10px;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* budget category items */
+    .cat-budget-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+
+    .cbi-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cbi-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .cbi-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cbi-name {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .cbi-bar {
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 3px;
+    }
+
+    .cbi-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s;
+    }
+
+    .cbi-nums {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .cbi-pct {
+      font-size: 13px;
+      font-weight: bold;
+      flex-shrink: 0;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .cbi-del {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: none;
+      background: var(--red-s);
+      color: var(--red);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cbi-del svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .cbi-del:active {
+      opacity: 0.7;
+    }
+
+    /* goals */
+    .goal-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+
+    .goal-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .goal-emoji {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .goal-info {
+      flex: 1;
+    }
+
+    .goal-name {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .goal-tgt {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .goal-badge {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--accent-s);
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .goal-badge.done {
+      background: var(--green-s);
+      color: var(--green);
+    }
+
+    .goal-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .goal-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--accent);
+      transition: width 0.8s;
+    }
+
+    .goal-fill.done {
+      background: var(--green);
+    }
+
+    .goal-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .goal-saved-txt {
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    .goal-saved-txt b {
+      color: var(--text);
+    }
+
+    .goal-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .goal-add-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent-s);
+      color: var(--accent);
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .goal-add-btn:active {
+      opacity: 0.7;
+    }
+
+    .goal-del-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: none;
+      background: var(--red-s);
+      color: var(--red);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .goal-del-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .goal-del-btn:active {
+      opacity: 0.7;
+    }
+
+    /* emoji / cat pickers */
+    .emoji-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .emoji-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .emoji-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-s);
+    }
+
+    .bc-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .bc-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text2);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .bc-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-s);
+      color: var(--accent);
+    }
+
+    /* nav badge dot */
+    .nav-btn {
+      position: relative;
+    }
+
+    .nav-dot {
+      position: absolute;
+      top: 8px;
+      right: calc(50% - 14px);
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      border: 2px solid var(--nav-bg);
+      display: none;
+    }
+
+    .nav-dot.show {
+      display: block;
+    }
   </style>
 </head>
 
@@ -1115,7 +1555,78 @@
 
     </div><!-- /pages -->
 
-    <!-- bottom nav -->
+    <!-- BUDGET PAGE -->
+    <div class="page" id="pageBudget">
+      <div class="page-title">Budget</div>
+      <div class="page-sub">Track your monthly spending limits</div>
+
+      <!-- month nav -->
+      <div class="month-nav">
+        <button class="month-nav-btn" onclick="shiftMonth(-1)">&#8249;</button>
+        <span id="budgetMonthLabel">Jan 2025</span>
+        <button class="month-nav-btn" onclick="shiftMonth(1)">&#8250;</button>
+      </div>
+
+      <!-- overview ring -->
+      <div class="budget-overview">
+        <div class="bov-row">
+          <div class="bov-ring">
+            <svg viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="8" />
+              <circle id="budgetRing" cx="40" cy="40" r="32" fill="none" stroke="var(--accent)" stroke-width="8"
+                stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="201" transform="rotate(-90 40 40)"
+                style="transition:stroke-dashoffset 0.8s" />
+            </svg>
+            <div class="bov-ring-pct" id="budgetPct">0%</div>
+          </div>
+          <div class="bov-info">
+            <div class="bov-title">Total spent this month</div>
+            <div class="bov-val" id="budgetSpent">₹0</div>
+            <div class="bov-sub">of <span id="budgetTotal">₹0</span> total budget</div>
+          </div>
+        </div>
+        <div class="bov-stats">
+          <div class="bov-stat">
+            <div class="sv" id="budgetRemain" style="color:var(--green)">₹0</div>
+            <div class="sl">Remaining</div>
+          </div>
+          <div class="bov-stat">
+            <div class="sv" id="budgetDailyLeft">₹0</div>
+            <div class="sl">Per day left</div>
+          </div>
+          <div class="bov-stat">
+            <div class="sv" id="budgetDaysLeft">0</div>
+            <div class="sl">Days left</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- category budgets -->
+      <div class="section-header">
+        <div class="section-title">Category Limits</div>
+        <button class="section-link" onclick="openAddBudget()">+ Add</button>
+      </div>
+      <div id="catBudgetList"></div>
+
+      <!-- goals teaser -->
+      <div class="section-header" style="margin-top:20px">
+        <div class="section-title">Savings Goals</div>
+        <button class="section-link" onclick="goPage('Goals')">See all →</button>
+      </div>
+      <div id="budgetGoalsPreview"></div>
+    </div>
+
+    <!-- GOALS PAGE -->
+    <div class="page" id="pageGoals">
+      <div class="page-title">Goals</div>
+      <div class="page-sub">Save towards what matters</div>
+      <div id="goalsList"></div>
+      <button class="save-btn" style="margin-top:8px" onclick="openAddGoal()">
+        + New Goal
+      </button>
+    </div>
+
+    <!-- bottom nav — 5 tabs -->
     <div class="bottom-nav">
       <button class="nav-btn active" id="navHome" onclick="goPage('Home')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1130,6 +1641,14 @@
             d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
         </svg>
         Transactions
+      </button>
+      <button class="nav-btn" id="navBudget" onclick="goPage('Budget')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 6v6l4 2" />
+        </svg>
+        Budget
+        <div class="nav-dot" id="budgetDot"></div>
       </button>
       <button class="nav-btn" id="navAnalytics" onclick="goPage('Analytics')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1285,30 +1804,92 @@
     </div>
   </div>
 
+  <!-- ═══ MODAL: ADD BUDGET CATEGORY ═══ -->
+  <div class="modal-overlay" id="modalBudget">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Set Category Budget</div>
+      <div class="form-group">
+        <label>Category</label>
+        <div class="bc-row" id="bcRow">
+          <button class="bc-btn active" onclick="setBudgetCat('food',this)">Food</button>
+          <button class="bc-btn" onclick="setBudgetCat('transport',this)">Transport</button>
+          <button class="bc-btn" onclick="setBudgetCat('shopping',this)">Shopping</button>
+          <button class="bc-btn" onclick="setBudgetCat('bills',this)">Bills</button>
+          <button class="bc-btn" onclick="setBudgetCat('health',this)">Health</button>
+          <button class="bc-btn" onclick="setBudgetCat('other',this)">Other</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Monthly Limit (₹)</label>
+        <input type="number" id="budgetLimitInput" placeholder="e.g. 5000" inputmode="decimal" />
+      </div>
+      <button class="save-btn" onclick="saveBudgetCat()">Save Limit</button>
+      <button class="cancel-btn" onclick="closeModal('modalBudget')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: ADD GOAL ═══ -->
+  <div class="modal-overlay" id="modalGoal">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">New Savings Goal</div>
+      <div class="form-group">
+        <label>Pick an emoji</label>
+        <div class="emoji-row">
+          <button class="emoji-btn active" onclick="setGoalEmoji('🎯',this)">🎯</button>
+          <button class="emoji-btn" onclick="setGoalEmoji('🏠',this)">🏠</button>
+          <button class="emoji-btn" onclick="setGoalEmoji('✈️',this)">✈️</button>
+          <button class="emoji-btn" onclick="setGoalEmoji('💻',this)">💻</button>
+          <button class="emoji-btn" onclick="setGoalEmoji('🚗',this)">🚗</button>
+          <button class="emoji-btn" onclick="setGoalEmoji('💍',this)">💍</button>
+          <button class="emoji-btn" onclick="setGoalEmoji('📱',this)">📱</button>
+          <button class="emoji-btn" onclick="setGoalEmoji('🎓',this)">🎓</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Goal Name</label>
+        <input type="text" id="goalName" placeholder="e.g. Goa Trip, New Laptop" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Target Amount (₹)</label>
+          <input type="number" id="goalTarget" placeholder="50000" inputmode="decimal" />
+        </div>
+        <div class="form-group">
+          <label>Already Saved (₹)</label>
+          <input type="number" id="goalSaved" placeholder="0" inputmode="decimal" />
+        </div>
+      </div>
+      <button class="save-btn" onclick="saveGoal()">Create Goal</button>
+      <button class="cancel-btn" onclick="closeModal('modalGoal')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: ADD TO GOAL ═══ -->
+  <div class="modal-overlay" id="modalAddGoal">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Add to Goal</div>
+      <div id="addGoalInfo" style="text-align:center;color:var(--text2);font-size:13px;margin-bottom:16px;"></div>
+      <div class="form-group">
+        <label>Amount to add (₹)</label>
+        <input type="number" id="addGoalAmt" placeholder="e.g. 1000" inputmode="decimal" />
+      </div>
+      <button class="save-btn" onclick="confirmAddToGoal()">Add</button>
+      <button class="cancel-btn" onclick="closeModal('modalAddGoal')">Cancel</button>
+    </div>
+  </div>
+
   <!-- TOAST -->
   <div id="toast"></div>
 
   <script>
     /* ════════════════════════════════════════════════════════
-       DATA
+       DATA — handled in Phase 4 section below
     ════════════════════════════════════════════════════════ */
     var wallets = [];
     var txns = [];
-
-    function saveData() {
-      try {
-        localStorage.setItem('sxt_wallets', JSON.stringify(wallets));
-        localStorage.setItem('sxt_txns', JSON.stringify(txns));
-      } catch (e) { }
-    }
-    function loadData() {
-      try {
-        var w = localStorage.getItem('sxt_wallets');
-        var t = localStorage.getItem('sxt_txns');
-        if (w) wallets = JSON.parse(w);
-        if (t) txns = JSON.parse(t);
-      } catch (e) { }
-    }
 
     /* ════════════════════════════════════════════════════════
        PIN
@@ -1398,19 +1979,8 @@
       if (e.key === 'Backspace') tapDel();
     });
 
-    /* ════════════════════════════════════════════════════════
-       NAVIGATION
-    ════════════════════════════════════════════════════════ */
-    var curPage = 'Home';
-    function goPage(name) {
-      document.getElementById('page' + curPage).classList.remove('active');
-      document.getElementById('nav' + curPage).classList.remove('active');
-      curPage = name;
-      document.getElementById('page' + curPage).classList.add('active');
-      document.getElementById('nav' + curPage).classList.add('active');
-      if (name === 'Analytics') refreshAnalytics();
-      if (name === 'More') refreshWalletList();
-    }
+
+    /* navigation and analytics — see Phase 4 section below */
 
     /* ════════════════════════════════════════════════════════
        THEME
@@ -1552,17 +2122,7 @@
       refreshAll();
     }
 
-    function renderTxItem(tx) {
-      var iconHtml = CAT_ICONS[tx.cat] || CAT_ICONS.other;
-      var sign = tx.type === 'debit' ? '−' : '+';
-      var amtClass = tx.type === 'debit' ? 'debit' : 'credit';
-      return '<div class="tx-item">'
-        + '<div class="tx-icon cat-' + tx.cat + '">' + iconHtml + '</div>'
-        + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div>'
-        + '<div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div></div>'
-        + '<div class="tx-amount ' + amtClass + '">' + sign + '₹' + fmt(tx.amt) + '</div>'
-        + '</div>';
-    }
+    /* renderTxItem — see Phase 4 section */
 
     function refreshTxList() {
       var recent = document.getElementById('homeRecentList');
@@ -1617,34 +2177,7 @@
     ════════════════════════════════════════════════════════ */
     var CAT_COLORS = { food: '#fb923c', transport: '#818cf8', shopping: '#ec4899', bills: '#eab308', health: '#14b8a6', income: '#22c55e', other: '#7c6dfa' };
 
-    function refreshAnalytics() {
-      var now = new Date();
-      var thisM = txns.filter(function (t) {
-        var d = new Date(t.date);
-        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && t.type === 'debit';
-      });
-      var byCat = {};
-      thisM.forEach(function (t) { byCat[t.cat] = (byCat[t.cat] || 0) + t.amt; });
-      var cats = Object.keys(byCat).sort(function (a, b) { return byCat[b] - byCat[a]; });
-      var total = thisM.reduce(function (s, t) { return s + t.amt; }, 0);
-      var el = document.getElementById('catBreakdown');
-      if (cats.length === 0) {
-        el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg><p>Add transactions to see analytics</p></div>';
-        return;
-      }
-      el.innerHTML = cats.map(function (c) {
-        var pct = total > 0 ? Math.round((byCat[c] / total) * 100) : 0;
-        var clr = CAT_COLORS[c] || '#7c6dfa';
-        return '<div style="margin-bottom:14px;">'
-          + '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;">'
-          + '<span>' + c.charAt(0).toUpperCase() + c.slice(1) + '</span>'
-          + '<span style="color:var(--text2)">₹' + fmt(byCat[c]) + ' (' + pct + '%)</span>'
-          + '</div>'
-          + '<div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;">'
-          + '<div style="height:100%;width:' + pct + '%;background:' + clr + ';border-radius:4px;transition:width 0.6s;"></div>'
-          + '</div></div>';
-      }).join('');
-    }
+    /* refreshAnalytics — see Phase 4 section */
 
     /* ════════════════════════════════════════════════════════
        HELPERS
@@ -1680,6 +2213,373 @@
       var g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
       var el = document.querySelector('.greeting');
       if (el) el.innerHTML = g + ', <span>welcome back</span>';
+    }
+
+    /* ════════════════════════════════════════════════════════
+       PHASE 4 DATA
+    ════════════════════════════════════════════════════════ */
+    var budgets = [];   // { cat, limit }
+    var goals = [];   // { id, emoji, name, target, saved }
+
+    function saveData() {
+      try {
+        localStorage.setItem('sxt_wallets', JSON.stringify(wallets));
+        localStorage.setItem('sxt_txns', JSON.stringify(txns));
+        localStorage.setItem('sxt_budgets', JSON.stringify(budgets));
+        localStorage.setItem('sxt_goals', JSON.stringify(goals));
+      } catch (e) { }
+    }
+    function loadData() {
+      try {
+        var w = localStorage.getItem('sxt_wallets');
+        var t = localStorage.getItem('sxt_txns');
+        var b = localStorage.getItem('sxt_budgets');
+        var g = localStorage.getItem('sxt_goals');
+        if (w) wallets = JSON.parse(w);
+        if (t) txns = JSON.parse(t);
+        if (b) budgets = JSON.parse(b);
+        if (g) goals = JSON.parse(g);
+      } catch (e) { }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       NAVIGATION — updated to include Budget & Goals
+    ════════════════════════════════════════════════════════ */
+    var curPage = 'Home';
+    function goPage(name) {
+      document.getElementById('page' + curPage).classList.remove('active');
+      document.getElementById('nav' + curPage) && document.getElementById('nav' + curPage).classList.remove('active');
+      curPage = name;
+      document.getElementById('page' + curPage).classList.add('active');
+      document.getElementById('nav' + curPage) && document.getElementById('nav' + curPage).classList.add('active');
+      if (name === 'Analytics') refreshAnalytics();
+      if (name === 'More') refreshWalletList();
+      if (name === 'Budget') refreshBudgetPage();
+      if (name === 'Goals') refreshGoalsPage();
+    }
+
+    /* ════════════════════════════════════════════════════════
+       MONTH NAVIGATION (shared between Budget & Analytics)
+    ════════════════════════════════════════════════════════ */
+    var viewYear = new Date().getFullYear();
+    var viewMonth = new Date().getMonth();
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    function shiftMonth(d) {
+      viewMonth += d;
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      refreshBudgetPage();
+      refreshAnalytics();
+    }
+
+    function getMonthTxns() {
+      return txns.filter(function (t) {
+        var d = new Date(t.date);
+        return d.getFullYear() === viewYear && d.getMonth() === viewMonth;
+      });
+    }
+
+    /* ════════════════════════════════════════════════════════
+       BUDGET PAGE
+    ════════════════════════════════════════════════════════ */
+    var budgetCat = 'food';
+
+    function setBudgetCat(c, btn) {
+      budgetCat = c;
+      document.querySelectorAll('#bcRow .bc-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+
+    function openAddBudget() { openModal('modalBudget'); }
+
+    function saveBudgetCat() {
+      var limit = parseFloat(document.getElementById('budgetLimitInput').value);
+      if (!limit || limit <= 0) { showToast('Enter a valid limit'); return; }
+      var existing = -1;
+      for (var i = 0; i < budgets.length; i++) { if (budgets[i].cat === budgetCat) { existing = i; break; } }
+      if (existing >= 0) budgets[existing].limit = limit;
+      else budgets.push({ cat: budgetCat, limit: limit });
+      saveData();
+      closeModal('modalBudget');
+      document.getElementById('budgetLimitInput').value = '';
+      showToast('Budget limit saved');
+      refreshBudgetPage();
+      checkBudgetAlerts();
+    }
+
+    function deleteBudget(cat) {
+      budgets = budgets.filter(function (b) { return b.cat !== cat; });
+      saveData();
+      refreshBudgetPage();
+      showToast('Budget removed');
+    }
+
+    function refreshBudgetPage() {
+      var label = document.getElementById('budgetMonthLabel');
+      if (label) label.textContent = MONTHS[viewMonth] + ' ' + viewYear;
+
+      var monthTxns = getMonthTxns();
+      var totalSpent = monthTxns.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var totalBudget = budgets.reduce(function (s, b) { return s + b.limit; }, 0);
+      var pct = totalBudget > 0 ? Math.min(Math.round((totalSpent / totalBudget) * 100), 100) : 0;
+      var remain = Math.max(0, totalBudget - totalSpent);
+
+      // ring
+      var ring = document.getElementById('budgetRing');
+      if (ring) {
+        var circ = 201;
+        ring.style.strokeDashoffset = circ - (circ * pct / 100);
+        ring.style.stroke = pct >= 90 ? 'var(--red)' : pct >= 70 ? '#f59e0b' : 'var(--accent)';
+      }
+
+      var now = new Date();
+      var isCurrentMonth = now.getFullYear() === viewYear && now.getMonth() === viewMonth;
+      var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+      var daysLeft = isCurrentMonth ? Math.max(1, daysInMonth - now.getDate() + 1) : daysInMonth;
+      var dailyLeft = daysLeft > 0 ? Math.round(remain / daysLeft) : 0;
+
+      setText('budgetPct', pct + '%');
+      setText('budgetSpent', '₹' + fmt(totalSpent));
+      setText('budgetTotal', '₹' + fmt(totalBudget));
+      setText('budgetRemain', '₹' + fmt(remain));
+      setText('budgetDailyLeft', '₹' + fmt(dailyLeft));
+      setText('budgetDaysLeft', daysLeft);
+
+      // badge dot on nav
+      var dot = document.getElementById('budgetDot');
+      if (dot) dot.classList.toggle('show', pct >= 80);
+
+      // category list
+      var el = document.getElementById('catBudgetList');
+      if (!el) return;
+      if (budgets.length === 0) {
+        el.innerHTML = '<div class="empty-state" style="padding:24px 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 10px;opacity:0.4"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><p>No budget limits set. Tap + Add to start.</p></div>';
+      } else {
+        el.innerHTML = budgets.map(function (b) {
+          var spent = monthTxns.filter(function (t) { return t.type === 'debit' && t.cat === b.cat; }).reduce(function (s, t) { return s + t.amt; }, 0);
+          var pctC = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
+          var color = pctC >= 90 ? 'var(--red)' : pctC >= 70 ? '#f59e0b' : 'var(--accent)';
+          var iconBg = CAT_COLORS[b.cat] || '#7c6dfa';
+          return '<div class="cat-budget-item">'
+            + '<div class="cbi-icon" style="background:' + iconBg + '22;color:' + iconBg + '">' + (CAT_ICONS[b.cat] || CAT_ICONS.other) + '</div>'
+            + '<div class="cbi-info">'
+            + '<div class="cbi-name">' + b.cat.charAt(0).toUpperCase() + b.cat.slice(1) + '</div>'
+            + '<div class="cbi-bar"><div class="cbi-fill" style="width:' + pctC + '%;background:' + color + '"></div></div>'
+            + '<div class="cbi-nums">₹' + fmt(spent) + ' of ₹' + fmt(b.limit) + '</div>'
+            + '</div>'
+            + '<div class="cbi-pct" style="color:' + color + '">' + pctC + '%</div>'
+            + '<button class="cbi-del" onclick="deleteBudget(\'' + b.cat + '\')">'
+            + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>'
+            + '</button>'
+            + '</div>';
+        }).join('');
+      }
+
+      // goals preview on budget page
+      var gPrev = document.getElementById('budgetGoalsPreview');
+      if (gPrev) {
+        if (goals.length === 0) {
+          gPrev.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:10px 0">No goals yet. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer" onclick="goPage(\'Goals\')">Create one →</button></div>';
+        } else {
+          gPrev.innerHTML = goals.slice(0, 2).map(function (g) {
+            var pctG = g.target > 0 ? Math.min(Math.round((g.saved / g.target) * 100), 100) : 0;
+            return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+              + '<div style="font-size:24px">' + g.emoji + '</div>'
+              + '<div style="flex:1">'
+              + '<div style="font-size:13px;font-weight:500;margin-bottom:4px">' + g.name + '</div>'
+              + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:' + pctG + '%;background:var(--accent)"></div></div>'
+              + '</div>'
+              + '<div style="font-size:12px;font-weight:bold;color:var(--accent)">' + pctG + '%</div>'
+              + '</div>';
+          }).join('');
+        }
+      }
+    }
+
+    function checkBudgetAlerts() {
+      budgets.forEach(function (b) {
+        var monthTxns = getMonthTxns();
+        var spent = monthTxns.filter(function (t) { return t.type === 'debit' && t.cat === b.cat; }).reduce(function (s, t) { return s + t.amt; }, 0);
+        var pct = b.limit > 0 ? Math.round((spent / b.limit) * 100) : 0;
+        if (pct >= 90) showToast('⚠️ ' + b.cat + ' budget at ' + pct + '%');
+      });
+    }
+
+    /* ════════════════════════════════════════════════════════
+       GOALS PAGE
+    ════════════════════════════════════════════════════════ */
+    var goalEmoji = '🎯';
+    var addingToGoal = null;
+
+    function setGoalEmoji(e, btn) {
+      goalEmoji = e;
+      document.querySelectorAll('.emoji-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+
+    function openAddGoal() { openModal('modalGoal'); }
+
+    function saveGoal() {
+      var name = document.getElementById('goalName').value.trim();
+      var target = parseFloat(document.getElementById('goalTarget').value) || 0;
+      var saved = parseFloat(document.getElementById('goalSaved').value) || 0;
+      if (!name) { showToast('Enter a goal name'); return; }
+      if (target <= 0) { showToast('Enter a target amount'); return; }
+      goals.push({ id: Date.now(), emoji: goalEmoji, name: name, target: target, saved: saved });
+      saveData();
+      closeModal('modalGoal');
+      document.getElementById('goalName').value = '';
+      document.getElementById('goalTarget').value = '';
+      document.getElementById('goalSaved').value = '';
+      showToast('Goal created!');
+      refreshGoalsPage();
+    }
+
+    function deleteGoal(id) {
+      goals = goals.filter(function (g) { return g.id !== id; });
+      saveData();
+      refreshGoalsPage();
+      showToast('Goal deleted');
+    }
+
+    function openAddToGoal(id) {
+      addingToGoal = id;
+      var g = goals.find(function (g) { return g.id === id; });
+      if (!g) return;
+      var info = document.getElementById('addGoalInfo');
+      if (info) info.textContent = g.emoji + ' ' + g.name + ' — ₹' + fmt(g.saved) + ' of ₹' + fmt(g.target);
+      document.getElementById('addGoalAmt').value = '';
+      openModal('modalAddGoal');
+    }
+
+    function confirmAddToGoal() {
+      var amt = parseFloat(document.getElementById('addGoalAmt').value) || 0;
+      if (amt <= 0) { showToast('Enter a valid amount'); return; }
+      for (var i = 0; i < goals.length; i++) {
+        if (goals[i].id === addingToGoal) {
+          goals[i].saved = Math.min(goals[i].saved + amt, goals[i].target);
+          break;
+        }
+      }
+      saveData();
+      closeModal('modalAddGoal');
+      showToast('Added to goal!');
+      refreshGoalsPage();
+    }
+
+    function refreshGoalsPage() {
+      var el = document.getElementById('goalsList');
+      if (!el) return;
+      if (goals.length === 0) {
+        el.innerHTML = '<div class="empty-state" style="padding:32px 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>No goals yet. Tap the button below to create one.</p></div>';
+        return;
+      }
+      el.innerHTML = goals.map(function (g) {
+        var pct = g.target > 0 ? Math.min(Math.round((g.saved / g.target) * 100), 100) : 0;
+        var done = g.saved >= g.target;
+        return '<div class="goal-item">'
+          + '<div class="goal-head">'
+          + '<div class="goal-emoji">' + g.emoji + '</div>'
+          + '<div class="goal-info"><div class="goal-name">' + g.name + '</div><div class="goal-tgt">Target: ₹' + fmt(g.target) + '</div></div>'
+          + '<div class="goal-badge' + (done ? ' done' : '') + '">' + pct + '%' + (done ? ' ✓' : '') + '</div>'
+          + '</div>'
+          + '<div class="goal-bar"><div class="goal-fill' + (done ? ' done' : '') + '" style="width:' + pct + '%"></div></div>'
+          + '<div class="goal-foot">'
+          + '<div class="goal-saved-txt">Saved: <b>₹' + fmt(g.saved) + '</b></div>'
+          + '<div class="goal-btns">'
+          + (done ? '' : '<button class="goal-add-btn" onclick="openAddToGoal(' + g.id + ')">+ Add</button>')
+          + '<button class="goal-del-btn" onclick="deleteGoal(' + g.id + ')">'
+          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>'
+          + '</button>'
+          + '</div></div>'
+          + '</div>';
+      }).join('');
+    }
+
+    /* ════════════════════════════════════════════════════════
+       DELETE TRANSACTION
+    ════════════════════════════════════════════════════════ */
+    function deleteTx(id) {
+      var tx = null;
+      for (var i = 0; i < txns.length; i++) { if (txns[i].id === id) { tx = txns[i]; break; } }
+      if (!tx) return;
+      // reverse wallet balance
+      for (var j = 0; j < wallets.length; j++) {
+        if (wallets[j].name === tx.wallet) {
+          wallets[j].balance += (tx.type === 'credit' ? -tx.amt : tx.amt);
+          break;
+        }
+      }
+      txns = txns.filter(function (t) { return t.id !== id; });
+      saveData();
+      showToast('Transaction deleted');
+      refreshAll();
+    }
+
+    /* ════════════════════════════════════════════════════════
+       UPDATED renderTxItem — with delete button
+    ════════════════════════════════════════════════════════ */
+    function renderTxItem(tx) {
+      var iconHtml = CAT_ICONS[tx.cat] || CAT_ICONS.other;
+      var sign = tx.type === 'debit' ? '−' : '+';
+      var amtClass = tx.type === 'debit' ? 'debit' : 'credit';
+      return '<div class="tx-item" id="tx' + tx.id + '">'
+        + '<div class="tx-icon cat-' + tx.cat + '">' + iconHtml + '</div>'
+        + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div>'
+        + '<div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div></div>'
+        + '<div class="tx-amount ' + amtClass + '" style="cursor:pointer" onclick="toggleTxDel(' + tx.id + ')">'
+        + sign + '₹' + fmt(tx.amt) + '</div>'
+        + '<button class="tx-del-btn" onclick="deleteTx(' + tx.id + ')">'
+        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>'
+        + 'Delete</button>'
+        + '</div>';
+    }
+
+    function toggleTxDel(id) {
+      var el = document.getElementById('tx' + id);
+      if (el) el.classList.toggle('show-del');
+    }
+
+    /* ════════════════════════════════════════════════════════
+       UPDATED ANALYTICS — uses month nav
+    ════════════════════════════════════════════════════════ */
+    function refreshAnalytics() {
+      var label = document.getElementById('budgetMonthLabel');
+      if (label) label.textContent = MONTHS[viewMonth] + ' ' + viewYear;
+
+      var monthTxns = getMonthTxns();
+      var income = monthTxns.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var expense = monthTxns.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+
+      setText('aIncome', '₹' + fmt(income));
+      setText('aExpense', '₹' + fmt(expense));
+      setText('aSaved', '₹' + fmt(Math.max(0, income - expense)));
+
+      var byCat = {};
+      monthTxns.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { byCat[t.cat] = (byCat[t.cat] || 0) + t.amt; });
+      var cats = Object.keys(byCat).sort(function (a, b) { return byCat[b] - byCat[a]; });
+      var total = monthTxns.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var el = document.getElementById('catBreakdown');
+      if (!el) return;
+      if (cats.length === 0) {
+        el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg><p>No expenses in ' + MONTHS[viewMonth] + ' ' + viewYear + '</p></div>';
+        return;
+      }
+      el.innerHTML = cats.map(function (c) {
+        var pct = total > 0 ? Math.round((byCat[c] / total) * 100) : 0;
+        var clr = CAT_COLORS[c] || '#7c6dfa';
+        var budget = budgets.find(function (b) { return b.cat === c; });
+        var budgetNote = budget ? ' / ₹' + fmt(budget.limit) + ' budget' : '';
+        return '<div style="margin-bottom:14px;">'
+          + '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;">'
+          + '<span>' + c.charAt(0).toUpperCase() + c.slice(1) + '</span>'
+          + '<span style="color:var(--text2)">₹' + fmt(byCat[c]) + budgetNote + ' (' + pct + '%)</span>'
+          + '</div>'
+          + '<div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;">'
+          + '<div style="height:100%;width:' + pct + '%;background:' + clr + ';border-radius:4px;transition:width 0.6s;"></div>'
+          + '</div></div>';
+      }).join('');
     }
 
     init();
