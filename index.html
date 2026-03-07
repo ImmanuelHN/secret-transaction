@@ -1,36 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>sXt</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── THEMES ─────────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #0d0d14;
+      --surface: #1a1a2e;
+      --border: #2a2a3e;
+      --text: #f0f0f5;
+      --text2: #888;
+      --accent: #7c6dfa;
+      --btn-bg: #1a1a2e;
+      --nav-bg: #13131f;
+      --card-bg: #1a1a2e;
+    }
+
+    [data-theme="color"] {
+      --bg: #0b1e3d;
+      --surface: #0f2a52;
+      --border: #1a3a6a;
+      --text: #e8f4ff;
+      --text2: #7aaac8;
+      --accent: #4fc3f7;
+      --btn-bg: #0f2a52;
+      --nav-bg: #091827;
+      --card-bg: #0f2a52;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f8;
+      --surface: #ffffff;
+      --border: #e0e0ea;
+      --text: #1a1a2e;
+      --text2: #666;
+      --accent: #7c6dfa;
+      --btn-bg: #ffffff;
+      --nav-bg: #ffffff;
+      --card-bg: #ffffff;
+    }
+
+    /* ── RESET ───────────────────────────────────────────────── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      background: #0d0d14;
+      background: var(--bg);
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+   PIN SCREEN
+════════════════════════════════════════════════════════════ */
+    #pinScreen {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: Arial, sans-serif;
-      color: #fff;
       padding: 24px;
     }
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 6px;
-      color: #a78bfa;
+    #pinScreen h1 {
+      font-size: 38px;
+      color: var(--accent);
+      margin-bottom: 4px;
     }
 
-    p.sub {
-      font-size: 12px;
+    #pinScreen .sub {
+      font-size: 11px;
       letter-spacing: 2px;
-      color: #666;
+      color: var(--text2);
       text-transform: uppercase;
-      margin-bottom: 40px;
+      margin-bottom: 44px;
     }
 
     .dots {
@@ -43,94 +94,375 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      background: #333;
-      border: 2px solid #444;
+      background: var(--border);
+      border: 2px solid var(--border);
+      transition: background 0.15s, border-color 0.15s;
     }
-    .dot.on  { background: #7c6dfa; border-color: #7c6dfa; }
-    .dot.err { background: #ff4444; border-color: #ff4444; }
-    .dot.ok  { background: #44ff88; border-color: #44ff88; }
+
+    .dot.on {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .dot.err {
+      background: #ff4444;
+      border-color: #ff4444;
+    }
+
+    .dot.ok {
+      background: #44ff88;
+      border-color: #44ff88;
+    }
 
     #msg {
-      font-size: 14px;
-      color: #888;
-      margin-bottom: 32px;
-      min-height: 20px;
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 30px;
+      min-height: 18px;
       text-align: center;
     }
-    #msg.err { color: #ff4444; }
-    #msg.ok  { color: #44ff88; }
 
-    .grid {
+    #msg.err {
+      color: #ff4444;
+    }
+
+    #msg.ok {
+      color: #44ff88;
+    }
+
+    .pin-grid {
       display: grid;
       grid-template-columns: repeat(3, 80px);
       gap: 12px;
     }
 
-    button {
+    .pin-grid button {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      border: 2px solid #333;
-      background: #1a1a2e;
-      color: #fff;
+      border: 2px solid var(--border);
+      background: var(--btn-bg);
+      color: var(--text);
       font-size: 26px;
       cursor: pointer;
     }
 
-    button:active {
-      background: #7c6dfa;
-      border-color: #7c6dfa;
+    .pin-grid button:active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
     }
 
-    .btn-skip {
-      margin-top: 28px;
-      width: auto;
-      height: auto;
-      border-radius: 20px;
-      font-size: 14px;
-      padding: 10px 24px;
+    .skip-btn {
+      margin-top: 24px;
       background: none;
-      border: 1px solid #333;
-      color: #888;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      font-size: 13px;
+      padding: 10px 24px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .skip-btn:active {
+      background: var(--surface);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+   MAIN APP
+════════════════════════════════════════════════════════════ */
+    #app {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* theme toggle */
+    .theme-toggle {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .theme-toggle button {
+      width: 36px;
+      height: 30px;
+      border: none;
+      background: none;
+      color: var(--text2);
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 0;
+    }
+
+    .theme-toggle button.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .theme-toggle button:active {
+      opacity: 0.8;
+    }
+
+    /* lock icon button */
+    .lock-icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text2);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lock-icon-btn:active {
+      background: var(--surface);
+    }
+
+    /* ── PAGES ── */
+    .pages {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .page {
+      display: none;
+      padding: 24px 20px 100px;
+      min-height: calc(100vh - 60px - 64px);
+      overflow-y: auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 24px;
+    }
+
+    /* placeholder card */
+    .placeholder-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 14px;
+      text-align: center;
+      color: var(--text2);
+      font-size: 14px;
+    }
+
+    .placeholder-card .big {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--nav-bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      flex: 1;
+      height: 64px;
+      background: none;
+      border: none;
+      color: var(--text2);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-btn .nav-icon {
+      font-size: 22px;
+    }
+
+    .nav-btn.active {
+      color: var(--accent);
+    }
+
+    .nav-btn:active {
+      opacity: 0.7;
     }
   </style>
 </head>
+
 <body>
 
-  <h1>sXt</h1>
-  <p class="sub">Secret Transactions</p>
+  <!-- ════════ PIN SCREEN ════════ -->
+  <div id="pinScreen">
 
-  <div class="dots">
-    <div class="dot" id="d0"></div>
-    <div class="dot" id="d1"></div>
-    <div class="dot" id="d2"></div>
-    <div class="dot" id="d3"></div>
+    <h1>sXt</h1>
+    <p class="sub">Secret Transactions</p>
+
+    <div class="dots">
+      <div class="dot" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+    </div>
+
+    <div id="msg">Loading…</div>
+
+    <div class="pin-grid">
+      <button onclick="tap('1')">1</button>
+      <button onclick="tap('2')">2</button>
+      <button onclick="tap('3')">3</button>
+      <button onclick="tap('4')">4</button>
+      <button onclick="tap('5')">5</button>
+      <button onclick="tap('6')">6</button>
+      <button onclick="tap('7')">7</button>
+      <button onclick="tap('8')">8</button>
+      <button onclick="tap('9')">9</button>
+      <button onclick="tapBio()">&#x1F44D;</button>
+      <button onclick="tap('0')">0</button>
+      <button onclick="tapDel()">&#x232B;</button>
+    </div>
+
+    <button class="skip-btn" onclick="unlock()">Continue as Guest →</button>
+
   </div>
 
-  <div id="msg">Loading…</div>
+  <!-- ════════ MAIN APP ════════ -->
+  <div id="app">
 
-  <div class="grid">
-    <button onclick="tap('1')">1</button>
-    <button onclick="tap('2')">2</button>
-    <button onclick="tap('3')">3</button>
-    <button onclick="tap('4')">4</button>
-    <button onclick="tap('5')">5</button>
-    <button onclick="tap('6')">6</button>
-    <button onclick="tap('7')">7</button>
-    <button onclick="tap('8')">8</button>
-    <button onclick="tap('9')">9</button>
-    <button onclick="tapBio()">&#x1F44D;</button>
-    <button onclick="tap('0')">0</button>
-    <button onclick="tapDel()">&#x232B;</button>
+    <!-- header -->
+    <div class="header">
+      <div class="header-logo">sXt</div>
+      <div class="header-right">
+        <div class="theme-toggle">
+          <button id="tD" onclick="setTheme('dark')" class="active">D</button>
+          <button id="tC" onclick="setTheme('color')">C</button>
+          <button id="tL" onclick="setTheme('light')">L</button>
+        </div>
+        <button class="lock-icon-btn" onclick="lockApp()">&#x1F512;</button>
+      </div>
+    </div>
+
+    <!-- pages -->
+    <div class="pages">
+
+      <div class="page active" id="pageHome">
+        <div class="page-title">Dashboard</div>
+        <div class="page-sub">Welcome to sXt</div>
+        <div class="placeholder-card">
+          <div class="big">🏠</div>
+          Home content — Phase 3
+        </div>
+        <div class="placeholder-card">
+          <div class="big">💳</div>
+          Wallets — Phase 3
+        </div>
+      </div>
+
+      <div class="page" id="pageTx">
+        <div class="page-title">Transactions</div>
+        <div class="page-sub">Your transaction history</div>
+        <div class="placeholder-card">
+          <div class="big">💸</div>
+          Transactions — Phase 3
+        </div>
+      </div>
+
+      <div class="page" id="pageAnalytics">
+        <div class="page-title">Analytics</div>
+        <div class="page-sub">Spending overview</div>
+        <div class="placeholder-card">
+          <div class="big">📊</div>
+          Charts & Analytics — Phase 3
+        </div>
+      </div>
+
+      <div class="page" id="pageMore">
+        <div class="page-title">More</div>
+        <div class="page-sub">Settings & tools</div>
+        <div class="placeholder-card">
+          <div class="big">⚙️</div>
+          Settings — Phase 3
+        </div>
+      </div>
+
+    </div>
+
+    <!-- bottom nav -->
+    <div class="bottom-nav">
+      <button class="nav-btn active" id="navHome" onclick="goPage('Home')">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-btn" id="navTx" onclick="goPage('Tx')">
+        <span class="nav-icon">💸</span>
+        <span>Transactions</span>
+      </button>
+      <button class="nav-btn" id="navAnalytics" onclick="goPage('Analytics')">
+        <span class="nav-icon">📊</span>
+        <span>Analytics</span>
+      </button>
+      <button class="nav-btn" id="navMore" onclick="goPage('More')">
+        <span class="nav-icon">☰</span>
+        <span>More</span>
+      </button>
+    </div>
+
   </div>
-
-  <button class="btn-skip" onclick="unlock()">Skip →</button>
 
   <script>
-    var stored  = null;
-    var mode    = 'enter';
+    /* ── PIN STATE ── */
+    var stored = null;
+    var mode = 'enter';
     var attempt = '';
-    var newBuf  = '';
+    var newBuf = '';
     var waiting = false;
 
     function makeHash(pin) {
@@ -144,7 +476,11 @@
     }
 
     function init() {
-      try { stored = localStorage.getItem('sxt_pin') || null; } catch(e) {}
+      try { stored = localStorage.getItem('sxt_pin') || null; } catch (e) { }
+      var t = null;
+      try { t = localStorage.getItem('sxt_theme') || null; } catch (e) { }
+      if (t) setTheme(t);
+
       if (!stored) {
         mode = 'set';
         setMsg('Create a 4-digit PIN', '');
@@ -154,6 +490,7 @@
       }
     }
 
+    /* ── PIN ACTIONS ── */
     function tap(d) {
       if (waiting) return;
       if (attempt.length >= 4) return;
@@ -187,16 +524,13 @@
         } else {
           dotState('err');
           setMsg('Wrong PIN', 'err');
-          setTimeout(function() {
-            reset();
-            setMsg('Enter your PIN', '');
-          }, 700);
+          setTimeout(function () { reset(); setMsg('Enter your PIN', ''); }, 700);
         }
 
       } else if (mode === 'set') {
-        newBuf  = attempt;
+        newBuf = attempt;
         attempt = '';
-        mode    = 'confirm';
+        mode = 'confirm';
         paint();
         setMsg('Confirm PIN', '');
         waiting = false;
@@ -204,57 +538,86 @@
       } else if (mode === 'confirm') {
         if (attempt === newBuf) {
           var h = makeHash(attempt);
-          try { localStorage.setItem('sxt_pin', h); } catch(e) {}
+          try { localStorage.setItem('sxt_pin', h); } catch (e) { }
           stored = h;
           dotState('ok');
           setMsg('PIN saved!', 'ok');
           setTimeout(unlock, 600);
         } else {
           dotState('err');
-          setMsg("No match. Try again.", 'err');
-          setTimeout(function() {
-            newBuf  = '';
-            mode    = 'set';
-            reset();
+          setMsg('No match. Try again.', 'err');
+          setTimeout(function () {
+            newBuf = ''; mode = 'set'; reset();
             setMsg('Create a 4-digit PIN', '');
           }, 700);
         }
       }
     }
 
+    /* ── DOTS ── */
     function paint() {
       for (var i = 0; i < 4; i++) {
-        document.getElementById('d'+i).className = 'dot' + (i < attempt.length ? ' on' : '');
+        document.getElementById('d' + i).className = 'dot' + (i < attempt.length ? ' on' : '');
       }
     }
-
     function dotState(cls) {
       for (var i = 0; i < 4; i++) {
-        document.getElementById('d'+i).className = 'dot ' + cls;
+        document.getElementById('d' + i).className = 'dot ' + cls;
       }
     }
-
     function reset() {
-      attempt = '';
-      waiting = false;
+      attempt = ''; waiting = false;
       for (var i = 0; i < 4; i++) {
-        document.getElementById('d'+i).className = 'dot';
+        document.getElementById('d' + i).className = 'dot';
       }
     }
-
     function setMsg(t, c) {
       var el = document.getElementById('msg');
       el.textContent = t;
       el.className = c || '';
     }
 
+    /* ── UNLOCK / LOCK ── */
     function unlock() {
-      alert('Unlocked! Phase 2 goes here.');
-      reset();
-      setMsg('Enter your PIN', '');
+      document.getElementById('pinScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
     }
 
-    document.addEventListener('keydown', function(e) {
+    function lockApp() {
+      attempt = ''; newBuf = ''; waiting = false;
+      mode = stored ? 'enter' : 'set';
+      reset();
+      setMsg(stored ? 'Enter your PIN' : 'Create a 4-digit PIN', '');
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('pinScreen').style.display = 'flex';
+    }
+
+    /* ── NAVIGATION ── */
+    var curPage = 'Home';
+
+    function goPage(name) {
+      document.getElementById('page' + curPage).classList.remove('active');
+      document.getElementById('nav' + curPage).classList.remove('active');
+      curPage = name;
+      document.getElementById('page' + curPage).classList.add('active');
+      document.getElementById('nav' + curPage).classList.add('active');
+    }
+
+    /* ── THEME ── */
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      try { localStorage.setItem('sxt_theme', t); } catch (e) { }
+      var btns = ['D', 'C', 'L'];
+      var maps = { dark: 'D', color: 'C', light: 'L' };
+      btns.forEach(function (b) {
+        document.getElementById('t' + b).classList.remove('active');
+      });
+      document.getElementById('t' + maps[t]).classList.add('active');
+    }
+
+    /* ── KEYBOARD ── */
+    document.addEventListener('keydown', function (e) {
+      if (document.getElementById('pinScreen').style.display === 'none') return;
       if (e.key >= '0' && e.key <= '9') tap(e.key);
       if (e.key === 'Backspace') tapDel();
     });
@@ -263,4 +626,5 @@
   </script>
 
 </body>
+
 </html>
