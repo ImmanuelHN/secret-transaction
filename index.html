@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>sXt</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d14;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 6px;
+      color: #a78bfa;
+    }
+
+    p.sub {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #333;
+      border: 2px solid #444;
+    }
+    .dot.on  { background: #7c6dfa; border-color: #7c6dfa; }
+    .dot.err { background: #ff4444; border-color: #ff4444; }
+    .dot.ok  { background: #44ff88; border-color: #44ff88; }
+
+    #msg {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 32px;
+      min-height: 20px;
+      text-align: center;
+    }
+    #msg.err { color: #ff4444; }
+    #msg.ok  { color: #44ff88; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 12px;
+    }
+
+    button {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    button:active {
+      background: #7c6dfa;
+      border-color: #7c6dfa;
+    }
+
+    .btn-skip {
+      margin-top: 28px;
+      width: auto;
+      height: auto;
+      border-radius: 20px;
+      font-size: 14px;
+      padding: 10px 24px;
+      background: none;
+      border: 1px solid #333;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>sXt</h1>
+  <p class="sub">Secret Transactions</p>
+
+  <div class="dots">
+    <div class="dot" id="d0"></div>
+    <div class="dot" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+  </div>
+
+  <div id="msg">Loading…</div>
+
+  <div class="grid">
+    <button onclick="tap('1')">1</button>
+    <button onclick="tap('2')">2</button>
+    <button onclick="tap('3')">3</button>
+    <button onclick="tap('4')">4</button>
+    <button onclick="tap('5')">5</button>
+    <button onclick="tap('6')">6</button>
+    <button onclick="tap('7')">7</button>
+    <button onclick="tap('8')">8</button>
+    <button onclick="tap('9')">9</button>
+    <button onclick="tapBio()">&#x1F44D;</button>
+    <button onclick="tap('0')">0</button>
+    <button onclick="tapDel()">&#x232B;</button>
+  </div>
+
+  <button class="btn-skip" onclick="unlock()">Skip →</button>
+
+  <script>
+    var stored  = null;
+    var mode    = 'enter';
+    var attempt = '';
+    var newBuf  = '';
+    var waiting = false;
+
+    function makeHash(pin) {
+      var s = pin + 'sxt2026';
+      var h = 5381;
+      for (var i = 0; i < s.length; i++) {
+        h = ((h << 5) + h) + s.charCodeAt(i);
+        h = h & h;
+      }
+      return 'p' + Math.abs(h).toString(16);
+    }
+
+    function init() {
+      try { stored = localStorage.getItem('sxt_pin') || null; } catch(e) {}
+      if (!stored) {
+        mode = 'set';
+        setMsg('Create a 4-digit PIN', '');
+      } else {
+        mode = 'enter';
+        setMsg('Enter your PIN', '');
+      }
+    }
+
+    function tap(d) {
+      if (waiting) return;
+      if (attempt.length >= 4) return;
+      attempt += d;
+      paint();
+      if (attempt.length === 4) {
+        waiting = true;
+        setTimeout(check, 300);
+      }
+    }
+
+    function tapDel() {
+      if (waiting) return;
+      attempt = attempt.slice(0, -1);
+      paint();
+    }
+
+    function tapBio() {
+      if (waiting) return;
+      setMsg('Authenticating…', '');
+      waiting = true;
+      setTimeout(unlock, 800);
+    }
+
+    function check() {
+      if (mode === 'enter') {
+        if (makeHash(attempt) === stored) {
+          dotState('ok');
+          setMsg('Welcome!', 'ok');
+          setTimeout(unlock, 500);
+        } else {
+          dotState('err');
+          setMsg('Wrong PIN', 'err');
+          setTimeout(function() {
+            reset();
+            setMsg('Enter your PIN', '');
+          }, 700);
+        }
+
+      } else if (mode === 'set') {
+        newBuf  = attempt;
+        attempt = '';
+        mode    = 'confirm';
+        paint();
+        setMsg('Confirm PIN', '');
+        waiting = false;
+
+      } else if (mode === 'confirm') {
+        if (attempt === newBuf) {
+          var h = makeHash(attempt);
+          try { localStorage.setItem('sxt_pin', h); } catch(e) {}
+          stored = h;
+          dotState('ok');
+          setMsg('PIN saved!', 'ok');
+          setTimeout(unlock, 600);
+        } else {
+          dotState('err');
+          setMsg("No match. Try again.", 'err');
+          setTimeout(function() {
+            newBuf  = '';
+            mode    = 'set';
+            reset();
+            setMsg('Create a 4-digit PIN', '');
+          }, 700);
+        }
+      }
+    }
+
+    function paint() {
+      for (var i = 0; i < 4; i++) {
+        document.getElementById('d'+i).className = 'dot' + (i < attempt.length ? ' on' : '');
+      }
+    }
+
+    function dotState(cls) {
+      for (var i = 0; i < 4; i++) {
+        document.getElementById('d'+i).className = 'dot ' + cls;
+      }
+    }
+
+    function reset() {
+      attempt = '';
+      waiting = false;
+      for (var i = 0; i < 4; i++) {
+        document.getElementById('d'+i).className = 'dot';
+      }
+    }
+
+    function setMsg(t, c) {
+      var el = document.getElementById('msg');
+      el.textContent = t;
+      el.className = c || '';
+    }
+
+    function unlock() {
+      alert('Unlocked! Phase 2 goes here.');
+      reset();
+      setMsg('Enter your PIN', '');
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key >= '0' && e.key <= '9') tap(e.key);
+      if (e.key === 'Backspace') tapDel();
+    });
+
+    init();
+  </script>
+
+</body>
+</html>
