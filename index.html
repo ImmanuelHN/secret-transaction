@@ -1327,9 +1327,7 @@
       box-shadow: var(--shadow);
     }
 
-    /* ══ PHASE 8 ═════════════════════════════════════════════ */
-
-    /* Health score card */
+    /* ══ PHASE 8-10 ══════════════════════════════════════════ */
     .health-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -1379,7 +1377,7 @@
     .health-label {
       font-size: 13px;
       font-weight: bold;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .health-sub {
@@ -1416,7 +1414,6 @@
       transition: width 0.8s;
     }
 
-    /* date group headers in tx list */
     .tx-date-group {
       font-size: 11px;
       font-weight: bold;
@@ -1425,65 +1422,10 @@
       text-transform: uppercase;
       padding: 8px 0 4px;
       margin-top: 4px;
-    }
-
-    /* balance hide/show */
-    .bal-eye {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      cursor: pointer;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
+      justify-content: space-between;
     }
 
-    .bal-eye svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    .balance-card {
-      position: relative;
-    }
-
-    .bal-hidden {
-      letter-spacing: 4px;
-      font-size: 22px;
-    }
-
-    /* currency badge */
-    .currency-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 6px;
-    }
-
-    .currency-btn {
-      padding: 6px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: none;
-      color: var(--text2);
-      font-size: 13px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .currency-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-    }
-
-    /* financial tip banner */
     .tip-banner {
       background: linear-gradient(135deg, rgba(124, 109, 250, 0.15), rgba(124, 109, 250, 0.05));
       border: 1px solid rgba(124, 109, 250, 0.2);
@@ -1509,6 +1451,43 @@
 
     .tip-text b {
       color: var(--text);
+    }
+
+    .currency-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text2);
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .currency-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .cur-tab-btn {
+      flex: 1;
+      padding: 10px 4px;
+      border: none;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .cur-tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .cur-tab-btn:not(.active) {
+      background: none;
+      color: var(--text2);
     }
   </style>
 </head>
@@ -1587,7 +1566,7 @@
               <circle cx="35" cy="35" r="28" fill="none" stroke="var(--border)" stroke-width="7" />
               <circle id="healthArc" cx="35" cy="35" r="28" fill="none" stroke="var(--green)" stroke-width="7"
                 stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="175.9" transform="rotate(-90 35 35)"
-                style="transition:stroke-dashoffset 1s ease,stroke 0.5s;" />
+                style="transition:stroke-dashoffset 1s,stroke 0.5s;" />
             </svg>
             <div class="health-score-txt">
               <div id="healthScoreNum">–</div><span>score</span>
@@ -1595,17 +1574,18 @@
           </div>
           <div class="health-info">
             <div class="health-label" id="healthLabel">Financial Health</div>
-            <div class="health-sub" id="healthSub">Add transactions to see your score</div>
+            <div class="health-sub" id="healthSub">Add transactions to see score</div>
             <div class="health-bars" id="healthBars"></div>
           </div>
         </div>
 
+        <!-- balance card — eye button INSIDE flex, NOT absolute positioned -->
         <div class="balance-card">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-            <div class="bal-label">TOTAL BALANCE</div>
-            <button onclick="toggleBalVis()" id="balEye"
-              style="background:rgba(255,255,255,0.18);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:-2px;">
-              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" width="15" height="15">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div class="bal-label" style="margin-bottom:0;">TOTAL BALANCE</div>
+            <button id="balEye" onclick="toggleBalVis()"
+              style="background:rgba(255,255,255,0.2);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" width="14" height="14">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
@@ -1617,6 +1597,7 @@
             <div class="bal-item">Expenses <span id="homeExpense">₹0</span></div>
           </div>
         </div>
+
         <!-- 7-day trend -->
         <div
           style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
@@ -1625,6 +1606,7 @@
           <div id="trendBars" style="display:flex;align-items:flex-end;gap:4px;height:44px;"></div>
           <div id="trendLabels" style="display:flex;gap:4px;margin-top:4px;"></div>
         </div>
+
         <!-- wallets -->
         <div class="section-header">
           <div class="section-title">Wallets</div>
@@ -1639,6 +1621,7 @@
             <span>Add Wallet</span>
           </div>
         </div>
+
         <!-- recent -->
         <div class="section-header">
           <div class="section-title">Recent</div>
@@ -1652,11 +1635,12 @@
             <p>No transactions yet</p>
           </div>
         </div>
-        <!-- financial tip -->
-        <div class="tip-banner" id="financialTip" style="margin-bottom:18px;"></div>
+
+        <!-- tip -->
+        <div class="tip-banner" id="financialTip" style="margin-top:18px;"></div>
 
         <!-- subs teaser -->
-        <div class="section-header" style="margin-top:20px;">
+        <div class="section-header" style="margin-top:4px;">
           <div class="section-title">Subscriptions</div>
           <button class="section-link" onclick="goPage('Subs')">See all →</button>
         </div>
@@ -1765,61 +1749,124 @@
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>Goals</button>
         </div>
-        <!-- currency -->
-        <div class="section-title" style="margin-bottom:12px;">Currency</div>
+        <!-- home currency -->
+        <div class="section-title" style="margin-bottom:10px;">Home Currency</div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Your base currency (amounts you enter are
+            in this currency)</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="currency-btn active" id="home-INR" onclick="setHomeCurrency('INR','₹')">₹ INR</button>
+            <button class="currency-btn" id="home-USD" onclick="setHomeCurrency('USD','$')">$ USD</button>
+            <button class="currency-btn" id="home-EUR" onclick="setHomeCurrency('EUR','€')">€ EUR</button>
+            <button class="currency-btn" id="home-GBP" onclick="setHomeCurrency('GBP','£')">£ GBP</button>
+            <button class="currency-btn" id="home-AED" onclick="setHomeCurrency('AED','د.إ')">د.إ AED</button>
+            <button class="currency-btn" id="home-SGD" onclick="setHomeCurrency('SGD','S$')">S$ SGD</button>
+            <button class="currency-btn" id="home-JPY" onclick="setHomeCurrency('JPY','¥')">¥ JPY</button>
+            <button class="currency-btn" id="home-AUD" onclick="setHomeCurrency('AUD','A$')">A$ AUD</button>
+          </div>
+        </div>
+
+        <!-- display & convert -->
+        <div class="section-title" style="margin-bottom:10px;">Display &amp; Convert</div>
         <div
           style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;">
-          <!-- tab selector -->
           <div style="display:flex;border-bottom:1px solid var(--border);">
-            <button id="curTabSign" onclick="switchCurTab('sign')"
-              style="flex:1;padding:12px;border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:bold;cursor:pointer;border-radius:0;">
-              Symbol Only
-            </button>
-            <button id="curTabConvert" onclick="switchCurTab('convert')"
-              style="flex:1;padding:12px;border:none;background:none;color:var(--text2);font-size:13px;cursor:pointer;border-radius:0;">
-              Convert
-            </button>
+            <button class="cur-tab-btn active" id="curTab1" onclick="switchCurTab('sign')">Symbol</button>
+            <button class="cur-tab-btn" id="curTab2" onclick="switchCurTab('manual')">Manual</button>
+            <button class="cur-tab-btn" id="curTab3" onclick="switchCurTab('live')">Live Rate</button>
           </div>
-          <!-- sign tab -->
-          <div id="curPanelSign" style="padding:14px;">
-            <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Changes the currency symbol only —
-              amounts stay in original value</div>
-            <div class="currency-row">
+
+          <!-- Symbol tab -->
+          <div id="curPanel1" style="padding:14px;">
+            <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Change the symbol shown — amounts stay
+              unchanged</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <button class="currency-btn active" id="cur-INR" onclick="setCurrency('INR','₹')">₹ INR</button>
               <button class="currency-btn" id="cur-USD" onclick="setCurrency('USD','$')">$ USD</button>
               <button class="currency-btn" id="cur-EUR" onclick="setCurrency('EUR','€')">€ EUR</button>
               <button class="currency-btn" id="cur-GBP" onclick="setCurrency('GBP','£')">£ GBP</button>
+              <button class="currency-btn" id="cur-AED" onclick="setCurrency('AED','د.إ')">د.إ AED</button>
+              <button class="currency-btn" id="cur-SGD" onclick="setCurrency('SGD','S$')">S$ SGD</button>
+              <button class="currency-btn" id="cur-JPY" onclick="setCurrency('JPY','¥')">¥ JPY</button>
+              <button class="currency-btn" id="cur-AUD" onclick="setCurrency('AUD','A$')">A$ AUD</button>
             </div>
           </div>
-          <!-- convert tab -->
-          <div id="curPanelConvert" style="padding:14px;display:none;">
-            <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">Converts all amounts using real exchange
-              rates (1 INR = x Currency)</div>
-            <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
-              <input type="number" id="convertFrom" placeholder="e.g. 90" inputmode="decimal"
-                style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:14px;" />
-              <div style="font-size:13px;color:var(--text2);">INR =</div>
-              <input type="number" id="convertTo" placeholder="1"
-                style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:14px;" />
-              <select id="convertToCur"
-                style="padding:10px 8px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;">
+
+          <!-- Manual rate tab -->
+          <div id="curPanel2" style="padding:14px;display:none;">
+            <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Enter your own exchange rate to convert
+              all amounts</div>
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+              <div style="font-size:12px;color:var(--text2);font-weight:bold;" id="manualFromLabel">1 INR =</div>
+              <input type="number" id="manualRate" placeholder="e.g. 0.012" inputmode="decimal" step="any"
+                style="flex:1;min-width:80px;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;" />
+              <select id="manualToCur" onchange="updateManualPreview()"
+                style="flex:1;min-width:70px;padding:9px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;">
                 <option value="USD" data-sym="$">$ USD</option>
                 <option value="EUR" data-sym="€">€ EUR</option>
                 <option value="GBP" data-sym="£">£ GBP</option>
                 <option value="AED" data-sym="د.إ">د.إ AED</option>
                 <option value="SGD" data-sym="S$">S$ SGD</option>
                 <option value="JPY" data-sym="¥">¥ JPY</option>
+                <option value="AUD" data-sym="A$">A$ AUD</option>
               </select>
             </div>
-            <div id="convertPreview"
-              style="font-size:12px;color:var(--text2);margin-bottom:12px;padding:10px;background:var(--surface2);border-radius:8px;min-height:36px;">
+            <div id="manualPreview"
+              style="font-size:12px;color:var(--text2);padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;min-height:32px;">
             </div>
-            <button onclick="applyConversion()"
-              style="width:100%;padding:12px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;">Apply
-              Conversion</button>
+            <button onclick="applyManualRate()"
+              style="width:100%;padding:11px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:bold;cursor:pointer;">Apply
+              Rate</button>
             <button onclick="resetConversion()"
-              style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--text2);font-size:13px;cursor:pointer;margin-top:8px;">Reset
-              to Original (INR)</button>
+              style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--text2);font-size:12px;cursor:pointer;margin-top:8px;">Reset
+              to Home Currency</button>
+          </div>
+
+          <!-- Live rate tab -->
+          <div id="curPanel3" style="padding:14px;display:none;">
+            <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Fetch today's live exchange rate from the
+              internet</div>
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px;">
+              <select id="liveFromCur"
+                style="flex:1;padding:9px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;">
+                <option value="INR">INR</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="AED">AED</option>
+                <option value="SGD">SGD</option>
+                <option value="JPY">JPY</option>
+                <option value="AUD">AUD</option>
+              </select>
+              <span style="font-size:18px;color:var(--text2);">→</span>
+              <select id="liveToCur"
+                style="flex:1;padding:9px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="AED">AED</option>
+                <option value="SGD">SGD</option>
+                <option value="JPY">JPY</option>
+                <option value="AUD">AUD</option>
+                <option value="INR">INR</option>
+              </select>
+              <button onclick="fetchLiveRate()" id="fetchBtn"
+                style="padding:9px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap;">
+                Fetch Rate
+              </button>
+            </div>
+            <div id="liveRateResult"
+              style="font-size:12px;color:var(--text2);padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:10px;min-height:36px;line-height:1.5;">
+              Tap "Fetch Rate" to get today's rate
+            </div>
+            <button id="applyLiveBtn" onclick="applyLiveRate()"
+              style="width:100%;padding:11px;border-radius:10px;border:none;background:var(--surface2);color:var(--text2);font-size:13px;font-weight:bold;cursor:not-allowed;opacity:0.5;">
+              Apply Live Rate
+            </button>
+            <button onclick="resetConversion()"
+              style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--text2);font-size:12px;cursor:pointer;margin-top:8px;">Reset
+              to Home Currency</button>
           </div>
         </div>
 
@@ -2102,8 +2149,22 @@
       </div>
       <div class="form-group"><label>Notes (optional)</label><input type="text" id="txNotes"
           placeholder="Add a note…" /></div>
-      <button class="save-btn" onclick="saveTx()">Save Transaction</button>
-      <button class="cancel-btn" onclick="closeModal('modalTx')">Cancel</button>
+      <button class="save-btn" id="txSaveBtn" onclick="saveTx()">Save Transaction</button>
+      <button class="cancel-btn" onclick="cancelTxModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: WALLET TRANSFER ═══ -->
+  <div class="modal-overlay" id="modalTransfer">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Transfer Between Wallets</div>
+      <div class="form-group"><label>From Wallet</label><select id="transferFrom"></select></div>
+      <div class="form-group"><label>To Wallet</label><select id="transferTo"></select></div>
+      <div class="form-group"><label>Amount</label><input type="number" id="transferAmt" placeholder="0.00"
+          inputmode="decimal" /></div>
+      <button class="save-btn" onclick="saveTransfer()">Transfer Now</button>
+      <button class="cancel-btn" onclick="closeModal('modalTransfer')">Cancel</button>
     </div>
   </div>
 
@@ -2240,20 +2301,6 @@
     </div>
   </div>
 
-  <!-- ═══ MODAL: WALLET TRANSFER ═══ -->
-  <div class="modal-overlay" id="modalTransfer">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-title">Transfer Between Wallets</div>
-      <div class="form-group"><label>From Wallet</label><select id="transferFrom"></select></div>
-      <div class="form-group"><label>To Wallet</label><select id="transferTo"></select></div>
-      <div class="form-group"><label>Amount</label><input type="number" id="transferAmt" placeholder="0.00"
-          inputmode="decimal" /></div>
-      <button class="save-btn" onclick="saveTransfer()">Transfer</button>
-      <button class="cancel-btn" onclick="closeModal('modalTransfer')">Cancel</button>
-    </div>
-  </div>
-
   <!-- ═══ MODAL: CHANGE PIN ═══ -->
   <div class="modal-overlay" id="modalChangePin">
     <div class="modal-sheet">
@@ -2321,7 +2368,7 @@
       return 'p' + Math.abs(h).toString(16);
     }
     function init() {
-      loadData(); loadCurrency();
+      loadData(); loadHomeCurrency(); loadDisplayCurrency();
       try { stored = localStorage.getItem('sxt_pin') || null; } catch (e) { }
       var t; try { t = localStorage.getItem('sxt_theme'); } catch (e) { }
       if (t) setTheme(t);
@@ -2506,9 +2553,27 @@
       var notes = document.getElementById('txNotes').value.trim();
       if (!amt || amt <= 0) { showToast('Enter a valid amount'); return; }
       if (!desc) { showToast('Enter a description'); return; }
+
+      if (editingTxId) {
+        // EDIT MODE — reverse old, apply new
+        var oldTx = null; for (var i = 0; i < txns.length; i++) { if (txns[i].id === editingTxId) { oldTx = txns[i]; break; } }
+        if (oldTx) {
+          for (var k = 0; k < wallets.length; k++) { if (wallets[k].name === oldTx.wallet) { wallets[k].balance += (oldTx.type === 'credit' ? -oldTx.amt : oldTx.amt); break; } }
+          var wName2 = ''; for (var m = 0; m < wallets.length; m++) { if (String(wallets[m].id) === String(wId)) { wName2 = wallets[m].name; break; } }
+          for (var n = 0; n < wallets.length; n++) { if (String(wallets[n].id) === String(wId)) { wallets[n].balance += (txType === 'credit' ? amt : -amt); break; } }
+          oldTx.type = txType; oldTx.cat = txCat; oldTx.amt = amt; oldTx.desc = desc; oldTx.wallet = wName2; oldTx.date = date; oldTx.notes = notes;
+        }
+        saveData(); closeModal('modalTx');
+        document.getElementById('txAmt').value = ''; document.getElementById('txDesc').value = ''; document.getElementById('txNotes').value = '';
+        var btn2 = document.getElementById('txSaveBtn'); if (btn2) btn2.textContent = 'Save Transaction';
+        editingTxId = null;
+        showToast('Transaction updated'); refreshAll(); return;
+      }
+
+      // ADD MODE
       var wName = '';
-      for (var i = 0; i < wallets.length; i++) { if (String(wallets[i].id) === String(wId)) { wName = wallets[i].name; break; } }
-      for (var j = 0; j < wallets.length; j++) { if (String(wallets[j].id) === String(wId)) { wallets[j].balance += (txType === 'credit' ? amt : -amt); break; } }
+      for (var j = 0; j < wallets.length; j++) { if (String(wallets[j].id) === String(wId)) { wName = wallets[j].name; break; } }
+      for (var l = 0; l < wallets.length; l++) { if (String(wallets[l].id) === String(wId)) { wallets[l].balance += (txType === 'credit' ? amt : -amt); break; } }
       txns.unshift({ id: Date.now(), type: txType, cat: txCat, amt: amt, desc: desc, wallet: wName, date: date, notes: notes });
       saveData(); closeModal('modalTx');
       document.getElementById('txAmt').value = ''; document.getElementById('txDesc').value = ''; document.getElementById('txNotes').value = '';
@@ -2521,15 +2586,10 @@
         + '<div class="tx-icon cat-' + tx.cat + '">' + icon + '</div>'
         + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div><div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div>' + noteHtml + '</div>'
         + '<div class="tx-amount ' + amtCls + '" onclick="toggleTxDel(' + tx.id + ')">' + sign + fmtC(tx.amt) + '</div>'
-        + '<button class="tx-del-btn" style="flex-direction:row;gap:6px;width:auto;padding:0 10px;" onclick="event.stopPropagation();">'
-        + '<span onclick="openEditTx(' + tx.id + ')" style="cursor:pointer;padding:4px;" title="Edit">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
-        + '</span>'
-        + '<span onclick="deleteTx(' + tx.id + ')" style="cursor:pointer;padding:4px;" title="Delete">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>'
-        + '</span>'
-        + '</button>'
-        + '</div>';
+        + '<button class="tx-del-btn" style="width:90px;flex-direction:row;gap:4px;" onclick="event.stopPropagation();">'
+        + '<span onclick="openEditTx(' + tx.id + ')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</span>'
+        + '<span onclick="deleteTx(' + tx.id + ')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>Del</span>'
+        + '</button></div>';
     }
     function toggleTxDel(id) { var el = document.getElementById('tx' + id); if (el) el.classList.toggle('show-del'); }
     function deleteTx(id) {
@@ -2570,9 +2630,7 @@
       var now = new Date(), thisM = txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); });
       var income = thisM.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
       var expense = thisM.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-      // always update analytics values regardless of visibility
       setText('aIncome', fmtC(income)); setText('aExpense', fmtC(expense)); setText('aSaved', fmtC(Math.max(0, income - expense)));
-      // only update home balance if visible
       if (!balVisible) return;
       setText('totalBal', fmtC(total)); setText('homeIncome', fmtC(income)); setText('homeExpense', fmtC(expense));
     }
@@ -2612,8 +2670,8 @@
       el.innerHTML = cats.map(function (c) {
         var pct = total > 0 ? Math.round((byCat[c] / total) * 100) : 0, clr = CAT_COLORS[c] || '#7c6dfa';
         var budget = budgets.filter(function (b) { return b.cat === c; })[0];
-        var budgetNote = budget ? ' / ₹' + fmt(budget.limit) + ' budget' : '';
-        return '<div style="margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span>' + c.charAt(0).toUpperCase() + c.slice(1) + '</span><span style="color:var(--text2)">₹' + fmt(byCat[c]) + budgetNote + ' (' + pct + '%)</span></div><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;width:' + pct + '%;background:' + clr + ';border-radius:4px;transition:width 0.6s;"></div></div></div>';
+        var budgetNote = budget ? ' / ' + fmtC(budget.limit) + ' budget' : '';
+        return '<div style="margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span>' + c.charAt(0).toUpperCase() + c.slice(1) + '</span><span style="color:var(--text2)"' + fmtC(byCat[c]) + budgetNote + ' (' + pct + '%)</span></div><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;width:' + pct + '%;background:' + clr + ';border-radius:4px;transition:width 0.6s;"></div></div></div>';
       }).join('');
     }
 
@@ -2726,7 +2784,7 @@
     function openAddToGoal(id) {
       addingToGoal = id;
       var g = goals.filter(function (g) { return g.id === id; })[0]; if (!g) return;
-      var info = document.getElementById('addGoalInfo'); if (info) info.textContent = g.emoji + ' ' + g.name + ' — ₹' + fmt(g.saved) + ' of ₹' + fmt(g.target);
+      var info = document.getElementById('addGoalInfo'); if (info) info.textContent = g.emoji + ' ' + g.name + ' — ' + fmtC(g.saved) + ' of ' + fmtC(g.target);
       document.getElementById('addGoalAmt').value = ''; openModal('modalAddGoal');
     }
     function confirmAddToGoal() {
@@ -2740,9 +2798,9 @@
       if (goals.length === 0) { el.innerHTML = '<div class="empty-state" style="padding:32px 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>No goals yet. Tap the button below.</p></div>'; return; }
       el.innerHTML = goals.map(function (g) {
         var pct = g.target > 0 ? Math.min(Math.round((g.saved / g.target) * 100), 100) : 0, done = g.saved >= g.target;
-        return '<div class="goal-item"><div class="goal-head"><div class="goal-emoji">' + g.emoji + '</div><div class="goal-info"><div class="goal-name">' + g.name + '</div><div class="goal-tgt">Target: ₹' + fmt(g.target) + '</div></div><div class="goal-badge' + (done ? ' done' : '') + '">' + pct + '%' + (done ? ' ✓' : '') + '</div></div>'
+        return '<div class="goal-item"><div class="goal-head"><div class="goal-emoji">' + g.emoji + '</div><div class="goal-info"><div class="goal-name">' + g.name + '</div><div class="goal-tgt">Target: ' + fmtC(g.target) + '</div></div><div class="goal-badge' + (done ? ' done' : '') + '">' + pct + '%' + (done ? ' ✓' : '') + '</div></div>'
           + '<div class="goal-bar"><div class="goal-fill' + (done ? ' done' : '') + '" style="width:' + pct + '%"></div></div>'
-          + '<div class="goal-foot"><div class="goal-saved-txt">Saved: <b>₹' + fmt(g.saved) + '</b></div><div class="goal-btns">'
+          + '<div class="goal-foot"><div class="goal-saved-txt">Saved: <b>' + fmtC(g.saved) + '</b></div><div class="goal-btns">'
           + (done ? '' : '<button class="goal-add-btn" onclick="openAddToGoal(' + g.id + ')">+ Add</button>')
           + '<button class="goal-del-btn" onclick="deleteGoal(' + g.id + ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
           + '</div></div></div>';
@@ -2801,12 +2859,12 @@
       else if (s.cycle === 'yearly') due.setFullYear(due.getFullYear() + 1);
       else if (s.cycle === 'weekly') due.setDate(due.getDate() + 7);
       s.due = due.toISOString().split('T')[0];
-      saveData(); showToast('₹' + fmt(s.amt) + ' paid for ' + s.name); refreshSubsPage(); refreshAll();
+      saveData(); showToast(fmtC(s.amt) + ' paid for ' + s.name); refreshSubsPage(); refreshAll();
     }
     function refreshSubsPage() {
       var active = subs.filter(function (s) { return s.active !== false; });
       var monthly = active.reduce(function (sum, s) { return sum + getMonthlyAmt(s); }, 0);
-      setText('subMonthly', '₹' + fmt(monthly)); setText('subYearly', '₹' + fmt(monthly * 12)); setText('subCount', active.length);
+      setText('subMonthly', fmtC(monthly)); setText('subYearly', fmtC(monthly * 12)); setText('subCount', active.length);
       var now = new Date(), y = now.getFullYear(), m = now.getMonth();
       var due = active.filter(function (s) { var d = new Date(s.due); return d.getFullYear() === y && d.getMonth() === m; }).sort(function (a, b) { return new Date(a.due) - new Date(b.due); });
       var dueEl = document.getElementById('subsDueList');
@@ -2816,7 +2874,7 @@
           return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
             + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
             + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + s.name + '</div><div style="font-size:12px;color:var(--text2)">' + s.cycle + ' · ' + s.due + '</div></div>'
-            + '<div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div><div style="font-size:11px;font-weight:bold;color:' + bColor + '">' + badge + '</div></div></div>';
+            + '<div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:bold"' + fmtC(s.amt) + '</div><div style="font-size:11px;font-weight:bold;color:' + bColor + '">' + badge + '</div></div></div>';
         }).join('');
       }
       var el = document.getElementById('subsList'); if (!el) return;
@@ -2827,7 +2885,7 @@
         return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
           + '<div style="display:flex;align-items:center;gap:12px;">'
           + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
-          + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + s.name + '</div><div style="font-size:12px;color:' + dueColor + '">' + dueTxt + ' · ₹' + fmt(mAmt) + '/mo</div></div>'
+          + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + s.name + '</div><div style="font-size:12px;color:' + dueColor + '">' + dueTxt + ' · ' + fmtC(mAmt) + '/mo</div></div>'
           + '<div style="display:flex;gap:6px;align-items:center;">'
           + '<button onclick="payNow(' + s.id + ')" style="padding:6px 10px;border-radius:8px;border:none;background:var(--green-s);color:var(--green);font-size:11px;font-weight:bold;cursor:pointer;">Pay</button>'
           + '<button onclick="editSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
@@ -2875,7 +2933,7 @@
         return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
           + '<div style="width:36px;height:36px;border-radius:10px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
           + '<div style="flex:1"><div style="font-size:13px;font-weight:500">' + s.name + '</div><div style="font-size:11px;color:' + bColor + '">' + daysLbl + '</div></div>'
-          + '<div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div></div>';
+          + '<div style="font-size:14px;font-weight:bold"' + fmtC(s.amt) + '</div></div>';
       }).join('');
     }
 
@@ -2885,37 +2943,184 @@
       var el = document.querySelector('.greeting'); if (el) el.innerHTML = g + ', <span>welcome back</span>';
     }
 
-    /* ════ PHASE 8 ══════════════════════════════════════════════ */
+    /* ════ PHASE 8-10 ═══════════════════════════════════════════ */
 
-    /* ── CURRENCY ── */
-    var currencySymbol = '₹';
-    var currencyCode = 'INR';
+    /* ── HOME CURRENCY (base, what user enters amounts in) ── */
+    var homeCurrencyCode = 'INR';
+    var homeCurrencySymbol = '₹';
 
-    function setCurrency(code, symbol) {
-      currencyCode = code;
-      currencySymbol = symbol;
-      try { localStorage.setItem('sxt_currency', JSON.stringify({ code: code, symbol: symbol })); } catch (e) { }
-      document.querySelectorAll('.currency-btn').forEach(function (b) { b.classList.remove('active'); });
-      var btn = document.getElementById('cur-' + code);
-      if (btn) btn.classList.add('active');
+    function setHomeCurrency(code, symbol) {
+      homeCurrencyCode = code;
+      homeCurrencySymbol = symbol;
+      // also reset display to home currency
+      displaySymbol = symbol;
+      displayCode = code;
+      convRate = 1;
+      isConverted = false;
+      try { localStorage.setItem('sxt_homecur', JSON.stringify({ code: code, symbol: symbol })); } catch (e) { }
+      document.querySelectorAll('[id^="home-"]').forEach(function (b) { b.classList.remove('active'); });
+      var btn = document.getElementById('home-' + code); if (btn) btn.classList.add('active');
+      // update display tab active button
+      document.querySelectorAll('[id^="cur-"]').forEach(function (b) { b.classList.remove('active'); });
+      var cb = document.getElementById('cur-' + code); if (cb) cb.classList.add('active');
+      showToast('Home currency set to ' + symbol + ' ' + code);
       refreshAll();
       if (curPage === 'Budget') refreshBudgetPage();
       if (curPage === 'Analytics') refreshAnalytics();
     }
 
-    function loadCurrency() {
+    function loadHomeCurrency() {
       try {
-        var c = localStorage.getItem('sxt_currency');
-        if (c) { var parsed = JSON.parse(c); currencyCode = parsed.code; currencySymbol = parsed.symbol; }
+        var h = localStorage.getItem('sxt_homecur');
+        if (h) { var p = JSON.parse(h); homeCurrencyCode = p.code; homeCurrencySymbol = p.symbol; displaySymbol = p.symbol; displayCode = p.code; }
       } catch (e) { }
-      document.querySelectorAll('.currency-btn').forEach(function (b) { b.classList.remove('active'); });
-      var btn = document.getElementById('cur-' + currencyCode);
-      if (btn) btn.classList.add('active');
+      document.querySelectorAll('[id^="home-"]').forEach(function (b) { b.classList.remove('active'); });
+      var btn = document.getElementById('home-' + homeCurrencyCode); if (btn) btn.classList.add('active');
+      document.querySelectorAll('[id^="cur-"]').forEach(function (b) { b.classList.remove('active'); });
+      var cb = document.getElementById('cur-' + homeCurrencyCode); if (cb) cb.classList.add('active');
     }
 
-    /* Override fmt to use currency symbol */
+    /* ── DISPLAY CURRENCY & CONVERSION ── */
+    var displaySymbol = '₹';
+    var displayCode = 'INR';
+    var convRate = 1;
+    var isConverted = false;
+
     function fmtC(n) {
-      return currencySymbol + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      var v = isConverted ? n * convRate : n;
+      if (isConverted) return displaySymbol + ' ' + v.toFixed(2);
+      return displaySymbol + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    function setCurrency(code, symbol) {
+      displaySymbol = symbol; displayCode = code; convRate = 1; isConverted = false;
+      try { localStorage.setItem('sxt_displaycur', JSON.stringify({ code: code, symbol: symbol })); } catch (e) { }
+      document.querySelectorAll('[id^="cur-"]').forEach(function (b) { b.classList.remove('active'); });
+      var btn = document.getElementById('cur-' + code); if (btn) btn.classList.add('active');
+      showToast('Display symbol changed to ' + symbol);
+      refreshAll();
+      if (curPage === 'Budget') refreshBudgetPage();
+      if (curPage === 'Analytics') refreshAnalytics();
+    }
+
+    function loadDisplayCurrency() {
+      try {
+        var d = localStorage.getItem('sxt_displaycur');
+        if (d) { var p = JSON.parse(d); displaySymbol = p.symbol; displayCode = p.code; }
+      } catch (e) { }
+      document.querySelectorAll('[id^="cur-"]').forEach(function (b) { b.classList.remove('active'); });
+      var btn = document.getElementById('cur-' + displayCode); if (btn) btn.classList.add('active');
+    }
+
+    /* ── CURRENCY TABS ── */
+    function switchCurTab(tab) {
+      var tabs = ['sign', 'manual', 'live'];
+      var idx = { sign: 1, manual: 2, live: 3 };
+      tabs.forEach(function (t, i) {
+        var panel = document.getElementById('curPanel' + (i + 1));
+        var tBtn = document.getElementById('curTab' + (i + 1));
+        var isActive = (t === tab);
+        if (panel) panel.style.display = isActive ? 'block' : 'none';
+        if (tBtn) { tBtn.classList.toggle('active', isActive); }
+      });
+      if (tab === 'manual') updateManualPreview();
+    }
+
+    /* ── MANUAL RATE ── */
+    function updateManualPreview() {
+      var rate = parseFloat(document.getElementById('manualRate').value) || 0;
+      var sel = document.getElementById('manualToCur');
+      var sym = sel.options[sel.selectedIndex].getAttribute('data-sym') || sel.value;
+      var lbl = document.getElementById('manualFromLabel');
+      if (lbl) lbl.textContent = '1 ' + homeCurrencyCode + ' =';
+      var prev = document.getElementById('manualPreview');
+      if (!prev) return;
+      if (!rate) { prev.textContent = 'Enter rate above'; return; }
+      prev.textContent = 'Example: ' + homeCurrencySymbol + '1,000 → ' + sym + ' ' + (1000 * rate).toFixed(2);
+    }
+    document.addEventListener('input', function (e) { if (e.target && e.target.id === 'manualRate') updateManualPreview(); });
+    document.addEventListener('change', function (e) { if (e.target && e.target.id === 'manualToCur') updateManualPreview(); });
+
+    function applyManualRate() {
+      var rate = parseFloat(document.getElementById('manualRate').value) || 0;
+      if (rate <= 0) { showToast('Enter a valid exchange rate'); return; }
+      var sel = document.getElementById('manualToCur');
+      var sym = sel.options[sel.selectedIndex].getAttribute('data-sym') || sel.value;
+      displaySymbol = sym; displayCode = sel.value; convRate = rate; isConverted = true;
+      showToast('Converted: 1 ' + homeCurrencyCode + ' = ' + sym + ' ' + rate);
+      refreshAll();
+      if (curPage === 'Budget') refreshBudgetPage();
+      if (curPage === 'Analytics') refreshAnalytics();
+    }
+
+    /* ── LIVE RATE ── */
+    var liveRateValue = 0;
+    var liveRateSymbol = '';
+    var liveRateCode = '';
+
+    function fetchLiveRate() {
+      var from = document.getElementById('liveFromCur').value;
+      var to = document.getElementById('liveToCur').value;
+      var resEl = document.getElementById('liveRateResult');
+      var btn = document.getElementById('applyLiveBtn');
+      if (from === to) { showToast('Select two different currencies'); return; }
+      resEl.textContent = '⏳ Fetching rate...';
+      btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+
+      // Use exchangerate-api (free, no key, CORS-friendly)
+      var url = 'https://api.exchangerate-api.com/v4/latest/' + from;
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.timeout = 8000;
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            var rate = data.rates[to];
+            if (!rate) { resEl.textContent = 'Rate not found for ' + to; return; }
+            liveRateValue = rate;
+            liveRateCode = to;
+            // get symbol map
+            var symMap = { USD: '$', EUR: '€', GBP: '£', INR: '₹', AED: 'د.إ', SGD: 'S$', JPY: '¥', AUD: 'A$' };
+            liveRateSymbol = symMap[to] || to;
+            var date = data.date || 'today';
+            resEl.innerHTML = '<b style="color:var(--green)">✓ Rate fetched (' + date + ')</b><br/>1 ' + from + ' = ' + liveRateSymbol + ' ' + rate.toFixed(6) + '<br/><span style="color:var(--text2)">Source: exchangerate-api.com</span>';
+            btn.style.opacity = '1'; btn.style.cursor = 'pointer'; btn.style.background = 'var(--green)'; btn.style.color = '#fff';
+          } catch (e) { resEl.textContent = 'Parse error. Try again.'; }
+        } else {
+          resEl.textContent = 'Network error (' + xhr.status + '). Check your connection.';
+        }
+      };
+      xhr.onerror = xhr.ontimeout = function () {
+        resEl.textContent = '❌ Could not reach server. Check your internet connection.';
+      };
+      xhr.send();
+    }
+
+    function applyLiveRate() {
+      if (!liveRateValue) { showToast('Fetch a rate first'); return; }
+      displaySymbol = liveRateSymbol; displayCode = liveRateCode;
+      convRate = liveRateValue; isConverted = true;
+      showToast('Live rate applied: 1 ' + homeCurrencyCode + ' = ' + liveRateSymbol + ' ' + liveRateValue.toFixed(4));
+      refreshAll();
+      if (curPage === 'Budget') refreshBudgetPage();
+      if (curPage === 'Analytics') refreshAnalytics();
+    }
+
+    function resetConversion() {
+      displaySymbol = homeCurrencySymbol; displayCode = homeCurrencyCode;
+      convRate = 1; isConverted = false; liveRateValue = 0;
+      document.getElementById('manualRate').value = '';
+      var prev = document.getElementById('manualPreview'); if (prev) prev.textContent = '';
+      var res = document.getElementById('liveRateResult'); if (res) res.textContent = 'Tap "Fetch Rate" to get today\'s rate';
+      var btn = document.getElementById('applyLiveBtn');
+      if (btn) { btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed'; btn.style.background = 'var(--surface2)'; btn.style.color = 'var(--text2)'; }
+      document.querySelectorAll('[id^="cur-"]').forEach(function (b) { b.classList.remove('active'); });
+      var cb = document.getElementById('cur-' + homeCurrencyCode); if (cb) cb.classList.add('active');
+      showToast('Reset to ' + homeCurrencySymbol + ' ' + homeCurrencyCode);
+      refreshAll();
+      if (curPage === 'Budget') refreshBudgetPage();
+      if (curPage === 'Analytics') refreshAnalytics();
     }
 
     /* ── BALANCE VISIBILITY TOGGLE ── */
@@ -2924,13 +3129,11 @@
       balVisible = !balVisible;
       var eyeSvg = document.getElementById('eyeIcon');
       if (!balVisible) {
-        // hide
-        setText('totalBal', '••••••');
-        setText('homeIncome', '••••');
-        setText('homeExpense', '••••');
+        setText('totalBal', '• • • •');
+        setText('homeIncome', '• • •');
+        setText('homeExpense', '• • •');
         if (eyeSvg) eyeSvg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
       } else {
-        // show — just refresh
         if (eyeSvg) eyeSvg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
         refreshBalance();
       }
@@ -2938,203 +3141,100 @@
 
     /* ── FINANCIAL HEALTH SCORE ── */
     function refreshHealthScore() {
-      var now = new Date();
-      var thisM = txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); });
+      if (txns.length === 0) return;
+      var now = new Date(), thisM = txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); });
       var income = thisM.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
       var expense = thisM.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-
-      if (txns.length === 0) return; // no data yet
-
-      /* Component 1: Savings rate (0-40 pts) */
       var savingsRate = income > 0 ? Math.max(0, (income - expense) / income) : 0;
       var savingsPts = Math.min(Math.round(savingsRate * 40), 40);
-
-      /* Component 2: Budget adherence (0-30 pts) */
       var budgetPts = 30;
       if (budgets.length > 0) {
         var catSpend = {};
         thisM.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { catSpend[t.cat] = (catSpend[t.cat] || 0) + t.amt; });
-        var overCount = budgets.filter(function (b) { return (catSpend[b.cat] || 0) > b.limit; }).length;
-        budgetPts = Math.max(0, 30 - overCount * 10);
+        var over = budgets.filter(function (b) { return (catSpend[b.cat] || 0) > b.limit; }).length;
+        budgetPts = Math.max(0, 30 - over * 10);
       }
-
-      /* Component 3: Goals progress (0-30 pts) */
-      var goalPts = 15; // neutral if no goals
+      var goalPts = 15;
       if (goals.length > 0) {
-        var avgProgress = goals.reduce(function (s, g) { return s + (g.target > 0 ? Math.min(g.saved / g.target, 1) : 0); }, 0) / goals.length;
-        goalPts = Math.round(avgProgress * 30);
+        var avg = goals.reduce(function (s, g) { return s + (g.target > 0 ? Math.min(g.saved / g.target, 1) : 0); }, 0) / goals.length;
+        goalPts = Math.round(avg * 30);
       }
-
       var score = savingsPts + budgetPts + goalPts;
       var color = score >= 75 ? 'var(--green)' : score >= 50 ? '#f59e0b' : 'var(--red)';
       var label = score >= 75 ? 'Excellent 🎉' : score >= 50 ? 'Good 👍' : 'Needs Attention ⚠️';
-      var sub = score >= 75 ? 'You\'re managing money well!' : score >= 50 ? 'Some areas to improve.' : 'Review your spending habits.';
-
-      /* Draw arc */
-      var arc = document.getElementById('healthArc');
-      var circ = 2 * Math.PI * 28; // 175.9
-      if (arc) {
-        arc.style.stroke = color;
-        arc.style.strokeDashoffset = circ - (circ * score / 100);
-      }
-      setText('healthScoreNum', score);
-      setText('healthLabel', label);
-      setText('healthSub', sub);
-
-      /* Mini bars */
+      var sub = score >= 75 ? 'Managing money well!' : score >= 50 ? 'Some areas to improve.' : 'Review spending habits.';
+      var arc = document.getElementById('healthArc'), circ = 2 * Math.PI * 28;
+      if (arc) { arc.style.stroke = color; arc.style.strokeDashoffset = circ - (circ * score / 100); }
+      setText('healthScoreNum', score); setText('healthLabel', label); setText('healthSub', sub);
       var barsEl = document.getElementById('healthBars');
-      if (barsEl) {
-        barsEl.innerHTML = [
-          { label: 'Savings', pct: Math.round(savingsRate * 100), color: 'var(--green)' },
-          { label: 'Budget', pct: Math.round((budgetPts / 30) * 100), color: 'var(--accent)' },
-          { label: 'Goals', pct: Math.round((goalPts / 30) * 100), color: '#f59e0b' },
-        ].map(function (r) {
-          return '<div class="health-bar-row">'
-            + '<div style="width:42px">' + r.label + '</div>'
-            + '<div class="health-bar-track"><div class="health-bar-fill" style="width:' + r.pct + '%;background:' + r.color + '"></div></div>'
-            + '<div style="width:28px;text-align:right">' + r.pct + '%</div></div>';
-        }).join('');
-      }
+      if (barsEl) barsEl.innerHTML = [
+        { label: 'Savings', pct: Math.round(savingsRate * 100), color: 'var(--green)' },
+        { label: 'Budget', pct: Math.round((budgetPts / 30) * 100), color: 'var(--accent)' },
+        { label: 'Goals', pct: Math.round((goalPts / 30) * 100), color: '#f59e0b' },
+      ].map(function (r) {
+        return '<div class="health-bar-row"><div style="width:42px">' + r.label + '</div>'
+          + '<div class="health-bar-track"><div class="health-bar-fill" style="width:' + r.pct + '%;background:' + r.color + '"></div></div>'
+          + '<div style="width:28px;text-align:right">' + r.pct + '%</div></div>';
+      }).join('');
     }
 
-    /* ── GROUPED TRANSACTION LIST ── */
-    function renderTxListGrouped(list, containerId) {
-      var el = document.getElementById(containerId);
-      if (!el) return;
-      if (list.length === 0) {
-        el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><p>No transactions yet.</p></div>';
-        return;
+    /* ── 7-DAY TREND ── */
+    function refreshTrend() {
+      var barsEl = document.getElementById('trendBars'), labsEl = document.getElementById('trendLabels');
+      if (!barsEl || !labsEl) return;
+      var days = [], DAY = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], today = new Date(); today.setHours(0, 0, 0, 0);
+      for (var i = 6; i >= 0; i--) {
+        var d = new Date(today.getTime() - i * 86400000), key = d.toISOString().split('T')[0];
+        var total = txns.filter(function (t) { return t.date === key && t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+        days.push({ label: DAY[d.getDay()], amt: total, isToday: i === 0 });
       }
-      /* group by date */
-      var groups = {}, order = [];
-      list.forEach(function (t) {
-        if (!groups[t.date]) { groups[t.date] = []; order.push(t.date); }
-        groups[t.date].push(t);
-      });
-      /* sort dates descending */
-      order.sort(function (a, b) { return b > a ? 1 : -1; });
-
-      var today = new Date().toISOString().split('T')[0];
-      var yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-
-      el.innerHTML = order.map(function (date) {
-        var label = date === today ? 'Today' : date === yesterday ? 'Yesterday' : date;
-        var dayTotal = groups[date].filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-        var header = '<div class="tx-date-group"><span>' + label + '</span>'
-          + (dayTotal > 0 ? '<span style="float:right;color:var(--red);font-size:10px;">−' + fmtC(dayTotal) + '</span>' : '') + '</div>';
-        return header + groups[date].map(renderTxItem).join('');
+      var maxAmt = Math.max.apply(null, days.map(function (d) { return d.amt; })) || 1;
+      barsEl.innerHTML = days.map(function (d) {
+        var h = Math.max(Math.round((d.amt / maxAmt) * 40), d.amt > 0 ? 4 : 2), color = d.isToday ? 'var(--accent)' : (d.amt > 0 ? 'var(--text2)' : 'var(--border)');
+        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;"><div style="width:100%;height:' + h + 'px;background:' + color + ';border-radius:3px 3px 0 0;"></div></div>';
+      }).join('');
+      labsEl.innerHTML = days.map(function (d) {
+        return '<div style="flex:1;text-align:center;font-size:9px;color:' + (d.isToday ? 'var(--accent)' : 'var(--text2)') + '">' + d.label + '</div>';
       }).join('');
     }
 
     /* ── FINANCIAL TIPS ── */
     var TIPS = [
       { icon: '💡', text: '<b>50/30/20 rule:</b> Spend 50% on needs, 30% on wants, 20% on savings.' },
-      { icon: '📊', text: '<b>Track daily:</b> Just 2 minutes a day logging expenses builds financial awareness.' },
+      { icon: '📊', text: '<b>Track daily:</b> Just 2 minutes a day logging expenses builds awareness.' },
       { icon: '🎯', text: '<b>Pay yourself first:</b> Transfer savings to your goal before spending.' },
       { icon: '🔄', text: '<b>Review subscriptions:</b> Cancel unused ones — they add up fast!' },
-      { icon: '💳', text: '<b>Emergency fund:</b> Aim for 3-6 months of expenses saved.' },
+      { icon: '💳', text: '<b>Emergency fund:</b> Aim for 3–6 months of expenses saved.' },
     ];
     function showRandomTip() {
-      var el = document.getElementById('financialTip');
-      if (!el) return;
+      var el = document.getElementById('financialTip'); if (!el) return;
       var tip = TIPS[Math.floor(Math.random() * TIPS.length)];
       el.innerHTML = '<div class="tip-icon">' + tip.icon + '</div><div class="tip-text">' + tip.text + '</div>';
     }
 
-    /* ════ PHASE 9 ══════════════════════════════════════════════ */
-
-    /* ── CURRENCY TAB SWITCH ── */
-    function switchCurTab(tab) {
-      var isSign = tab === 'sign';
-      document.getElementById('curPanelSign').style.display = isSign ? 'block' : 'none';
-      document.getElementById('curPanelConvert').style.display = isSign ? 'none' : 'block';
-      document.getElementById('curTabSign').style.background = isSign ? 'var(--accent)' : 'none';
-      document.getElementById('curTabSign').style.color = isSign ? '#fff' : 'var(--text2)';
-      document.getElementById('curTabConvert').style.background = isSign ? 'none' : 'var(--accent)';
-      document.getElementById('curTabConvert').style.color = isSign ? 'var(--text2)' : '#fff';
-      if (!isSign) updateConvertPreview();
-    }
-
-    /* ── CONVERSION ── */
-    var conversionRate = 1;      // multiplier applied to all INR amounts
-    var conversionSymbol = '₹';
-    var isConverted = false;
-
-    function updateConvertPreview() {
-      var from = parseFloat(document.getElementById('convertFrom').value) || 0;
-      var to = parseFloat(document.getElementById('convertTo').value) || 0;
-      var sel = document.getElementById('convertToCur');
-      var sym = sel.options[sel.selectedIndex].getAttribute('data-sym') || sel.value;
-      var prev = document.getElementById('convertPreview');
-      if (!from || !to) { if (prev) prev.textContent = 'Enter rate above (e.g. 90 INR = 1 USD)'; return; }
-      var rate = to / from;
-      var ex = 1000; // example
-      if (prev) prev.textContent = 'Example: ₹' + fmt(ex) + ' → ' + sym + ' ' + (ex * rate).toFixed(2) + ' · Rate: 1 INR = ' + sym + ' ' + rate.toFixed(5);
-    }
-
-    function applyConversion() {
-      var from = parseFloat(document.getElementById('convertFrom').value) || 0;
-      var to = parseFloat(document.getElementById('convertTo').value) || 0;
-      var sel = document.getElementById('convertToCur');
-      var sym = sel.options[sel.selectedIndex].getAttribute('data-sym') || sel.value;
-      if (!from || !to) { showToast('Enter the exchange rate first'); return; }
-      conversionRate = to / from;
-      conversionSymbol = sym;
-      currencySymbol = sym;
-      currencyCode = sel.value;
-      isConverted = true;
-      showToast('Converting at ' + sym + ' ' + (to / from).toFixed(4) + ' per ₹');
-      refreshAll();
-      if (curPage === 'Budget') refreshBudgetPage();
-      if (curPage === 'Analytics') refreshAnalytics();
-    }
-
-    function resetConversion() {
-      conversionRate = 1;
-      conversionSymbol = '₹';
-      currencySymbol = '₹';
-      currencyCode = 'INR';
-      isConverted = false;
-      document.getElementById('convertFrom').value = '';
-      document.getElementById('convertTo').value = '';
-      document.getElementById('convertPreview').textContent = '';
-      // reset sign buttons
-      document.querySelectorAll('.currency-btn').forEach(function (b) { b.classList.remove('active'); });
-      var btn = document.getElementById('cur-INR'); if (btn) btn.classList.add('active');
-      showToast('Reset to INR ₹');
-      refreshAll();
-      if (curPage === 'Budget') refreshBudgetPage();
-      if (curPage === 'Analytics') refreshAnalytics();
-    }
-
-    // Wire preview updates
-    document.addEventListener('input', function (e) {
-      if (e.target && (e.target.id === 'convertFrom' || e.target.id === 'convertTo' || e.target.id === 'convertToCur')) {
-        updateConvertPreview();
-      }
-    });
-    document.addEventListener('change', function (e) {
-      if (e.target && e.target.id === 'convertToCur') updateConvertPreview();
-    });
-
-    /* Override fmtC to apply conversion rate */
-    function fmtC(n) {
-      var converted = isConverted ? n * conversionRate : n;
-      if (isConverted) {
-        return currencySymbol + ' ' + converted.toFixed(2);
-      }
-      return currencySymbol + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    /* ── GROUPED TX LIST ── */
+    function renderTxListGrouped(list, containerId) {
+      var el = document.getElementById(containerId); if (!el) return;
+      if (list.length === 0) { el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><p>No transactions yet.</p></div>'; return; }
+      var groups = {}, order = [];
+      list.forEach(function (t) { if (!groups[t.date]) { groups[t.date] = []; order.push(t.date); } groups[t.date].push(t); });
+      order.sort(function (a, b) { return b > a ? 1 : -1; });
+      var today = new Date().toISOString().split('T')[0], yest = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+      el.innerHTML = order.map(function (date) {
+        var label = date === today ? 'Today' : date === yest ? 'Yesterday' : date;
+        var dayTotal = groups[date].filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+        return '<div class="tx-date-group"><span>' + label + '</span>' + (dayTotal > 0 ? '<span style="color:var(--red);font-size:10px;">−' + fmtC(dayTotal) + '</span>' : '') + '</div>'
+          + groups[date].map(renderTxItem).join('');
+      }).join('');
     }
 
     /* ── WALLET TRANSFER ── */
     function openTransfer() {
-      if (wallets.length < 2) { showToast('Need at least 2 wallets to transfer'); return; }
-      var fromSel = document.getElementById('transferFrom');
-      var toSel = document.getElementById('transferTo');
+      if (wallets.length < 2) { showToast('Add at least 2 wallets to transfer'); return; }
       var opts = wallets.map(function (w) { return '<option value="' + w.id + '">' + w.name + ' (' + fmtC(w.balance) + ')</option>'; }).join('');
-      fromSel.innerHTML = opts;
-      toSel.innerHTML = opts;
-      if (wallets.length >= 2) toSel.selectedIndex = 1;
+      document.getElementById('transferFrom').innerHTML = opts;
+      document.getElementById('transferTo').innerHTML = opts;
+      document.getElementById('transferTo').selectedIndex = 1;
       document.getElementById('transferAmt').value = '';
       openModal('modalTransfer');
     }
@@ -3142,96 +3242,44 @@
       var fromId = parseInt(document.getElementById('transferFrom').value);
       var toId = parseInt(document.getElementById('transferTo').value);
       var amt = parseFloat(document.getElementById('transferAmt').value) || 0;
-      if (fromId === toId) { showToast('Select different wallets'); return; }
-      if (amt <= 0) { showToast('Enter a valid amount'); return; }
+      if (fromId === toId) { showToast('Choose two different wallets'); return; }
+      if (amt <= 0) { showToast('Enter an amount'); return; }
       var fromW = null, toW = null;
-      for (var i = 0; i < wallets.length; i++) {
-        if (wallets[i].id === fromId) fromW = wallets[i];
-        if (wallets[i].id === toId) toW = wallets[i];
-      }
+      for (var i = 0; i < wallets.length; i++) { if (wallets[i].id === fromId) fromW = wallets[i]; if (wallets[i].id === toId) toW = wallets[i]; }
       if (!fromW || !toW) return;
-      if (fromW.balance < amt) { showToast('Insufficient balance in ' + fromW.name); return; }
-      fromW.balance -= amt;
-      toW.balance += amt;
+      if (fromW.balance < amt) { showToast('Not enough balance in ' + fromW.name); return; }
+      fromW.balance -= amt; toW.balance += amt;
       var date = new Date().toISOString().split('T')[0];
-      txns.unshift({ id: Date.now(), type: 'debit', cat: 'other', amt: amt, desc: 'Transfer to ' + toW.name, wallet: fromW.name, date: date, notes: 'Internal transfer' });
-      txns.unshift({ id: Date.now() + 1, type: 'credit', cat: 'income', amt: amt, desc: 'Transfer from ' + fromW.name, wallet: toW.name, date: date, notes: 'Internal transfer' });
-      saveData(); closeModal('modalTransfer');
-      showToast(fmtC(amt) + ' transferred from ' + fromW.name + ' to ' + toW.name);
+      txns.unshift({ id: Date.now(), type: 'debit', cat: 'other', amt: amt, desc: 'Transfer → ' + toW.name, wallet: fromW.name, date: date, notes: 'Wallet transfer' });
+      txns.unshift({ id: Date.now() + 1, type: 'credit', cat: 'income', amt: amt, desc: 'Transfer ← ' + fromW.name, wallet: toW.name, date: date, notes: 'Wallet transfer' });
+      saveData();
+      // close modal directly (no override)
+      document.getElementById('modalTransfer').classList.remove('open');
+      showToast('✓ ' + fmtC(amt) + ' moved: ' + fromW.name + ' → ' + toW.name);
       refreshAll();
+      refreshWalletList();
     }
 
     /* ── EDIT TRANSACTION ── */
     var editingTxId = null;
     function openEditTx(id) {
-      var tx = null;
-      for (var i = 0; i < txns.length; i++) { if (txns[i].id === id) { tx = txns[i]; break; } }
-      if (!tx) return;
+      var tx = null; for (var i = 0; i < txns.length; i++) { if (txns[i].id === id) { tx = txns[i]; break; } } if (!tx) return;
       editingTxId = id;
-      // pre-fill modal
-      setType(tx.type);
-      txCat = tx.cat;
+      setType(tx.type); txCat = tx.cat;
       document.querySelectorAll('.cat-btn').forEach(function (b) { b.classList.remove('active'); });
-      var catBtn = document.getElementById('cat-' + tx.cat); if (catBtn) catBtn.classList.add('active');
-      document.getElementById('txAmt').value = tx.amt;
-      document.getElementById('txDesc').value = tx.desc;
-      document.getElementById('txDate').value = tx.date;
-      document.getElementById('txNotes').value = tx.notes || '';
+      var cb = document.getElementById('cat-' + tx.cat); if (cb) cb.classList.add('active');
+      document.getElementById('txAmt').value = tx.amt; document.getElementById('txDesc').value = tx.desc;
+      document.getElementById('txDate').value = tx.date; document.getElementById('txNotes').value = tx.notes || '';
       walletSelectOptions();
-      // select the right wallet
       var sel = document.getElementById('txWallet');
       for (var j = 0; j < wallets.length; j++) { if (wallets[j].name === tx.wallet) { sel.value = wallets[j].id; break; } }
-      // change save button text
-      var saveBtn = document.querySelector('#modalTx .save-btn');
-      if (saveBtn) saveBtn.textContent = 'Update Transaction';
+      var btn = document.getElementById('txSaveBtn'); if (btn) btn.textContent = 'Update Transaction';
       openModal('modalTx');
     }
-
-    /* Override saveTx to handle edit mode */
-    var _origSaveTx = saveTx;
-    function saveTx() {
-      if (!editingTxId) { _origSaveTx(); return; }
-      // editing existing
-      var amt = parseFloat(document.getElementById('txAmt').value);
-      var desc = document.getElementById('txDesc').value.trim();
-      var wId = document.getElementById('txWallet').value;
-      var date = document.getElementById('txDate').value || new Date().toISOString().split('T')[0];
-      var notes = document.getElementById('txNotes').value.trim();
-      if (!amt || amt <= 0) { showToast('Enter a valid amount'); return; }
-      if (!desc) { showToast('Enter a description'); return; }
-      var wName = '';
-      for (var i = 0; i < wallets.length; i++) { if (String(wallets[i].id) === String(wId)) { wName = wallets[i].name; break; } }
-      // reverse old tx from wallet
-      var oldTx = null;
-      for (var j = 0; j < txns.length; j++) { if (txns[j].id === editingTxId) { oldTx = txns[j]; break; } }
-      if (oldTx) {
-        for (var k = 0; k < wallets.length; k++) {
-          if (wallets[k].name === oldTx.wallet) { wallets[k].balance += (oldTx.type === 'credit' ? -oldTx.amt : oldTx.amt); break; }
-        }
-        oldTx.type = txType; oldTx.cat = txCat; oldTx.amt = amt; oldTx.desc = desc;
-        oldTx.wallet = wName; oldTx.date = date; oldTx.notes = notes;
-        // apply new
-        for (var l = 0; l < wallets.length; l++) {
-          if (wallets[l].name === wName) { wallets[l].balance += (txType === 'credit' ? amt : -amt); break; }
-        }
-      }
-      saveData(); closeModal('modalTx');
-      document.getElementById('txAmt').value = ''; document.getElementById('txDesc').value = ''; document.getElementById('txNotes').value = '';
-      var saveBtn = document.querySelector('#modalTx .save-btn');
-      if (saveBtn) saveBtn.textContent = 'Save Transaction';
+    function cancelTxModal() {
       editingTxId = null;
-      showToast('Transaction updated'); refreshAll();
-    }
-
-    // Reset edit mode when modal closes via cancel
-    var origClose = closeModal;
-    function closeModal(id) {
-      origClose(id);
-      if (id === 'modalTx' && editingTxId) {
-        editingTxId = null;
-        var saveBtn = document.querySelector('#modalTx .save-btn');
-        if (saveBtn) saveBtn.textContent = 'Save Transaction';
-      }
+      var btn = document.getElementById('txSaveBtn'); if (btn) btn.textContent = 'Save Transaction';
+      closeModal('modalTx');
     }
 
     init();
