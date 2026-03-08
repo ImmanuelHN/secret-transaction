@@ -1326,6 +1326,190 @@
       white-space: nowrap;
       box-shadow: var(--shadow);
     }
+
+    /* ══ PHASE 8 ═════════════════════════════════════════════ */
+
+    /* Health score card */
+    .health-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .health-ring {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      flex-shrink: 0;
+    }
+
+    .health-ring svg {
+      width: 70px;
+      height: 70px;
+    }
+
+    .health-score-txt {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .health-score-txt span {
+      font-size: 9px;
+      color: var(--text2);
+      font-weight: normal;
+      margin-top: 2px;
+    }
+
+    .health-info {
+      flex: 1;
+    }
+
+    .health-label {
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .health-sub {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .health-bars {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .health-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--text2);
+    }
+
+    .health-bar-track {
+      flex: 1;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .health-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.8s;
+    }
+
+    /* date group headers in tx list */
+    .tx-date-group {
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--text2);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 8px 0 4px;
+      margin-top: 4px;
+    }
+
+    /* balance hide/show */
+    .bal-eye {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .bal-eye svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .balance-card {
+      position: relative;
+    }
+
+    .bal-hidden {
+      letter-spacing: 4px;
+      font-size: 22px;
+    }
+
+    /* currency badge */
+    .currency-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .currency-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text2);
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .currency-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* financial tip banner */
+    .tip-banner {
+      background: linear-gradient(135deg, rgba(124, 109, 250, 0.15), rgba(124, 109, 250, 0.05));
+      border: 1px solid rgba(124, 109, 250, 0.2);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .tip-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .tip-text {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .tip-text b {
+      color: var(--text);
+    }
   </style>
 </head>
 
@@ -1395,6 +1579,27 @@
       <!-- HOME -->
       <div class="page active" id="pageHome">
         <div class="greeting">Good morning, <span>welcome back</span></div>
+
+        <!-- financial health score -->
+        <div class="health-card" id="healthCard">
+          <div class="health-ring">
+            <svg viewBox="0 0 70 70">
+              <circle cx="35" cy="35" r="28" fill="none" stroke="var(--border)" stroke-width="7" />
+              <circle id="healthArc" cx="35" cy="35" r="28" fill="none" stroke="var(--green)" stroke-width="7"
+                stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="175.9" transform="rotate(-90 35 35)"
+                style="transition:stroke-dashoffset 1s ease,stroke 0.5s;" />
+            </svg>
+            <div class="health-score-txt">
+              <div id="healthScoreNum">–</div><span>score</span>
+            </div>
+          </div>
+          <div class="health-info">
+            <div class="health-label" id="healthLabel">Financial Health</div>
+            <div class="health-sub" id="healthSub">Add transactions to see your score</div>
+            <div class="health-bars" id="healthBars"></div>
+          </div>
+        </div>
+
         <div class="balance-card">
           <div class="bal-label">TOTAL BALANCE</div>
           <div class="bal-amount" id="totalBal">₹0</div>
@@ -1402,6 +1607,12 @@
             <div class="bal-item">Income <span id="homeIncome">₹0</span></div>
             <div class="bal-item">Expenses <span id="homeExpense">₹0</span></div>
           </div>
+          <button class="bal-eye" onclick="toggleBalVis()" id="balEye">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
         </div>
         <!-- 7-day trend -->
         <div
@@ -1438,6 +1649,9 @@
             <p>No transactions yet</p>
           </div>
         </div>
+        <!-- financial tip -->
+        <div class="tip-banner" id="financialTip" style="margin-bottom:18px;"></div>
+
         <!-- subs teaser -->
         <div class="section-header" style="margin-top:20px;">
           <div class="section-title">Subscriptions</div>
@@ -1545,6 +1759,19 @@
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>Goals</button>
         </div>
+        <!-- currency -->
+        <div class="section-title" style="margin-bottom:12px;">Currency</div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:18px;">
+          <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">Display symbol</div>
+          <div class="currency-row">
+            <button class="currency-btn active" id="cur-INR" onclick="setCurrency('INR','₹')">₹ INR</button>
+            <button class="currency-btn" id="cur-USD" onclick="setCurrency('USD','$')">$ USD</button>
+            <button class="currency-btn" id="cur-EUR" onclick="setCurrency('EUR','€')">€ EUR</button>
+            <button class="currency-btn" id="cur-GBP" onclick="setCurrency('GBP','£')">£ GBP</button>
+          </div>
+        </div>
+
         <!-- security -->
         <div class="section-title" style="margin-bottom:12px;">Security</div>
         <div
@@ -2029,7 +2256,7 @@
       return 'p' + Math.abs(h).toString(16);
     }
     function init() {
-      loadData();
+      loadData(); loadCurrency();
       try { stored = localStorage.getItem('sxt_pin') || null; } catch (e) { }
       var t; try { t = localStorage.getItem('sxt_theme'); } catch (e) { }
       if (t) setTheme(t);
@@ -2162,7 +2389,7 @@
       var el = document.getElementById('walletScroll');
       var html = wallets.map(function (w) {
         var icon = WALLET_ICONS[w.type] || WALLET_ICONS['Cash'];
-        return '<div class="wallet-card"><div class="wc-icon">' + icon + '</div><div class="wc-name">' + w.name + '</div><div class="wc-bal">₹' + fmt(w.balance) + '</div></div>';
+        return '<div class="wallet-card"><div class="wc-icon">' + icon + '</div><div class="wc-name">' + w.name + '</div><div class="wc-bal">' + fmtC(w.balance) + '</div></div>';
       }).join('');
       html += '<div class="wallet-card add-card" onclick="openAddWallet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;color:var(--accent)"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Add Wallet</span></div>';
       el.innerHTML = html;
@@ -2175,7 +2402,7 @@
         return '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;">'
           + '<div style="width:40px;height:40px;border-radius:10px;background:var(--accent-s);display:flex;align-items:center;justify-content:center;color:var(--accent)">' + icon + '</div>'
           + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + w.name + '</div><div style="font-size:12px;color:var(--text2)">' + w.type + '</div></div>'
-          + '<div style="font-size:16px;font-weight:bold;margin-right:8px">₹' + fmt(w.balance) + '</div>'
+          + '<div style="font-size:16px;font-weight:bold;margin-right:8px">' + fmtC(w.balance) + '</div>'
           + '<button onclick="openEditWallet(' + w.id + ')" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
           + '</div>';
       }).join('');
@@ -2228,7 +2455,7 @@
       return '<div class="tx-item" id="tx' + tx.id + '">'
         + '<div class="tx-icon cat-' + tx.cat + '">' + icon + '</div>'
         + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div><div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div>' + noteHtml + '</div>'
-        + '<div class="tx-amount ' + amtCls + '" onclick="toggleTxDel(' + tx.id + ')">' + sign + '₹' + fmt(tx.amt) + '</div>'
+        + '<div class="tx-amount ' + amtCls + '" onclick="toggleTxDel(' + tx.id + ')">' + sign + fmtC(tx.amt) + '</div>'
         + '<button class="tx-del-btn" onclick="deleteTx(' + tx.id + ')">'
         + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>Delete</button>'
         + '</div>';
@@ -2242,13 +2469,12 @@
       saveData(); showToast('Transaction deleted'); refreshAll();
     }
     function refreshTxList() {
-      var recent = document.getElementById('homeRecentList'), full = document.getElementById('txFullList');
-      if (txns.length === 0) {
-        var empty = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><p>No transactions yet.</p></div>';
-        if (recent) recent.innerHTML = empty; if (full) full.innerHTML = empty; return;
+      var recent = document.getElementById('homeRecentList');
+      if (recent) {
+        if (txns.length === 0) { recent.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><p>No transactions yet</p></div>'; }
+        else { recent.innerHTML = txns.slice(0, 5).map(renderTxItem).join(''); }
       }
-      if (recent) recent.innerHTML = txns.slice(0, 5).map(renderTxItem).join('');
-      if (full) full.innerHTML = txns.map(renderTxItem).join('');
+      renderTxListGrouped(txns, 'txFullList');
     }
     var activeFilter = 'all';
     function filterTx(btn, f) {
@@ -2269,12 +2495,13 @@
 
     /* ════ BALANCE ══════════════════════════════════════════════ */
     function refreshBalance() {
+      if (!balVisible) return;
       var total = wallets.reduce(function (s, w) { return s + w.balance; }, 0);
       var now = new Date(), thisM = txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); });
       var income = thisM.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
       var expense = thisM.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-      setText('totalBal', '₹' + fmt(total)); setText('homeIncome', '₹' + fmt(income)); setText('homeExpense', '₹' + fmt(expense));
-      setText('aIncome', '₹' + fmt(income)); setText('aExpense', '₹' + fmt(expense)); setText('aSaved', '₹' + fmt(Math.max(0, income - expense)));
+      setText('totalBal', fmtC(total)); setText('homeIncome', fmtC(income)); setText('homeExpense', fmtC(expense));
+      setText('aIncome', fmtC(income)); setText('aExpense', fmtC(expense)); setText('aSaved', fmtC(Math.max(0, income - expense)));
     }
 
     /* ════ 7-DAY TREND ══════════════════════════════════════════ */
@@ -2303,7 +2530,7 @@
       var mt = getMonthTxns();
       var income = mt.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
       var expense = mt.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-      setText('aIncome', '₹' + fmt(income)); setText('aExpense', '₹' + fmt(expense)); setText('aSaved', '₹' + fmt(Math.max(0, income - expense)));
+      setText('aIncome', fmtC(income)); setText('aExpense', fmtC(expense)); setText('aSaved', fmtC(Math.max(0, income - expense)));
       var byCat = {};
       mt.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { byCat[t.cat] = (byCat[t.cat] || 0) + t.amt; });
       var cats = Object.keys(byCat).sort(function (a, b) { return byCat[b] - byCat[a]; }), total = mt.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
@@ -2347,8 +2574,8 @@
       var now = new Date(), isNow = now.getFullYear() === viewYear && now.getMonth() === viewMonth;
       var daysInM = new Date(viewYear, viewMonth + 1, 0).getDate(), daysLeft = isNow ? Math.max(1, daysInM - now.getDate() + 1) : daysInM;
       var daily = daysLeft > 0 ? Math.round(remain / daysLeft) : 0;
-      setText('budgetPct', pct + '%'); setText('budgetSpent', '₹' + fmt(totalSpent)); setText('budgetTotal', '₹' + fmt(totalLimit));
-      setText('budgetRemain', '₹' + fmt(remain)); setText('budgetDailyLeft', '₹' + fmt(daily)); setText('budgetDaysLeft', daysLeft);
+      setText('budgetPct', pct + '%'); setText('budgetSpent', fmtC(totalSpent)); setText('budgetTotal', fmtC(totalLimit));
+      setText('budgetRemain', fmtC(remain)); setText('budgetDailyLeft', fmtC(daily)); setText('budgetDaysLeft', daysLeft);
       var dot = document.getElementById('budgetDot'); if (dot) dot.classList.toggle('show', pct >= 80);
 
       /* DONUT */
@@ -2392,7 +2619,7 @@
           return '<div class="cat-budget-item"><div class="cbi-icon" style="background:' + bg + '22;color:' + bg + '">' + (CAT_ICONS[b.cat] || CAT_ICONS.other) + '</div>'
             + '<div class="cbi-info"><div class="cbi-name">' + b.cat.charAt(0).toUpperCase() + b.cat.slice(1) + '</div>'
             + '<div class="cbi-bar"><div class="cbi-fill" style="width:' + pctC + '%;background:' + color + '"></div></div>'
-            + '<div class="cbi-nums">₹' + fmt(spent) + ' of ₹' + fmt(b.limit) + (over ? ' <b style="color:var(--red)">Over!</b>' : '') + '</div></div>'
+            + '<div class="cbi-nums">' + fmtC(spent) + ' of ' + fmtC(b.limit) + (over ? ' <b style="color:var(--red)">Over!</b>' : '') + '</div></div>'
             + '<div class="cbi-pct" style="color:' + color + '">' + pctC + '%</div>'
             + '<button class="cbi-del" onclick="deleteBudget(\'' + b.cat + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button></div>';
         }).join('');
@@ -2563,6 +2790,7 @@
     /* ════ REFRESH ALL ══════════════════════════════════════════ */
     function refreshAll() {
       refreshBalance(); refreshWalletScroll(); refreshTxList(); refreshTrend();
+      refreshHealthScore(); showRandomTip();
       if (curPage === 'Subs') refreshSubsPage();
       /* home subs teaser */
       var el = document.getElementById('homeSubsTeaser'); if (!el) return;
@@ -2582,6 +2810,163 @@
     function setGreeting() {
       var h = new Date().getHours(), g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
       var el = document.querySelector('.greeting'); if (el) el.innerHTML = g + ', <span>welcome back</span>';
+    }
+
+    /* ════ PHASE 8 ══════════════════════════════════════════════ */
+
+    /* ── CURRENCY ── */
+    var currencySymbol = '₹';
+    var currencyCode = 'INR';
+
+    function setCurrency(code, symbol) {
+      currencyCode = code;
+      currencySymbol = symbol;
+      try { localStorage.setItem('sxt_currency', JSON.stringify({ code: code, symbol: symbol })); } catch (e) { }
+      document.querySelectorAll('.currency-btn').forEach(function (b) { b.classList.remove('active'); });
+      var btn = document.getElementById('cur-' + code);
+      if (btn) btn.classList.add('active');
+      refreshAll();
+      if (curPage === 'Budget') refreshBudgetPage();
+      if (curPage === 'Analytics') refreshAnalytics();
+    }
+
+    function loadCurrency() {
+      try {
+        var c = localStorage.getItem('sxt_currency');
+        if (c) { var parsed = JSON.parse(c); currencyCode = parsed.code; currencySymbol = parsed.symbol; }
+      } catch (e) { }
+      document.querySelectorAll('.currency-btn').forEach(function (b) { b.classList.remove('active'); });
+      var btn = document.getElementById('cur-' + currencyCode);
+      if (btn) btn.classList.add('active');
+    }
+
+    /* Override fmt to use currency symbol */
+    function fmtC(n) {
+      return currencySymbol + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    /* ── BALANCE VISIBILITY TOGGLE ── */
+    var balVisible = true;
+    function toggleBalVis() {
+      balVisible = !balVisible;
+      var balEl = document.getElementById('totalBal');
+      var incEl = document.getElementById('homeIncome');
+      var expEl = document.getElementById('homeExpense');
+      var eyeEl = document.getElementById('eyeIcon');
+      if (!balVisible) {
+        if (balEl) balEl.innerHTML = '<span class="bal-hidden">••••</span>';
+        if (incEl) incEl.textContent = '••••';
+        if (expEl) expEl.textContent = '••••';
+        if (eyeEl) eyeEl.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+      } else {
+        refreshBalance();
+        if (eyeEl) eyeEl.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+      }
+    }
+
+    /* ── FINANCIAL HEALTH SCORE ── */
+    function refreshHealthScore() {
+      var now = new Date();
+      var thisM = txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); });
+      var income = thisM.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var expense = thisM.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+
+      if (txns.length === 0) return; // no data yet
+
+      /* Component 1: Savings rate (0-40 pts) */
+      var savingsRate = income > 0 ? Math.max(0, (income - expense) / income) : 0;
+      var savingsPts = Math.min(Math.round(savingsRate * 40), 40);
+
+      /* Component 2: Budget adherence (0-30 pts) */
+      var budgetPts = 30;
+      if (budgets.length > 0) {
+        var catSpend = {};
+        thisM.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { catSpend[t.cat] = (catSpend[t.cat] || 0) + t.amt; });
+        var overCount = budgets.filter(function (b) { return (catSpend[b.cat] || 0) > b.limit; }).length;
+        budgetPts = Math.max(0, 30 - overCount * 10);
+      }
+
+      /* Component 3: Goals progress (0-30 pts) */
+      var goalPts = 15; // neutral if no goals
+      if (goals.length > 0) {
+        var avgProgress = goals.reduce(function (s, g) { return s + (g.target > 0 ? Math.min(g.saved / g.target, 1) : 0); }, 0) / goals.length;
+        goalPts = Math.round(avgProgress * 30);
+      }
+
+      var score = savingsPts + budgetPts + goalPts;
+      var color = score >= 75 ? 'var(--green)' : score >= 50 ? '#f59e0b' : 'var(--red)';
+      var label = score >= 75 ? 'Excellent 🎉' : score >= 50 ? 'Good 👍' : 'Needs Attention ⚠️';
+      var sub = score >= 75 ? 'You\'re managing money well!' : score >= 50 ? 'Some areas to improve.' : 'Review your spending habits.';
+
+      /* Draw arc */
+      var arc = document.getElementById('healthArc');
+      var circ = 2 * Math.PI * 28; // 175.9
+      if (arc) {
+        arc.style.stroke = color;
+        arc.style.strokeDashoffset = circ - (circ * score / 100);
+      }
+      setText('healthScoreNum', score);
+      setText('healthLabel', label);
+      setText('healthSub', sub);
+
+      /* Mini bars */
+      var barsEl = document.getElementById('healthBars');
+      if (barsEl) {
+        barsEl.innerHTML = [
+          { label: 'Savings', pct: Math.round(savingsRate * 100), color: 'var(--green)' },
+          { label: 'Budget', pct: Math.round((budgetPts / 30) * 100), color: 'var(--accent)' },
+          { label: 'Goals', pct: Math.round((goalPts / 30) * 100), color: '#f59e0b' },
+        ].map(function (r) {
+          return '<div class="health-bar-row">'
+            + '<div style="width:42px">' + r.label + '</div>'
+            + '<div class="health-bar-track"><div class="health-bar-fill" style="width:' + r.pct + '%;background:' + r.color + '"></div></div>'
+            + '<div style="width:28px;text-align:right">' + r.pct + '%</div></div>';
+        }).join('');
+      }
+    }
+
+    /* ── GROUPED TRANSACTION LIST ── */
+    function renderTxListGrouped(list, containerId) {
+      var el = document.getElementById(containerId);
+      if (!el) return;
+      if (list.length === 0) {
+        el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><p>No transactions yet.</p></div>';
+        return;
+      }
+      /* group by date */
+      var groups = {}, order = [];
+      list.forEach(function (t) {
+        if (!groups[t.date]) { groups[t.date] = []; order.push(t.date); }
+        groups[t.date].push(t);
+      });
+      /* sort dates descending */
+      order.sort(function (a, b) { return b > a ? 1 : -1; });
+
+      var today = new Date().toISOString().split('T')[0];
+      var yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+      el.innerHTML = order.map(function (date) {
+        var label = date === today ? 'Today' : date === yesterday ? 'Yesterday' : date;
+        var dayTotal = groups[date].filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+        var header = '<div class="tx-date-group"><span>' + label + '</span>'
+          + (dayTotal > 0 ? '<span style="float:right;color:var(--red);font-size:10px;">−' + fmtC(dayTotal) + '</span>' : '') + '</div>';
+        return header + groups[date].map(renderTxItem).join('');
+      }).join('');
+    }
+
+    /* ── FINANCIAL TIPS ── */
+    var TIPS = [
+      { icon: '💡', text: '<b>50/30/20 rule:</b> Spend 50% on needs, 30% on wants, 20% on savings.' },
+      { icon: '📊', text: '<b>Track daily:</b> Just 2 minutes a day logging expenses builds financial awareness.' },
+      { icon: '🎯', text: '<b>Pay yourself first:</b> Transfer savings to your goal before spending.' },
+      { icon: '🔄', text: '<b>Review subscriptions:</b> Cancel unused ones — they add up fast!' },
+      { icon: '💳', text: '<b>Emergency fund:</b> Aim for 3-6 months of expenses saved.' },
+    ];
+    function showRandomTip() {
+      var el = document.getElementById('financialTip');
+      if (!el) return;
+      var tip = TIPS[Math.floor(Math.random() * TIPS.length)];
+      el.innerHTML = '<div class="tip-icon">' + tip.icon + '</div><div class="tip-text">' + tip.text + '</div>';
     }
 
     init();
