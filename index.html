@@ -1483,6 +1483,13 @@
             <p>No transactions yet</p>
           </div>
         </div>
+
+        <!-- subs teaser -->
+        <div class="section-header" style="margin-top:20px;">
+          <div class="section-title">Subscriptions</div>
+          <button class="section-link" onclick="goPage('Subs')">See all →</button>
+        </div>
+        <div id="homeSubsTeaser"></div>
       </div>
 
       <!-- TRANSACTIONS -->
@@ -1565,6 +1572,29 @@
         </div>
         <div id="walletFullList" style="margin-bottom:22px;"></div>
 
+        <!-- quick links -->
+        <div class="section-title" style="margin-bottom:12px;">Quick Links</div>
+        <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+          <button onclick="goPage('Analytics')"
+            style="flex:1;min-width:120px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"
+              style="color:var(--accent)">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+            </svg>
+            Analytics
+          </button>
+          <button onclick="goPage('Goals')"
+            style="flex:1;min-width:120px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"
+              style="color:var(--green)">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            Goals
+          </button>
+        </div>
+
         <!-- security -->
         <div class="section-title" style="margin-bottom:12px;">Security</div>
         <div
@@ -1634,7 +1664,7 @@
         <div style="text-align:center;padding:20px 0;color:var(--text2);font-size:12px;">
           <img src="logo.png" style="height:36px;margin:0 auto 8px;display:block;"
             onerror="this.style.display='none'" />
-          sXt — Secret Transactions<br />v5.0 · Your money. Your secret.
+          sXt — Secret Transactions<br />v6.0 · Your money. Your secret.
         </div>
       </div>
 
@@ -1711,6 +1741,41 @@
       </button>
     </div>
 
+    <!-- SUBSCRIPTIONS PAGE (Phase 6) -->
+    <div class="page" id="pageSubs">
+      <div class="page-title">Subscriptions</div>
+      <div class="page-sub">Track recurring payments</div>
+      <!-- monthly summary -->
+      <div style="display:flex;gap:10px;margin-bottom:18px;">
+        <div
+          style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">MONTHLY</div>
+          <div id="subMonthly" style="font-size:18px;font-weight:bold;color:var(--red)">₹0</div>
+        </div>
+        <div
+          style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">YEARLY</div>
+          <div id="subYearly" style="font-size:18px;font-weight:bold;color:var(--accent)">₹0</div>
+        </div>
+        <div
+          style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">ACTIVE</div>
+          <div id="subCount" style="font-size:18px;font-weight:bold;">0</div>
+        </div>
+      </div>
+      <!-- upcoming this month -->
+      <div class="section-header" style="margin-bottom:12px;">
+        <div class="section-title">Due This Month</div>
+      </div>
+      <div id="subsDueList" style="margin-bottom:18px;"></div>
+      <!-- all subs -->
+      <div class="section-header" style="margin-bottom:12px;">
+        <div class="section-title">All Subscriptions</div>
+        <button class="section-link" onclick="openAddSub()">+ Add</button>
+      </div>
+      <div id="subsList"></div>
+    </div>
+
     <!-- bottom nav — 5 tabs -->
     <div class="bottom-nav">
       <button class="nav-btn active" id="navHome" onclick="goPage('Home')">
@@ -1735,13 +1800,17 @@
         Budget
         <div class="nav-dot" id="budgetDot"></div>
       </button>
-      <button class="nav-btn" id="navAnalytics" onclick="goPage('Analytics')">
+      <button class="nav-btn" id="navSubs" onclick="goPage('Subs')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="20" x2="18" y2="10" />
-          <line x1="12" y1="20" x2="12" y2="4" />
-          <line x1="6" y1="20" x2="6" y2="14" />
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+          <polyline points="7.5 4.21 12 6.81 16.5 4.21" />
+          <polyline points="7.5 19.79 7.5 14.6 3 12" />
+          <polyline points="21 12 16.5 14.6 16.5 19.79" />
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+          <line x1="12" y1="22.08" x2="12" y2="12" />
         </svg>
-        Analytics
+        Subs
       </button>
       <button class="nav-btn" id="navMore" onclick="goPage('More')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1966,6 +2035,51 @@
       </div>
       <button class="save-btn" onclick="confirmAddToGoal()">Add</button>
       <button class="cancel-btn" onclick="closeModal('modalAddGoal')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: ADD SUBSCRIPTION ═══ -->
+  <div class="modal-overlay" id="modalSub">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Add Subscription</div>
+      <input type="hidden" id="editSubId" value="" />
+      <div class="form-group">
+        <label>Service Name</label>
+        <input type="text" id="subName" placeholder="e.g. Netflix, Spotify, Amazon Prime" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Amount (₹)</label>
+          <input type="number" id="subAmt" placeholder="499" inputmode="decimal" />
+        </div>
+        <div class="form-group">
+          <label>Cycle</label>
+          <select id="subCycle">
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Next Due Date</label>
+          <input type="date" id="subDue" />
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="subCat">
+            <option value="entertainment">Entertainment</option>
+            <option value="utilities">Utilities</option>
+            <option value="health">Health</option>
+            <option value="shopping">Shopping</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <button class="save-btn" onclick="saveSub()">Save Subscription</button>
+      <button class="cancel-btn" onclick="closeModal('modalSub')">Cancel</button>
     </div>
   </div>
 
@@ -2326,6 +2440,28 @@
       refreshBalance();
       refreshWalletScroll();
       refreshTxList();
+      // home subs teaser
+      var el = document.getElementById('homeSubsTeaser');
+      if (!el) return;
+      var active = subs.filter(function (s) { return s.active !== false; });
+      if (active.length === 0) {
+        el.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:8px 0">No subscriptions tracked. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer" onclick="goPage(\'Subs\')">Add one →</button></div>';
+        return;
+      }
+      // show next 2 upcoming
+      var sorted = active.slice().sort(function (a, b) { return new Date(a.due) - new Date(b.due); });
+      el.innerHTML = sorted.slice(0, 2).map(function (s) {
+        var days = daysUntil(s.due);
+        var bColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--text2)';
+        var daysLbl = days < 0 ? 'Overdue' : days === 0 ? 'Due today' : 'Due in ' + days + 'd';
+        var clr = SUB_COLORS[s.cat] || '#7c6dfa';
+        return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+          + '<div style="width:36px;height:36px;border-radius:10px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
+          + '<div style="flex:1"><div style="font-size:13px;font-weight:500">' + s.name + '</div>'
+          + '<div style="font-size:11px;color:' + bColor + '">' + daysLbl + '</div></div>'
+          + '<div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div>'
+          + '</div>';
+      }).join('');
     }
 
     var toastTimer;
@@ -2398,6 +2534,7 @@
       if (name === 'More') refreshWalletList();
       if (name === 'Budget') refreshBudgetPage();
       if (name === 'Goals') refreshGoalsPage();
+      if (name === 'Subs') refreshSubsPage();
     }
 
     /* ════════════════════════════════════════════════════════
@@ -2501,63 +2638,69 @@
       if (dot) dot.classList.toggle('show', pct >= 80);
 
       // ── MULTI-SEGMENT DONUT ─────────────────────────────
+      // Technique: each segment uses stroke-dasharray = [segLen, rest]
+      // and stroke-dashoffset = circ - startAngle
+      // SVG circle starts at 3 o'clock; we rotate(-90) to start at 12 o'clock.
       var svg = document.getElementById('budgetDonut');
       var legend = document.getElementById('donutLegend');
       if (!svg) return;
 
-      // Clear old segments (keep base circle at index 0)
+      // Remove all children except the base grey ring (first child)
       while (svg.children.length > 1) svg.removeChild(svg.lastChild);
 
       var R = 32;
-      var circ = 2 * Math.PI * R; // ~201
+      var circ = 2 * Math.PI * R;  // ≈ 201.06
       var CX = 40, CY = 40;
+      var GAP = 2; // gap between segments in px
 
       if (budgets.length === 0 || totalLimit === 0) {
         if (legend) legend.innerHTML = '<div style="font-size:12px;color:var(--text2)">Set category limits to see breakdown</div>';
       } else {
-        var offset = 0;
+        var startAt = 0; // cumulative arc length from 12 o'clock
         var legendHtml = '';
 
         budgets.forEach(function (b) {
           var spent = catSpend[b.cat] || 0;
-          var segFrac = b.limit / totalLimit;
-          var fillFrac = Math.min(spent / b.limit, 1) * segFrac;
-          var segDash = segFrac * circ;
-          var fillDash = fillFrac * circ;
+          var segLen = (b.limit / totalLimit) * circ;           // full arc for this cat
+          var fillLen = Math.min(spent / b.limit, 1) * segLen;   // filled portion
           var color = CAT_COLORS[b.cat] || '#7c6dfa';
           var pctCat = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
-          var overBudget = spent > b.limit;
+          var over = spent > b.limit;
+          var drawLen = Math.max(segLen - GAP, 0);
 
-          // background arc (full segment, faded)
-          var bgCirc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          bgCirc.setAttribute('cx', CX); bgCirc.setAttribute('cy', CY); bgCirc.setAttribute('r', R);
-          bgCirc.setAttribute('fill', 'none');
-          bgCirc.setAttribute('stroke', color);
-          bgCirc.setAttribute('stroke-opacity', '0.25');
-          bgCirc.setAttribute('stroke-width', '9');
-          bgCirc.setAttribute('stroke-dasharray', (segDash - 2) + ' ' + (circ - segDash + 2));
-          bgCirc.setAttribute('stroke-dashoffset', circ * 0.25 - offset);
-          bgCirc.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
-          svg.appendChild(bgCirc);
+          // ── background arc (faded, shows the full limit allocation) ──
+          // dashoffset trick: offset = circ - startAt makes the dash begin at startAt
+          var bg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          bg.setAttribute('cx', CX); bg.setAttribute('cy', CY); bg.setAttribute('r', R);
+          bg.setAttribute('fill', 'none');
+          bg.setAttribute('stroke', color);
+          bg.setAttribute('stroke-opacity', '0.22');
+          bg.setAttribute('stroke-width', '9');
+          bg.setAttribute('stroke-dasharray', drawLen + ' ' + (circ - drawLen));
+          bg.setAttribute('stroke-dashoffset', circ - startAt);
+          bg.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
+          svg.appendChild(bg);
 
-          // filled arc (actual spend)
-          if (fillDash > 0.5) {
-            var fillCirc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            fillCirc.setAttribute('cx', CX); fillCirc.setAttribute('cy', CY); fillCirc.setAttribute('r', R);
-            fillCirc.setAttribute('fill', 'none');
-            fillCirc.setAttribute('stroke', overBudget ? '#ef4444' : color);
-            fillCirc.setAttribute('stroke-width', '9');
-            fillCirc.setAttribute('stroke-dasharray', (fillDash - 1) + ' ' + (circ - fillDash + 1));
-            fillCirc.setAttribute('stroke-dashoffset', circ * 0.25 - offset);
-            fillCirc.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
-            svg.appendChild(fillCirc);
+          // ── filled arc (actual spend) ──
+          if (fillLen > 0.5) {
+            var fillDraw = Math.min(fillLen, drawLen);
+            var fg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            fg.setAttribute('cx', CX); fg.setAttribute('cy', CY); fg.setAttribute('r', R);
+            fg.setAttribute('fill', 'none');
+            fg.setAttribute('stroke', over ? '#ef4444' : color);
+            fg.setAttribute('stroke-width', '9');
+            fg.setAttribute('stroke-dasharray', fillDraw + ' ' + (circ - fillDraw));
+            fg.setAttribute('stroke-dashoffset', circ - startAt);
+            fg.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
+            svg.appendChild(fg);
           }
 
-          offset += segDash;
+          startAt += segLen;
 
           legendHtml += '<div style="display:flex;align-items:center;gap:5px;font-size:11px;">'
             + '<div style="width:10px;height:10px;border-radius:3px;background:' + color + ';flex-shrink:0"></div>'
-            + '<span style="color:var(--text2)">' + b.cat.charAt(0).toUpperCase() + b.cat.slice(1)
+            + '<span style="color:var(--text2)">'
+            + b.cat.charAt(0).toUpperCase() + b.cat.slice(1)
             + ' <b style="color:var(--text)">' + pctCat + '%</b></span></div>';
         });
 
@@ -2930,6 +3073,177 @@
       } catch (e) { }
       showToast('All data cleared');
       refreshAll(); refreshWalletList();
+    }
+
+    /* ════════════════════════════════════════════════════════
+       PHASE 6 — Subscriptions Tracker
+    ════════════════════════════════════════════════════════ */
+    var subs = [];
+
+    // Add subs to saveData / loadData
+    function saveData() {
+      try {
+        localStorage.setItem('sxt_wallets', JSON.stringify(wallets));
+        localStorage.setItem('sxt_txns', JSON.stringify(txns));
+        localStorage.setItem('sxt_budgets', JSON.stringify(budgets));
+        localStorage.setItem('sxt_goals', JSON.stringify(goals));
+        localStorage.setItem('sxt_subs', JSON.stringify(subs));
+      } catch (e) { }
+    }
+    function loadData() {
+      try {
+        var w = localStorage.getItem('sxt_wallets');
+        var t = localStorage.getItem('sxt_txns');
+        var b = localStorage.getItem('sxt_budgets');
+        var g = localStorage.getItem('sxt_goals');
+        var s = localStorage.getItem('sxt_subs');
+        if (w) wallets = JSON.parse(w);
+        if (t) txns = JSON.parse(t);
+        if (b) budgets = JSON.parse(b);
+        if (g) goals = JSON.parse(g);
+        if (s) subs = JSON.parse(s);
+      } catch (e) { }
+    }
+
+    var SUB_ICONS = {
+      entertainment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>',
+      utilities: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+      health: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+      shopping: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>',
+      other: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
+    };
+    var SUB_COLORS = { entertainment: '#a855f7', utilities: '#eab308', health: '#14b8a6', shopping: '#ec4899', other: '#7c6dfa' };
+
+    function openAddSub() {
+      document.getElementById('editSubId').value = '';
+      document.getElementById('subName').value = '';
+      document.getElementById('subAmt').value = '';
+      document.getElementById('subCycle').value = 'monthly';
+      document.getElementById('subCat').value = 'entertainment';
+      try { document.getElementById('subDue').valueAsDate = new Date(); } catch (e) { }
+      openModal('modalSub');
+    }
+
+    function saveSub() {
+      var name = document.getElementById('subName').value.trim();
+      var amt = parseFloat(document.getElementById('subAmt').value) || 0;
+      var cycle = document.getElementById('subCycle').value;
+      var due = document.getElementById('subDue').value || new Date().toISOString().split('T')[0];
+      var cat = document.getElementById('subCat').value;
+      if (!name) { showToast('Enter service name'); return; }
+      if (amt <= 0) { showToast('Enter a valid amount'); return; }
+
+      var editId = document.getElementById('editSubId').value;
+      if (editId) {
+        var id = parseInt(editId);
+        for (var i = 0; i < subs.length; i++) {
+          if (subs[i].id === id) { subs[i].name = name; subs[i].amt = amt; subs[i].cycle = cycle; subs[i].due = due; subs[i].cat = cat; break; }
+        }
+        showToast('Subscription updated');
+      } else {
+        subs.push({ id: Date.now(), name: name, amt: amt, cycle: cycle, due: due, cat: cat, active: true });
+        showToast('Subscription added');
+      }
+      saveData();
+      closeModal('modalSub');
+      refreshSubsPage();
+    }
+
+    function deleteSub(id) {
+      subs = subs.filter(function (s) { return s.id !== id; });
+      saveData(); refreshSubsPage(); showToast('Removed');
+    }
+
+    function editSub(id) {
+      var s = null;
+      for (var i = 0; i < subs.length; i++) { if (subs[i].id === id) { s = subs[i]; break; } }
+      if (!s) return;
+      document.getElementById('editSubId').value = id;
+      document.getElementById('subName').value = s.name;
+      document.getElementById('subAmt').value = s.amt;
+      document.getElementById('subCycle').value = s.cycle;
+      document.getElementById('subDue').value = s.due;
+      document.getElementById('subCat').value = s.cat;
+      openModal('modalSub');
+    }
+
+    function getMonthlyAmt(s) {
+      if (s.cycle === 'monthly') return s.amt;
+      if (s.cycle === 'yearly') return Math.round(s.amt / 12);
+      if (s.cycle === 'weekly') return Math.round(s.amt * 4.33);
+      return s.amt;
+    }
+
+    function daysUntil(dateStr) {
+      var now = new Date(); now.setHours(0, 0, 0, 0);
+      var d = new Date(dateStr); d.setHours(0, 0, 0, 0);
+      return Math.round((d - now) / 86400000);
+    }
+
+    function refreshSubsPage() {
+      var active = subs.filter(function (s) { return s.active !== false; });
+      var monthly = active.reduce(function (sum, s) { return sum + getMonthlyAmt(s); }, 0);
+      var yearly = monthly * 12;
+      setText('subMonthly', '₹' + fmt(monthly));
+      setText('subYearly', '₹' + fmt(yearly));
+      setText('subCount', active.length);
+
+      // due this month
+      var now = new Date();
+      var y = now.getFullYear(), m = now.getMonth();
+      var due = active.filter(function (s) {
+        var d = new Date(s.due); return d.getFullYear() === y && d.getMonth() === m;
+      }).sort(function (a, b) { return new Date(a.due) - new Date(b.due); });
+
+      var dueEl = document.getElementById('subsDueList');
+      if (dueEl) {
+        dueEl.innerHTML = due.length === 0
+          ? '<div style="font-size:13px;color:var(--text2);padding:8px 0">No subscriptions due this month</div>'
+          : due.map(function (s) {
+            var days = daysUntil(s.due);
+            var badge = days < 0 ? 'Overdue' : days === 0 ? 'Today' : 'In ' + days + 'd';
+            var bColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--green)';
+            var clr = SUB_COLORS[s.cat] || '#7c6dfa';
+            return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+              + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
+              + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + s.name + '</div>'
+              + '<div style="font-size:12px;color:var(--text2)">' + s.cycle + ' · ' + s.due + '</div></div>'
+              + '<div style="text-align:right;flex-shrink:0">'
+              + '<div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div>'
+              + '<div style="font-size:11px;font-weight:bold;color:' + bColor + '">' + badge + '</div></div>'
+              + '</div>';
+          }).join('');
+      }
+
+      // all subs
+      var el = document.getElementById('subsList');
+      if (!el) return;
+      if (subs.length === 0) {
+        el.innerHTML = '<div class="empty-state" style="padding:24px 0">'
+          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>'
+          + '<p>No subscriptions yet. Tap + Add to track one.</p></div>';
+        return;
+      }
+      el.innerHTML = subs.map(function (s) {
+        var clr = SUB_COLORS[s.cat] || '#7c6dfa';
+        var mAmt = getMonthlyAmt(s);
+        return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+          + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
+          + '<div style="flex:1;min-width:0">'
+          + '<div style="font-size:14px;font-weight:500">' + s.name + '</div>'
+          + '<div style="font-size:12px;color:var(--text2)">₹' + fmt(mAmt) + '/mo · next: ' + s.due + '</div></div>'
+          + '<div style="display:flex;gap:6px;">'
+          + '<button onclick="editSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;">'
+          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
+          + '<button onclick="deleteSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;">'
+          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
+          + '</div></div>';
+      }).join('');
+    }
+
+    // Also add Analytics link in More page subscriptions teaser on home
+    function refreshHomeSubTeaser() {
+      // show upcoming sub due on home dashboard
     }
 
     init();
