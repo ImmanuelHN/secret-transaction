@@ -4,6 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0d0d14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="sXt" />
+  <link rel="apple-touch-icon" href="logo.png" />
   <title>sXt</title>
   <style>
     /* ══ THEMES ══════════════════════════════════════════════ */
@@ -1454,6 +1459,15 @@
           </div>
         </div>
 
+        <!-- 7-day trend -->
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px;letter-spacing:0.5px;">LAST 7 DAYS SPENDING
+          </div>
+          <div id="trendBars" style="display:flex;align-items:flex-end;gap:4px;height:44px;"></div>
+          <div id="trendLabels" style="display:flex;gap:4px;margin-top:4px;"></div>
+        </div>
+
         <!-- wallets -->
         <div class="section-header">
           <div class="section-title">Wallets</div>
@@ -1527,6 +1541,15 @@
 
       <!-- ANALYTICS -->
       <div class="page" id="pageAnalytics">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <button onclick="goPage('More')"
+            style="background:none;border:none;color:var(--accent);cursor:pointer;padding:4px;display:flex;align-items:center;gap:4px;font-size:13px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M19 12H5M12 5l-7 7 7 7" />
+            </svg>
+            Back
+          </button>
+        </div>
         <div class="page-title">Analytics</div>
         <div class="page-sub">This month's overview</div>
         <!-- summary strip -->
@@ -1687,9 +1710,7 @@
         <div class="bov-row">
           <div class="bov-ring">
             <!-- dynamically built by JS -->
-            <svg id="budgetDonut" viewBox="0 0 80 80" width="80" height="80">
-              <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="9" />
-            </svg>
+            <svg id="budgetDonut" viewBox="0 0 80 80" width="80" height="80"></svg>
             <div class="bov-ring-pct" id="budgetPct">0%</div>
           </div>
           <div class="bov-info">
@@ -1733,6 +1754,15 @@
 
     <!-- GOALS PAGE -->
     <div class="page" id="pageGoals">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <button onclick="goPage('Budget')"
+          style="background:none;border:none;color:var(--accent);cursor:pointer;padding:4px;display:flex;align-items:center;gap:4px;font-size:13px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          Back
+        </button>
+      </div>
       <div class="page-title">Goals</div>
       <div class="page-sub">Save towards what matters</div>
       <div id="goalsList"></div>
@@ -1927,6 +1957,10 @@
           <label>Date</label>
           <input type="date" id="txDate" />
         </div>
+      </div>
+      <div class="form-group">
+        <label>Notes (optional)</label>
+        <input type="text" id="txNotes" placeholder="Add a note…" />
       </div>
 
       <button class="save-btn" onclick="saveTx()">Save Transaction</button>
@@ -2363,11 +2397,15 @@
         }
       }
 
-      txns.unshift({ id: Date.now(), type: txType, cat: txCat, amt: amt, desc: desc, wallet: wName, date: date });
+      txns.unshift({
+        id: Date.now(), type: txType, cat: txCat, amt: amt, desc: desc, wallet: wName, date: date,
+        notes: (document.getElementById('txNotes') ? document.getElementById('txNotes').value.trim() : '')
+      });
       saveData();
       closeModal('modalTx');
       document.getElementById('txAmt').value = '';
       document.getElementById('txDesc').value = '';
+      if (document.getElementById('txNotes')) document.getElementById('txNotes').value = '';
       showToast((txType === 'debit' ? 'Expense' : 'Income') + ' saved');
       refreshAll();
     }
@@ -2440,6 +2478,8 @@
       refreshBalance();
       refreshWalletScroll();
       refreshTxList();
+      refreshTrend();
+      if (curPage === 'Subs') refreshSubsPage();
       // home subs teaser
       var el = document.getElementById('homeSubsTeaser');
       if (!el) return;
@@ -2490,8 +2530,9 @@
     /* ════════════════════════════════════════════════════════
        PHASE 4 DATA
     ════════════════════════════════════════════════════════ */
-    var budgets = [];   // { cat, limit }
-    var goals = [];   // { id, emoji, name, target, saved }
+    var budgets = [];
+    var goals = [];
+    var subs = [];
 
     function saveData() {
       try {
@@ -2499,6 +2540,7 @@
         localStorage.setItem('sxt_txns', JSON.stringify(txns));
         localStorage.setItem('sxt_budgets', JSON.stringify(budgets));
         localStorage.setItem('sxt_goals', JSON.stringify(goals));
+        localStorage.setItem('sxt_subs', JSON.stringify(subs));
       } catch (e) { }
     }
     function loadData() {
@@ -2507,10 +2549,12 @@
         var t = localStorage.getItem('sxt_txns');
         var b = localStorage.getItem('sxt_budgets');
         var g = localStorage.getItem('sxt_goals');
+        var s = localStorage.getItem('sxt_subs');
         if (w) wallets = JSON.parse(w);
         if (t) txns = JSON.parse(t);
         if (b) budgets = JSON.parse(b);
         if (g) goals = JSON.parse(g);
+        if (s) subs = JSON.parse(s);
       } catch (e) { }
     }
 
@@ -2638,61 +2682,57 @@
       if (dot) dot.classList.toggle('show', pct >= 80);
 
       // ── MULTI-SEGMENT DONUT ─────────────────────────────
-      // Technique: each segment uses stroke-dasharray = [segLen, rest]
-      // and stroke-dashoffset = circ - startAngle
-      // SVG circle starts at 3 o'clock; we rotate(-90) to start at 12 o'clock.
       var svg = document.getElementById('budgetDonut');
       var legend = document.getElementById('donutLegend');
       if (!svg) return;
 
-      // Remove all children except the base grey ring (first child)
-      while (svg.children.length > 1) svg.removeChild(svg.lastChild);
+      // Wipe SVG completely — redraw everything in JS so order is controlled
+      svg.innerHTML = '';
 
       var R = 32;
-      var circ = 2 * Math.PI * R;  // ≈ 201.06
+      var circ = 2 * Math.PI * R;
       var CX = 40, CY = 40;
-      var GAP = 2; // gap between segments in px
+      var GAP = 3;
+
+      function mkC(color, opacity, dash, offset) {
+        var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', CX); c.setAttribute('cy', CY); c.setAttribute('r', R);
+        c.setAttribute('fill', 'none');
+        c.setAttribute('stroke', color);
+        c.setAttribute('stroke-opacity', String(opacity));
+        c.setAttribute('stroke-width', '9');
+        c.setAttribute('stroke-dasharray', dash);
+        c.setAttribute('stroke-dashoffset', String(offset));
+        c.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
+        return c;
+      }
+
+      // Grey base ring (drawn first = bottom layer)
+      svg.appendChild(mkC('var(--border)', 1, circ + ' 0', 0));
 
       if (budgets.length === 0 || totalLimit === 0) {
         if (legend) legend.innerHTML = '<div style="font-size:12px;color:var(--text2)">Set category limits to see breakdown</div>';
       } else {
-        var startAt = 0; // cumulative arc length from 12 o'clock
+        var startAt = 0;
         var legendHtml = '';
 
         budgets.forEach(function (b) {
           var spent = catSpend[b.cat] || 0;
-          var segLen = (b.limit / totalLimit) * circ;           // full arc for this cat
-          var fillLen = Math.min(spent / b.limit, 1) * segLen;   // filled portion
+          var segLen = (b.limit / totalLimit) * circ;
+          var fillLen = Math.min(spent / b.limit, 1) * segLen;
+          var drawSeg = Math.max(segLen - GAP, 0);
+          var drawFil = Math.min(fillLen, drawSeg);
           var color = CAT_COLORS[b.cat] || '#7c6dfa';
           var pctCat = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
           var over = spent > b.limit;
-          var drawLen = Math.max(segLen - GAP, 0);
+          var offset = circ - startAt;
 
-          // ── background arc (faded, shows the full limit allocation) ──
-          // dashoffset trick: offset = circ - startAt makes the dash begin at startAt
-          var bg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          bg.setAttribute('cx', CX); bg.setAttribute('cy', CY); bg.setAttribute('r', R);
-          bg.setAttribute('fill', 'none');
-          bg.setAttribute('stroke', color);
-          bg.setAttribute('stroke-opacity', '0.22');
-          bg.setAttribute('stroke-width', '9');
-          bg.setAttribute('stroke-dasharray', drawLen + ' ' + (circ - drawLen));
-          bg.setAttribute('stroke-dashoffset', circ - startAt);
-          bg.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
-          svg.appendChild(bg);
+          // faded segment (limit share) — drawn above grey base
+          svg.appendChild(mkC(color, 0.28, drawSeg + ' ' + (circ - drawSeg), offset));
 
-          // ── filled arc (actual spend) ──
-          if (fillLen > 0.5) {
-            var fillDraw = Math.min(fillLen, drawLen);
-            var fg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            fg.setAttribute('cx', CX); fg.setAttribute('cy', CY); fg.setAttribute('r', R);
-            fg.setAttribute('fill', 'none');
-            fg.setAttribute('stroke', over ? '#ef4444' : color);
-            fg.setAttribute('stroke-width', '9');
-            fg.setAttribute('stroke-dasharray', fillDraw + ' ' + (circ - fillDraw));
-            fg.setAttribute('stroke-dashoffset', circ - startAt);
-            fg.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
-            svg.appendChild(fg);
+          // bright fill (actual spend) — drawn on top
+          if (drawFil > 0.5) {
+            svg.appendChild(mkC(over ? '#ef4444' : color, 1, drawFil + ' ' + (circ - drawFil), offset));
           }
 
           startAt += segLen;
@@ -2884,10 +2924,12 @@
       var iconHtml = CAT_ICONS[tx.cat] || CAT_ICONS.other;
       var sign = tx.type === 'debit' ? '−' : '+';
       var amtClass = tx.type === 'debit' ? 'debit' : 'credit';
+      var noteLine = tx.notes ? '<div style="font-size:11px;color:var(--text2);margin-top:1px;font-style:italic">' + tx.notes + '</div>' : '';
       return '<div class="tx-item" id="tx' + tx.id + '">'
         + '<div class="tx-icon cat-' + tx.cat + '">' + iconHtml + '</div>'
         + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div>'
-        + '<div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div></div>'
+        + '<div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div>'
+        + noteLine + '</div>'
         + '<div class="tx-amount ' + amtClass + '" style="cursor:pointer" onclick="toggleTxDel(' + tx.id + ')">'
         + sign + '₹' + fmt(tx.amt) + '</div>'
         + '<button class="tx-del-btn" onclick="deleteTx(' + tx.id + ')">'
@@ -3078,32 +3120,6 @@
     /* ════════════════════════════════════════════════════════
        PHASE 6 — Subscriptions Tracker
     ════════════════════════════════════════════════════════ */
-    var subs = [];
-
-    // Add subs to saveData / loadData
-    function saveData() {
-      try {
-        localStorage.setItem('sxt_wallets', JSON.stringify(wallets));
-        localStorage.setItem('sxt_txns', JSON.stringify(txns));
-        localStorage.setItem('sxt_budgets', JSON.stringify(budgets));
-        localStorage.setItem('sxt_goals', JSON.stringify(goals));
-        localStorage.setItem('sxt_subs', JSON.stringify(subs));
-      } catch (e) { }
-    }
-    function loadData() {
-      try {
-        var w = localStorage.getItem('sxt_wallets');
-        var t = localStorage.getItem('sxt_txns');
-        var b = localStorage.getItem('sxt_budgets');
-        var g = localStorage.getItem('sxt_goals');
-        var s = localStorage.getItem('sxt_subs');
-        if (w) wallets = JSON.parse(w);
-        if (t) txns = JSON.parse(t);
-        if (b) budgets = JSON.parse(b);
-        if (g) goals = JSON.parse(g);
-        if (s) subs = JSON.parse(s);
-      } catch (e) { }
-    }
 
     var SUB_ICONS = {
       entertainment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>',
@@ -3227,23 +3243,99 @@
       el.innerHTML = subs.map(function (s) {
         var clr = SUB_COLORS[s.cat] || '#7c6dfa';
         var mAmt = getMonthlyAmt(s);
-        return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+        var days = daysUntil(s.due);
+        var dueColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--text2)';
+        var dueTxt = days < 0 ? 'Overdue' : days === 0 ? 'Due today' : 'Due in ' + days + 'd';
+        return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+          + '<div style="display:flex;align-items:center;gap:12px;">'
           + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
           + '<div style="flex:1;min-width:0">'
           + '<div style="font-size:14px;font-weight:500">' + s.name + '</div>'
-          + '<div style="font-size:12px;color:var(--text2)">₹' + fmt(mAmt) + '/mo · next: ' + s.due + '</div></div>'
-          + '<div style="display:flex;gap:6px;">'
+          + '<div style="font-size:12px;color:' + dueColor + '">' + dueTxt + ' · ₹' + fmt(mAmt) + '/mo</div></div>'
+          + '<div style="display:flex;gap:6px;align-items:center;">'
+          + '<button onclick="payNow(' + s.id + ')" style="padding:6px 10px;border-radius:8px;border:none;background:var(--green-s);color:var(--green);font-size:11px;font-weight:bold;cursor:pointer;">Pay</button>'
           + '<button onclick="editSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;">'
           + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
           + '<button onclick="deleteSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;">'
           + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
-          + '</div></div>';
+          + '</div></div></div>';
       }).join('');
     }
 
     // Also add Analytics link in More page subscriptions teaser on home
     function refreshHomeSubTeaser() {
       // show upcoming sub due on home dashboard
+    }
+
+    /* ════════════════════════════════════════════════════════
+       PHASE 7 — Notes, Pay Now, 7-day Trend
+    ════════════════════════════════════════════════════════ */
+
+    /* ── 7-DAY SPENDING TREND ── */
+    function refreshTrend() {
+      var barsEl = document.getElementById('trendBars');
+      var labsEl = document.getElementById('trendLabels');
+      if (!barsEl || !labsEl) return;
+
+      var days = [];
+      var DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+      var today = new Date(); today.setHours(0, 0, 0, 0);
+      for (var i = 6; i >= 0; i--) {
+        var d = new Date(today.getTime() - i * 86400000);
+        var key = d.toISOString().split('T')[0];
+        var total = txns.filter(function (t) { return t.date === key && t.type === 'debit'; })
+          .reduce(function (s, t) { return s + t.amt; }, 0);
+        days.push({ label: DAY_NAMES[d.getDay()], amt: total, isToday: i === 0 });
+      }
+
+      var maxAmt = Math.max.apply(null, days.map(function (d) { return d.amt; })) || 1;
+
+      barsEl.innerHTML = days.map(function (d) {
+        var h = Math.max(Math.round((d.amt / maxAmt) * 40), d.amt > 0 ? 4 : 2);
+        var color = d.isToday ? 'var(--accent)' : 'var(--border)';
+        if (d.amt > 0 && !d.isToday) color = 'var(--text2)';
+        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;">'
+          + '<div style="width:100%;height:' + h + 'px;background:' + color + ';border-radius:3px 3px 0 0;min-height:2px;"></div>'
+          + '</div>';
+      }).join('');
+
+      labsEl.innerHTML = days.map(function (d) {
+        var color = d.isToday ? 'var(--accent)' : 'var(--text2)';
+        return '<div style="flex:1;text-align:center;font-size:9px;color:' + color + '">' + d.label + '</div>';
+      }).join('');
+    }
+
+    /* ── SUBSCRIPTION PAY NOW ── */
+    function payNow(id) {
+      var s = null;
+      for (var i = 0; i < subs.length; i++) { if (subs[i].id === id) { s = subs[i]; break; } }
+      if (!s) return;
+
+      // Need a wallet to debit
+      if (wallets.length === 0) { showToast('Add a wallet first'); return; }
+
+      // Use first wallet
+      var w = wallets[0];
+      w.balance -= s.amt;
+
+      // Add as transaction
+      txns.unshift({
+        id: Date.now(), type: 'debit', cat: 'bills', amt: s.amt,
+        desc: s.name + ' subscription', wallet: w.name,
+        date: new Date().toISOString().split('T')[0], notes: 'Auto from subscriptions'
+      });
+
+      // Advance due date
+      var due = new Date(s.due);
+      if (s.cycle === 'monthly') due.setMonth(due.getMonth() + 1);
+      else if (s.cycle === 'yearly') due.setFullYear(due.getFullYear() + 1);
+      else if (s.cycle === 'weekly') due.setDate(due.getDate() + 7);
+      s.due = due.toISOString().split('T')[0];
+
+      saveData();
+      showToast('₹' + fmt(s.amt) + ' paid for ' + s.name);
+      refreshSubsPage();
+      refreshAll();
     }
 
     init();
