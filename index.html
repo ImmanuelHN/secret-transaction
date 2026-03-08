@@ -63,7 +63,6 @@
       --shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
     }
 
-    /* ══ RESET ═══════════════════════════════════════════════ */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -82,9 +81,7 @@
       display: block;
     }
 
-    /* ══════════════════════════════════════════════════════════
-   PIN SCREEN  (unchanged from Phase 2)
-══════════════════════════════════════════════════════════ */
+    /* ══ PIN SCREEN ══════════════════════════════════════════ */
     #pinScreen {
       min-height: 100vh;
       display: flex;
@@ -192,16 +189,13 @@
       background: var(--surface);
     }
 
-    /* ══════════════════════════════════════════════════════════
-   APP SHELL
-══════════════════════════════════════════════════════════ */
+    /* ══ APP SHELL ═══════════════════════════════════════════ */
     #app {
       display: none;
       flex-direction: column;
       min-height: 100vh;
     }
 
-    /* ── HEADER ── */
     .header {
       display: flex;
       align-items: center;
@@ -266,7 +260,7 @@
       background: var(--surface2);
     }
 
-    /* ── PAGES ── */
+    /* ══ PAGES ═══════════════════════════════════════════════ */
     .pages {
       flex: 1;
     }
@@ -294,7 +288,20 @@
       margin-bottom: 20px;
     }
 
-    /* ── BOTTOM NAV ── */
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    /* ══ BOTTOM NAV ══════════════════════════════════════════ */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -320,6 +327,7 @@
       align-items: center;
       justify-content: center;
       gap: 3px;
+      position: relative;
     }
 
     .nav-btn svg {
@@ -335,7 +343,23 @@
       opacity: 0.6;
     }
 
-    /* Centered floating add button above bottom nav */
+    .nav-dot {
+      position: absolute;
+      top: 8px;
+      right: calc(50% - 14px);
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      border: 2px solid var(--nav-bg);
+      display: none;
+    }
+
+    .nav-dot.show {
+      display: block;
+    }
+
+    /* ══ CENTERED FAB ════════════════════════════════════════ */
     .fab-center {
       position: fixed;
       bottom: 76px;
@@ -360,7 +384,6 @@
     .fab-center svg {
       width: 18px;
       height: 18px;
-      flex-shrink: 0;
     }
 
     .fab-center.show {
@@ -372,39 +395,7 @@
       transform: translateX(-50%) scale(0.96);
     }
 
-    /* keep page-add-btn for goals page only */
-    .page-add-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 14px;
-      border: none;
-      background: var(--accent);
-      color: #fff;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .page-add-btn:active {
-      opacity: 0.85;
-    }
-
-    .page-add-btn svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-   HOME PAGE
-══════════════════════════════════════════════════════════ */
-
-    /* greeting */
+    /* ══ HOME PAGE ═══════════════════════════════════════════ */
     .greeting {
       font-size: 13px;
       color: var(--text2);
@@ -416,7 +407,6 @@
       font-weight: bold;
     }
 
-    /* balance card */
     .balance-card {
       background: var(--accent);
       border-radius: 18px;
@@ -469,7 +459,6 @@
       margin-top: 2px;
     }
 
-    /* section */
     .section-header {
       display: flex;
       align-items: center;
@@ -490,7 +479,6 @@
       cursor: pointer;
     }
 
-    /* wallet cards horizontal scroll */
     .wallets-scroll {
       display: flex;
       gap: 12px;
@@ -567,7 +555,6 @@
       font-size: 12px;
     }
 
-    /* recent transactions */
     .tx-list {
       display: flex;
       flex-direction: column;
@@ -582,6 +569,8 @@
       background: var(--surface);
       border-radius: 12px;
       margin-bottom: 6px;
+      position: relative;
+      overflow: hidden;
     }
 
     .tx-icon {
@@ -653,10 +642,18 @@
       margin-top: 2px;
     }
 
+    .tx-notes {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 1px;
+      font-style: italic;
+    }
+
     .tx-amount {
       font-size: 14px;
       font-weight: bold;
       white-space: nowrap;
+      cursor: pointer;
     }
 
     .tx-amount.debit {
@@ -665,278 +662,6 @@
 
     .tx-amount.credit {
       color: var(--green);
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 32px 0;
-      color: var(--text2);
-    }
-
-    .empty-state svg {
-      width: 40px;
-      height: 40px;
-      margin: 0 auto 12px;
-      opacity: 0.4;
-    }
-
-    .empty-state p {
-      font-size: 13px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-   TRANSACTIONS PAGE
-══════════════════════════════════════════════════════════ */
-    .tx-filter-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    .tx-filter-row::-webkit-scrollbar {
-      display: none;
-    }
-
-    .filter-chip {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: none;
-      color: var(--text2);
-      font-size: 12px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .filter-chip.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-    }
-
-    .filter-chip:active {
-      opacity: 0.7;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-   MODAL — Add Transaction / Add Wallet
-══════════════════════════════════════════════════════════ */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 300;
-      background: rgba(0, 0, 0, 0.6);
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    .modal-overlay.open {
-      display: flex;
-    }
-
-    .modal-sheet {
-      background: var(--surface);
-      border-radius: 20px 20px 0 0;
-      padding: 20px 20px 40px;
-      width: 100%;
-      max-width: 480px;
-      border-top: 1px solid var(--border);
-    }
-
-    .modal-handle {
-      width: 36px;
-      height: 4px;
-      border-radius: 2px;
-      background: var(--border);
-      margin: 0 auto 18px;
-    }
-
-    .modal-title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 18px;
-      text-align: center;
-    }
-
-    /* type toggle */
-    .type-toggle {
-      display: flex;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .type-btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      background: none;
-      color: var(--text2);
-      font-size: 13px;
-      cursor: pointer;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .type-btn svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .type-btn.active.debit {
-      background: var(--red-s);
-      color: var(--red);
-    }
-
-    .type-btn.active.credit {
-      background: var(--green-s);
-      color: var(--green);
-    }
-
-    .type-btn:active {
-      opacity: 0.7;
-    }
-
-    /* form */
-    .form-group {
-      margin-bottom: 13px;
-    }
-
-    .form-group label {
-      font-size: 11px;
-      color: var(--text2);
-      display: block;
-      margin-bottom: 5px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 11px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface2);
-      color: var(--text);
-      font-size: 14px;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    .form-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .form-row .form-group {
-      flex: 1;
-    }
-
-    /* category grid */
-    .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .cat-btn {
-      border: 1px solid var(--border);
-      background: none;
-      border-radius: 10px;
-      padding: 8px 4px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: var(--text2);
-      font-size: 10px;
-    }
-
-    .cat-btn svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    .cat-btn.active {
-      border-color: var(--accent);
-      background: var(--accent-s);
-      color: var(--accent);
-    }
-
-    .cat-btn:active {
-      opacity: 0.7;
-    }
-
-    /* save button */
-    .save-btn {
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      border: none;
-      background: var(--accent);
-      color: #fff;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 6px;
-    }
-
-    .save-btn:active {
-      opacity: 0.85;
-    }
-
-    .cancel-btn {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: none;
-      color: var(--text2);
-      font-size: 14px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    .cancel-btn:active {
-      background: var(--surface2);
-    }
-
-    /* toast */
-    #toast {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #222;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 13px;
-      z-index: 999;
-      display: none;
-      white-space: nowrap;
-      box-shadow: var(--shadow);
-    }
-
-    /* ══ PHASE 4 ══════════════════════════════════════════════ */
-
-    /* tx delete button */
-    .tx-item {
-      position: relative;
-      overflow: hidden;
     }
 
     .tx-del-btn {
@@ -975,7 +700,54 @@
       padding-right: 68px;
     }
 
-    /* month nav */
+    .empty-state {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text2);
+    }
+
+    .empty-state svg {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      opacity: 0.4;
+    }
+
+    .empty-state p {
+      font-size: 13px;
+    }
+
+    /* ══ FILTER CHIPS ════════════════════════════════════════ */
+    .tx-filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .tx-filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text2);
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .filter-chip.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ══ MONTH NAV ═══════════════════════════════════════════ */
     .month-nav {
       display: flex;
       align-items: center;
@@ -1010,7 +782,7 @@
       font-weight: bold;
     }
 
-    /* budget overview */
+    /* ══ BUDGET ══════════════════════════════════════════════ */
     .budget-overview {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -1090,7 +862,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* budget category items */
     .cat-budget-item {
       display: flex;
       align-items: center;
@@ -1174,11 +945,7 @@
       height: 14px;
     }
 
-    .cbi-del:active {
-      opacity: 0.7;
-    }
-
-    /* goals */
+    /* ══ GOALS ═══════════════════════════════════════════════ */
     .goal-item {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -1280,10 +1047,6 @@
       font-weight: 500;
     }
 
-    .goal-add-btn:active {
-      opacity: 0.7;
-    }
-
     .goal-del-btn {
       width: 30px;
       height: 30px;
@@ -1302,11 +1065,186 @@
       height: 14px;
     }
 
-    .goal-del-btn:active {
-      opacity: 0.7;
+    /* ══ MODALS ══════════════════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(0, 0, 0, 0.6);
+      align-items: flex-end;
+      justify-content: center;
     }
 
-    /* emoji / cat pickers */
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      padding: 20px 20px 40px;
+      width: 100%;
+      max-width: 480px;
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      margin: 0 auto 18px;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .type-toggle {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .type-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: none;
+      color: var(--text2);
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .type-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .type-btn.active.debit {
+      background: var(--red-s);
+      color: var(--red);
+    }
+
+    .type-btn.active.credit {
+      background: var(--green-s);
+      color: var(--green);
+    }
+
+    .form-group {
+      margin-bottom: 13px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      color: var(--text2);
+      display: block;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .cat-btn {
+      border: 1px solid var(--border);
+      background: none;
+      border-radius: 10px;
+      padding: 8px 4px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text2);
+      font-size: 10px;
+    }
+
+    .cat-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .cat-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-s);
+      color: var(--accent);
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .save-btn:active {
+      opacity: 0.85;
+    }
+
+    .cancel-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text2);
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .cancel-btn:active {
+      background: var(--surface2);
+    }
+
     .emoji-row {
       display: flex;
       gap: 8px;
@@ -1350,25 +1288,43 @@
       color: var(--accent);
     }
 
-    /* nav badge dot */
-    .nav-btn {
-      position: relative;
+    .page-add-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 16px;
     }
 
-    .nav-dot {
-      position: absolute;
-      top: 8px;
-      right: calc(50% - 14px);
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--red);
-      border: 2px solid var(--nav-bg);
+    .page-add-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ══ TOAST ═══════════════════════════════════════════════ */
+    #toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      z-index: 999;
       display: none;
-    }
-
-    .nav-dot.show {
-      display: block;
+      white-space: nowrap;
+      box-shadow: var(--shadow);
     }
   </style>
 </head>
@@ -1391,28 +1347,19 @@
     </div>
     <div id="msg">Loading…</div>
     <div class="pin-grid">
-      <button onclick="tap('1')">1</button>
-      <button onclick="tap('2')">2</button>
-      <button onclick="tap('3')">3</button>
-      <button onclick="tap('4')">4</button>
-      <button onclick="tap('5')">5</button>
-      <button onclick="tap('6')">6</button>
-      <button onclick="tap('7')">7</button>
-      <button onclick="tap('8')">8</button>
-      <button onclick="tap('9')">9</button>
-      <button onclick="tapBio()">
-        <!-- fingerprint SVG -->
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="28" height="28">
+      <button onclick="tap('1')">1</button><button onclick="tap('2')">2</button><button onclick="tap('3')">3</button>
+      <button onclick="tap('4')">4</button><button onclick="tap('5')">5</button><button onclick="tap('6')">6</button>
+      <button onclick="tap('7')">7</button><button onclick="tap('8')">8</button><button onclick="tap('9')">9</button>
+      <button onclick="tapBio()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          width="28" height="28">
           <path
             d="M12 10a2 2 0 0 1 2 2c0 1.5-.5 3-1.5 4.5M8.5 8.5A5 5 0 0 1 17 12c0 2-.4 3.8-1.2 5.3M6 7a7 7 0 0 1 12 5c0 2.5-.6 4.8-1.8 6.7M3.5 5.5A10 10 0 0 1 22 12c0 3-.8 5.8-2.3 8.2" />
-        </svg>
-      </button>
+        </svg></button>
       <button onclick="tap('0')">0</button>
-      <button onclick="tapDel()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+      <button onclick="tapDel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26"
+          height="26">
           <path d="M21 12H9m0 0 4-4m-4 4 4 4" />
-        </svg>
-      </button>
+        </svg></button>
     </div>
     <button class="skip-btn" onclick="unlock()">Continue as Guest →</button>
   </div>
@@ -1442,14 +1389,12 @@
       </div>
     </div>
 
-    <!-- pages -->
+    <!-- ALL PAGES INSIDE .pages div -->
     <div class="pages">
 
       <!-- HOME -->
       <div class="page active" id="pageHome">
         <div class="greeting">Good morning, <span>welcome back</span></div>
-
-        <!-- balance card -->
         <div class="balance-card">
           <div class="bal-label">TOTAL BALANCE</div>
           <div class="bal-amount" id="totalBal">₹0</div>
@@ -1458,7 +1403,6 @@
             <div class="bal-item">Expenses <span id="homeExpense">₹0</span></div>
           </div>
         </div>
-
         <!-- 7-day trend -->
         <div
           style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
@@ -1467,7 +1411,6 @@
           <div id="trendBars" style="display:flex;align-items:flex-end;gap:4px;height:44px;"></div>
           <div id="trendLabels" style="display:flex;gap:4px;margin-top:4px;"></div>
         </div>
-
         <!-- wallets -->
         <div class="section-header">
           <div class="section-title">Wallets</div>
@@ -1482,22 +1425,19 @@
             <span>Add Wallet</span>
           </div>
         </div>
-
         <!-- recent -->
         <div class="section-header">
           <div class="section-title">Recent</div>
           <button class="section-link" onclick="goPage('Tx')">See all</button>
         </div>
         <div id="homeRecentList">
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path
                 d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
             </svg>
             <p>No transactions yet</p>
           </div>
         </div>
-
         <!-- subs teaser -->
         <div class="section-header" style="margin-top:20px;">
           <div class="section-title">Subscriptions</div>
@@ -1510,7 +1450,6 @@
       <div class="page" id="pageTx">
         <div class="page-title">Transactions</div>
         <div class="page-sub">All your activity</div>
-        <!-- search bar -->
         <div style="position:relative;margin-bottom:12px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--text2);pointer-events:none">
@@ -1529,30 +1468,28 @@
           <button class="filter-chip" onclick="filterTx(this,'shopping')">Shopping</button>
         </div>
         <div id="txFullList">
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path
                 d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
             </svg>
-            <p>No transactions yet. Tap + to add one.</p>
+            <p>No transactions yet.</p>
           </div>
         </div>
       </div>
 
       <!-- ANALYTICS -->
       <div class="page" id="pageAnalytics">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-          <button onclick="goPage('More')"
-            style="background:none;border:none;color:var(--accent);cursor:pointer;padding:4px;display:flex;align-items:center;gap:4px;font-size:13px;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M19 12H5M12 5l-7 7 7 7" />
-            </svg>
-            Back
-          </button>
-        </div>
+        <button class="back-btn" onclick="goPage('More')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" width="18" height="18">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg> Back</button>
         <div class="page-title">Analytics</div>
-        <div class="page-sub">This month's overview</div>
-        <!-- summary strip -->
+        <div class="page-sub">Monthly overview</div>
+        <div class="month-nav">
+          <button class="month-nav-btn" onclick="shiftMonth(-1)">&#8249;</button>
+          <span id="analyticsMonthLabel">Mar 2026</span>
+          <button class="month-nav-btn" onclick="shiftMonth(1)">&#8250;</button>
+        </div>
         <div style="display:flex;gap:10px;margin-bottom:18px;">
           <div
             style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
@@ -1570,11 +1507,9 @@
             <div style="font-size:18px;font-weight:bold;color:var(--accent);" id="aSaved">₹0</div>
           </div>
         </div>
-        <!-- category breakdown -->
         <div class="section-title" style="margin-bottom:12px;">By Category</div>
         <div id="catBreakdown">
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
               <path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
             </svg>
@@ -1586,38 +1521,30 @@
       <!-- MORE -->
       <div class="page" id="pageMore">
         <div class="page-title">More</div>
-        <div class="page-sub">Wallets & Settings</div>
-
-        <!-- wallets full list -->
+        <div class="page-sub">Wallets &amp; Settings</div>
         <div class="section-header">
-          <div class="section-title">My Wallets</div>
-          <button class="section-link" onclick="openAddWallet()">+ Add</button>
+          <div class="section-title">My Wallets</div><button class="section-link" onclick="openAddWallet()">+
+            Add</button>
         </div>
         <div id="walletFullList" style="margin-bottom:22px;"></div>
-
         <!-- quick links -->
         <div class="section-title" style="margin-bottom:12px;">Quick Links</div>
-        <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+        <div style="display:flex;gap:10px;margin-bottom:18px;">
           <button onclick="goPage('Analytics')"
-            style="flex:1;min-width:120px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+            style="flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"
               style="color:var(--accent)">
               <line x1="18" y1="20" x2="18" y2="10" />
               <line x1="12" y1="20" x2="12" y2="4" />
               <line x1="6" y1="20" x2="6" y2="14" />
-            </svg>
-            Analytics
-          </button>
+            </svg>Analytics</button>
           <button onclick="goPage('Goals')"
-            style="flex:1;min-width:120px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
+            style="flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"
               style="color:var(--green)">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-            Goals
-          </button>
+            </svg>Goals</button>
         </div>
-
         <!-- security -->
         <div class="section-title" style="margin-bottom:12px;">Security</div>
         <div
@@ -1648,8 +1575,7 @@
             </svg>
           </div>
         </div>
-
-        <!-- data & export -->
+        <!-- data -->
         <div class="section-title" style="margin-bottom:12px;">Data</div>
         <div
           style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;">
@@ -1682,173 +1608,145 @@
             </svg>
           </div>
         </div>
-
-        <!-- app info -->
         <div style="text-align:center;padding:20px 0;color:var(--text2);font-size:12px;">
           <img src="logo.png" style="height:36px;margin:0 auto 8px;display:block;"
             onerror="this.style.display='none'" />
-          sXt — Secret Transactions<br />v6.0 · Your money. Your secret.
+          sXt — Secret Transactions<br />v7.0 · Your money. Your secret.
         </div>
+      </div>
+
+      <!-- BUDGET -->
+      <div class="page" id="pageBudget">
+        <div class="page-title">Budget</div>
+        <div class="page-sub">Track your monthly spending limits</div>
+        <div class="month-nav">
+          <button class="month-nav-btn" onclick="shiftMonth(-1)">&#8249;</button>
+          <span id="budgetMonthLabel">Mar 2026</span>
+          <button class="month-nav-btn" onclick="shiftMonth(1)">&#8250;</button>
+        </div>
+        <div class="budget-overview">
+          <div class="bov-row">
+            <div class="bov-ring">
+              <svg id="budgetDonut" viewBox="0 0 80 80" width="80" height="80"></svg>
+              <div class="bov-ring-pct" id="budgetPct">0%</div>
+            </div>
+            <div class="bov-info">
+              <div class="bov-title">Total spent this month</div>
+              <div class="bov-val" id="budgetSpent">₹0</div>
+              <div class="bov-sub">of <span id="budgetTotal">₹0</span> budget</div>
+            </div>
+          </div>
+          <div id="donutLegend" style="display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:14px;"></div>
+          <div class="bov-stats">
+            <div class="bov-stat">
+              <div class="sv" id="budgetRemain" style="color:var(--green)">₹0</div>
+              <div class="sl">Remaining</div>
+            </div>
+            <div class="bov-stat">
+              <div class="sv" id="budgetDailyLeft">₹0</div>
+              <div class="sl">Per day left</div>
+            </div>
+            <div class="bov-stat">
+              <div class="sv" id="budgetDaysLeft">0</div>
+              <div class="sl">Days left</div>
+            </div>
+          </div>
+        </div>
+        <div class="section-header">
+          <div class="section-title">Category Limits</div><button class="section-link" onclick="openAddBudget()">+
+            Add</button>
+        </div>
+        <div id="catBudgetList"></div>
+        <div class="section-header" style="margin-top:20px">
+          <div class="section-title">Savings Goals</div><button class="section-link" onclick="goPage('Goals')">See all
+            →</button>
+        </div>
+        <div id="budgetGoalsPreview"></div>
+      </div>
+
+      <!-- GOALS -->
+      <div class="page" id="pageGoals">
+        <button class="back-btn" onclick="goPage('Budget')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" width="18" height="18">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg> Back</button>
+        <div class="page-title">Goals</div>
+        <div class="page-sub">Save towards what matters</div>
+        <div id="goalsList"></div>
+        <button class="page-add-btn" onclick="openAddGoal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M5 12h14" />
+          </svg>+ New Goal
+        </button>
+      </div>
+
+      <!-- SUBSCRIPTIONS -->
+      <div class="page" id="pageSubs">
+        <div class="page-title">Subscriptions</div>
+        <div class="page-sub">Track recurring payments</div>
+        <div style="display:flex;gap:10px;margin-bottom:18px;">
+          <div
+            style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">MONTHLY</div>
+            <div id="subMonthly" style="font-size:18px;font-weight:bold;color:var(--red)">₹0</div>
+          </div>
+          <div
+            style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">YEARLY</div>
+            <div id="subYearly" style="font-size:18px;font-weight:bold;color:var(--accent)">₹0</div>
+          </div>
+          <div
+            style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">ACTIVE</div>
+            <div id="subCount" style="font-size:18px;font-weight:bold;">0</div>
+          </div>
+        </div>
+        <div class="section-header" style="margin-bottom:12px;">
+          <div class="section-title">Due This Month</div>
+        </div>
+        <div id="subsDueList" style="margin-bottom:18px;"></div>
+        <div class="section-header" style="margin-bottom:12px;">
+          <div class="section-title">All Subscriptions</div><button class="section-link" onclick="openAddSub()">+
+            Add</button>
+        </div>
+        <div id="subsList"></div>
       </div>
 
     </div><!-- /pages -->
 
-    <!-- BUDGET PAGE -->
-    <div class="page" id="pageBudget">
-      <div class="page-title">Budget</div>
-      <div class="page-sub">Track your monthly spending limits</div>
-
-      <!-- month nav -->
-      <div class="month-nav">
-        <button class="month-nav-btn" onclick="shiftMonth(-1)">&#8249;</button>
-        <span id="budgetMonthLabel">Jan 2025</span>
-        <button class="month-nav-btn" onclick="shiftMonth(1)">&#8250;</button>
-      </div>
-
-      <!-- overview donut -->
-      <div class="budget-overview">
-        <div class="bov-row">
-          <div class="bov-ring">
-            <!-- dynamically built by JS -->
-            <svg id="budgetDonut" viewBox="0 0 80 80" width="80" height="80"></svg>
-            <div class="bov-ring-pct" id="budgetPct">0%</div>
-          </div>
-          <div class="bov-info">
-            <div class="bov-title">Total spent this month</div>
-            <div class="bov-val" id="budgetSpent">₹0</div>
-            <div class="bov-sub">of <span id="budgetTotal">₹0</span> budget</div>
-          </div>
-        </div>
-        <!-- donut legend -->
-        <div id="donutLegend" style="display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:14px;"></div>
-        <div class="bov-stats">
-          <div class="bov-stat">
-            <div class="sv" id="budgetRemain" style="color:var(--green)">₹0</div>
-            <div class="sl">Remaining</div>
-          </div>
-          <div class="bov-stat">
-            <div class="sv" id="budgetDailyLeft">₹0</div>
-            <div class="sl">Per day left</div>
-          </div>
-          <div class="bov-stat">
-            <div class="sv" id="budgetDaysLeft">0</div>
-            <div class="sl">Days left</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- category budgets -->
-      <div class="section-header">
-        <div class="section-title">Category Limits</div>
-        <button class="section-link" onclick="openAddBudget()">+ Add</button>
-      </div>
-      <div id="catBudgetList"></div>
-
-      <!-- goals teaser -->
-      <div class="section-header" style="margin-top:20px">
-        <div class="section-title">Savings Goals</div>
-        <button class="section-link" onclick="goPage('Goals')">See all →</button>
-      </div>
-      <div id="budgetGoalsPreview"></div>
-    </div>
-
-    <!-- GOALS PAGE -->
-    <div class="page" id="pageGoals">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-        <button onclick="goPage('Budget')"
-          style="background:none;border:none;color:var(--accent);cursor:pointer;padding:4px;display:flex;align-items:center;gap:4px;font-size:13px;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-            <path d="M19 12H5M12 5l-7 7 7 7" />
-          </svg>
-          Back
-        </button>
-      </div>
-      <div class="page-title">Goals</div>
-      <div class="page-sub">Save towards what matters</div>
-      <div id="goalsList"></div>
-      <button class="save-btn" style="margin-top:8px" onclick="openAddGoal()">
-        + New Goal
-      </button>
-    </div>
-
-    <!-- SUBSCRIPTIONS PAGE (Phase 6) -->
-    <div class="page" id="pageSubs">
-      <div class="page-title">Subscriptions</div>
-      <div class="page-sub">Track recurring payments</div>
-      <!-- monthly summary -->
-      <div style="display:flex;gap:10px;margin-bottom:18px;">
-        <div
-          style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
-          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">MONTHLY</div>
-          <div id="subMonthly" style="font-size:18px;font-weight:bold;color:var(--red)">₹0</div>
-        </div>
-        <div
-          style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
-          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">YEARLY</div>
-          <div id="subYearly" style="font-size:18px;font-weight:bold;color:var(--accent)">₹0</div>
-        </div>
-        <div
-          style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
-          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">ACTIVE</div>
-          <div id="subCount" style="font-size:18px;font-weight:bold;">0</div>
-        </div>
-      </div>
-      <!-- upcoming this month -->
-      <div class="section-header" style="margin-bottom:12px;">
-        <div class="section-title">Due This Month</div>
-      </div>
-      <div id="subsDueList" style="margin-bottom:18px;"></div>
-      <!-- all subs -->
-      <div class="section-header" style="margin-bottom:12px;">
-        <div class="section-title">All Subscriptions</div>
-        <button class="section-link" onclick="openAddSub()">+ Add</button>
-      </div>
-      <div id="subsList"></div>
-    </div>
-
-    <!-- bottom nav — 5 tabs -->
+    <!-- bottom nav -->
     <div class="bottom-nav">
       <button class="nav-btn active" id="navHome" onclick="goPage('Home')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
           <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-        Home
+        </svg>Home
       </button>
       <button class="nav-btn" id="navTx" onclick="goPage('Tx')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path
             d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
-        </svg>
-        Transactions
+        </svg>Transactions
       </button>
       <button class="nav-btn" id="navBudget" onclick="goPage('Budget')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10" />
           <path d="M12 6v6l4 2" />
-        </svg>
-        Budget
+        </svg>Budget
         <div class="nav-dot" id="budgetDot"></div>
       </button>
       <button class="nav-btn" id="navSubs" onclick="goPage('Subs')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-          <polyline points="7.5 4.21 12 6.81 16.5 4.21" />
-          <polyline points="7.5 19.79 7.5 14.6 3 12" />
-          <polyline points="21 12 16.5 14.6 16.5 19.79" />
-          <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-          <line x1="12" y1="22.08" x2="12" y2="12" />
-        </svg>
-        Subs
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 3l-4 4-4-4" />
+        </svg>Subs
       </button>
       <button class="nav-btn" id="navMore" onclick="goPage('More')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="3" />
           <path
             d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-        </svg>
-        More
+        </svg>More
       </button>
     </div>
 
@@ -1862,107 +1760,70 @@
     Add Transaction
   </button>
 
-  <!-- FAB removed — add buttons are now inline per page -->
-
   <!-- ═══ MODAL: ADD TRANSACTION ═══ -->
   <div class="modal-overlay" id="modalTx">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Add Transaction</div>
-
       <div class="type-toggle">
-        <button class="type-btn active debit" id="typeDebit" onclick="setType('debit')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+        <button class="type-btn active debit" id="typeDebit" onclick="setType('debit')"><svg viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <path d="M12 19V5M5 12l7 7 7-7" />
-          </svg>
-          Expense
-        </button>
-        <button class="type-btn credit" id="typeCredit" onclick="setType('credit')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          </svg>Expense</button>
+        <button class="type-btn credit" id="typeCredit" onclick="setType('credit')"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" width="16" height="16">
             <path d="M12 5v14M5 12l7-7 7 7" />
-          </svg>
-          Income
-        </button>
+          </svg>Income</button>
       </div>
-
-      <div class="form-group">
-        <label>Amount (₹)</label>
-        <input type="number" id="txAmt" placeholder="0.00" inputmode="decimal" />
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <input type="text" id="txDesc" placeholder="e.g. Swiggy, Salary…" />
-      </div>
-
+      <div class="form-group"><label>Amount (₹)</label><input type="number" id="txAmt" placeholder="0.00"
+          inputmode="decimal" /></div>
+      <div class="form-group"><label>Description</label><input type="text" id="txDesc"
+          placeholder="e.g. Swiggy, Salary…" /></div>
       <div class="form-group">
         <label>Category</label>
         <div class="cat-grid">
-          <button class="cat-btn active" id="cat-food" onclick="setCat('food',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="cat-btn active" id="cat-food" onclick="setCat('food',this)"><svg viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3" />
-            </svg>
-            Food
-          </button>
-          <button class="cat-btn" id="cat-transport" onclick="setCat('transport',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </svg>Food</button>
+          <button class="cat-btn" id="cat-transport" onclick="setCat('transport',this)"><svg viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
               <rect x="1" y="3" width="15" height="13" rx="2" />
               <path
                 d="M16 8h4l3 3v5h-7V8zM5.5 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM18.5 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
-            </svg>
-            Transport
-          </button>
-          <button class="cat-btn" id="cat-shopping" onclick="setCat('shopping',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </svg>Transport</button>
+          <button class="cat-btn" id="cat-shopping" onclick="setCat('shopping',this)"><svg viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0" />
-            </svg>
-            Shopping
-          </button>
-          <button class="cat-btn" id="cat-bills" onclick="setCat('bills',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </svg>Shopping</button>
+          <button class="cat-btn" id="cat-bills" onclick="setCat('bills',this)"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
-            </svg>
-            Bills
-          </button>
-          <button class="cat-btn" id="cat-health" onclick="setCat('health',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </svg>Bills</button>
+          <button class="cat-btn" id="cat-health" onclick="setCat('health',this)"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-            Health
-          </button>
-          <button class="cat-btn" id="cat-income" onclick="setCat('income',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </svg>Health</button>
+          <button class="cat-btn" id="cat-income" onclick="setCat('income',this)"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <line x1="12" y1="1" x2="12" y2="23" />
               <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-            Income
-          </button>
-          <button class="cat-btn" id="cat-other" onclick="setCat('other',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </svg>Income</button>
+          <button class="cat-btn" id="cat-other" onclick="setCat('other',this)"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            Other
-          </button>
+            </svg>Other</button>
         </div>
       </div>
-
       <div class="form-row">
-        <div class="form-group">
-          <label>Wallet</label>
-          <select id="txWallet"></select>
-        </div>
-        <div class="form-group">
-          <label>Date</label>
-          <input type="date" id="txDate" />
-        </div>
+        <div class="form-group"><label>Wallet</label><select id="txWallet"></select></div>
+        <div class="form-group"><label>Date</label><input type="date" id="txDate" /></div>
       </div>
-      <div class="form-group">
-        <label>Notes (optional)</label>
-        <input type="text" id="txNotes" placeholder="Add a note…" />
-      </div>
-
+      <div class="form-group"><label>Notes (optional)</label><input type="text" id="txNotes"
+          placeholder="Add a note…" /></div>
       <button class="save-btn" onclick="saveTx()">Save Transaction</button>
       <button class="cancel-btn" onclick="closeModal('modalTx')">Cancel</button>
     </div>
@@ -1973,35 +1834,43 @@
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Add Wallet</div>
-      <div class="form-group">
-        <label>Wallet Name</label>
-        <input type="text" id="wName" placeholder="e.g. SBI, Paytm, Cash" />
-      </div>
-      <div class="form-group">
-        <label>Type</label>
-        <select id="wType">
+      <div class="form-group"><label>Wallet Name</label><input type="text" id="wName"
+          placeholder="e.g. SBI, Paytm, Cash" /></div>
+      <div class="form-group"><label>Type</label><select id="wType">
           <option>Bank Account</option>
           <option>UPI Wallet</option>
           <option>Cash</option>
           <option>Credit Card</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Opening Balance (₹)</label>
-        <input type="number" id="wBal" placeholder="0" inputmode="decimal" />
-      </div>
+        </select></div>
+      <div class="form-group"><label>Opening Balance (₹)</label><input type="number" id="wBal" placeholder="0"
+          inputmode="decimal" /></div>
       <button class="save-btn" onclick="saveWallet()">Add Wallet</button>
       <button class="cancel-btn" onclick="closeModal('modalWallet')">Cancel</button>
     </div>
   </div>
 
-  <!-- ═══ MODAL: ADD BUDGET CATEGORY ═══ -->
+  <!-- ═══ MODAL: EDIT WALLET ═══ -->
+  <div class="modal-overlay" id="modalEditWallet">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Edit Wallet</div>
+      <input type="hidden" id="editWalletId" />
+      <div class="form-group"><label>Wallet Name</label><input type="text" id="editWalletName" /></div>
+      <div class="form-group"><label>Current Balance (₹)</label><input type="number" id="editWalletBal"
+          inputmode="decimal" /></div>
+      <button class="save-btn" onclick="saveEditWallet()">Save Changes</button>
+      <button class="cancel-btn" style="background:var(--red-s);color:var(--red);border-color:var(--red);"
+        onclick="deleteWallet()">Delete Wallet</button>
+      <button class="cancel-btn" onclick="closeModal('modalEditWallet')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: ADD BUDGET ═══ -->
   <div class="modal-overlay" id="modalBudget">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Set Category Budget</div>
-      <div class="form-group">
-        <label>Category</label>
+      <div class="form-group"><label>Category</label>
         <div class="bc-row" id="bcRow">
           <button class="bc-btn active" onclick="setBudgetCat('food',this)">Food</button>
           <button class="bc-btn" onclick="setBudgetCat('transport',this)">Transport</button>
@@ -2011,10 +1880,8 @@
           <button class="bc-btn" onclick="setBudgetCat('other',this)">Other</button>
         </div>
       </div>
-      <div class="form-group">
-        <label>Monthly Limit (₹)</label>
-        <input type="number" id="budgetLimitInput" placeholder="e.g. 5000" inputmode="decimal" />
-      </div>
+      <div class="form-group"><label>Monthly Limit (₹)</label><input type="number" id="budgetLimitInput"
+          placeholder="e.g. 5000" inputmode="decimal" /></div>
       <button class="save-btn" onclick="saveBudgetCat()">Save Limit</button>
       <button class="cancel-btn" onclick="closeModal('modalBudget')">Cancel</button>
     </div>
@@ -2025,8 +1892,7 @@
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">New Savings Goal</div>
-      <div class="form-group">
-        <label>Pick an emoji</label>
+      <div class="form-group"><label>Pick an emoji</label>
         <div class="emoji-row">
           <button class="emoji-btn active" onclick="setGoalEmoji('🎯',this)">🎯</button>
           <button class="emoji-btn" onclick="setGoalEmoji('🏠',this)">🏠</button>
@@ -2038,19 +1904,13 @@
           <button class="emoji-btn" onclick="setGoalEmoji('🎓',this)">🎓</button>
         </div>
       </div>
-      <div class="form-group">
-        <label>Goal Name</label>
-        <input type="text" id="goalName" placeholder="e.g. Goa Trip, New Laptop" />
-      </div>
+      <div class="form-group"><label>Goal Name</label><input type="text" id="goalName"
+          placeholder="e.g. Goa Trip, New Laptop" /></div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Target Amount (₹)</label>
-          <input type="number" id="goalTarget" placeholder="50000" inputmode="decimal" />
-        </div>
-        <div class="form-group">
-          <label>Already Saved (₹)</label>
-          <input type="number" id="goalSaved" placeholder="0" inputmode="decimal" />
-        </div>
+        <div class="form-group"><label>Target Amount (₹)</label><input type="number" id="goalTarget" placeholder="50000"
+            inputmode="decimal" /></div>
+        <div class="form-group"><label>Already Saved (₹)</label><input type="number" id="goalSaved" placeholder="0"
+            inputmode="decimal" /></div>
       </div>
       <button class="save-btn" onclick="saveGoal()">Create Goal</button>
       <button class="cancel-btn" onclick="closeModal('modalGoal')">Cancel</button>
@@ -2063,10 +1923,8 @@
       <div class="modal-handle"></div>
       <div class="modal-title">Add to Goal</div>
       <div id="addGoalInfo" style="text-align:center;color:var(--text2);font-size:13px;margin-bottom:16px;"></div>
-      <div class="form-group">
-        <label>Amount to add (₹)</label>
-        <input type="number" id="addGoalAmt" placeholder="e.g. 1000" inputmode="decimal" />
-      </div>
+      <div class="form-group"><label>Amount to add (₹)</label><input type="number" id="addGoalAmt"
+          placeholder="e.g. 1000" inputmode="decimal" /></div>
       <button class="save-btn" onclick="confirmAddToGoal()">Add</button>
       <button class="cancel-btn" onclick="closeModal('modalAddGoal')">Cancel</button>
     </div>
@@ -2078,39 +1936,26 @@
       <div class="modal-handle"></div>
       <div class="modal-title">Add Subscription</div>
       <input type="hidden" id="editSubId" value="" />
-      <div class="form-group">
-        <label>Service Name</label>
-        <input type="text" id="subName" placeholder="e.g. Netflix, Spotify, Amazon Prime" />
-      </div>
+      <div class="form-group"><label>Service Name</label><input type="text" id="subName"
+          placeholder="e.g. Netflix, Spotify, Amazon Prime" /></div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Amount (₹)</label>
-          <input type="number" id="subAmt" placeholder="499" inputmode="decimal" />
-        </div>
-        <div class="form-group">
-          <label>Cycle</label>
-          <select id="subCycle">
+        <div class="form-group"><label>Amount (₹)</label><input type="number" id="subAmt" placeholder="499"
+            inputmode="decimal" /></div>
+        <div class="form-group"><label>Cycle</label><select id="subCycle">
             <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
             <option value="weekly">Weekly</option>
-          </select>
-        </div>
+          </select></div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Next Due Date</label>
-          <input type="date" id="subDue" />
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <select id="subCat">
+        <div class="form-group"><label>Next Due Date</label><input type="date" id="subDue" /></div>
+        <div class="form-group"><label>Category</label><select id="subCat">
             <option value="entertainment">Entertainment</option>
             <option value="utilities">Utilities</option>
             <option value="health">Health</option>
             <option value="shopping">Shopping</option>
             <option value="other">Other</option>
-          </select>
-        </div>
+          </select></div>
       </div>
       <button class="save-btn" onclick="saveSub()">Save Subscription</button>
       <button class="cancel-btn" onclick="closeModal('modalSub')">Cancel</button>
@@ -2122,417 +1967,25 @@
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Change PIN</div>
-      <div id="cpStep1">
-        <div class="form-group">
-          <label>Current PIN</label>
-          <input type="password" id="cpOld" maxlength="4" placeholder="Enter current PIN" inputmode="numeric"
-            style="letter-spacing:8px;font-size:20px;text-align:center;" />
-        </div>
-        <div class="form-group">
-          <label>New PIN</label>
-          <input type="password" id="cpNew" maxlength="4" placeholder="Enter new PIN" inputmode="numeric"
-            style="letter-spacing:8px;font-size:20px;text-align:center;" />
-        </div>
-        <div class="form-group">
-          <label>Confirm New PIN</label>
-          <input type="password" id="cpConfirm" maxlength="4" placeholder="Confirm new PIN" inputmode="numeric"
-            style="letter-spacing:8px;font-size:20px;text-align:center;" />
-        </div>
-      </div>
+      <div class="form-group"><label>Current PIN</label><input type="password" id="cpOld" maxlength="4"
+          placeholder="Enter current PIN" inputmode="numeric"
+          style="letter-spacing:8px;font-size:20px;text-align:center;" /></div>
+      <div class="form-group"><label>New PIN</label><input type="password" id="cpNew" maxlength="4"
+          placeholder="Enter new PIN" inputmode="numeric"
+          style="letter-spacing:8px;font-size:20px;text-align:center;" /></div>
+      <div class="form-group"><label>Confirm New PIN</label><input type="password" id="cpConfirm" maxlength="4"
+          placeholder="Confirm new PIN" inputmode="numeric"
+          style="letter-spacing:8px;font-size:20px;text-align:center;" /></div>
       <button class="save-btn" onclick="saveNewPin()">Update PIN</button>
       <button class="cancel-btn" onclick="closeModal('modalChangePin')">Cancel</button>
     </div>
   </div>
 
-  <!-- ═══ MODAL: EDIT WALLET ═══ -->
-  <div class="modal-overlay" id="modalEditWallet">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-title">Edit Wallet</div>
-      <input type="hidden" id="editWalletId" />
-      <div class="form-group">
-        <label>Wallet Name</label>
-        <input type="text" id="editWalletName" />
-      </div>
-      <div class="form-group">
-        <label>Current Balance (₹)</label>
-        <input type="number" id="editWalletBal" inputmode="decimal" />
-      </div>
-      <button class="save-btn" onclick="saveEditWallet()">Save Changes</button>
-      <button class="cancel-btn" style="background:var(--red-s);color:var(--red);border-color:var(--red);"
-        onclick="deleteWallet()">Delete Wallet</button>
-      <button class="cancel-btn" onclick="closeModal('modalEditWallet')">Cancel</button>
-    </div>
-  </div>
-
-  <!-- TOAST -->
   <div id="toast"></div>
 
   <script>
-    /* ════════════════════════════════════════════════════════
-       DATA — handled in Phase 4 section below
-    ════════════════════════════════════════════════════════ */
-    var wallets = [];
-    var txns = [];
-
-    /* ════════════════════════════════════════════════════════
-       PIN
-    ════════════════════════════════════════════════════════ */
-    var stored = null, mode = 'enter', attempt = '', newBuf = '', waiting = false;
-
-    function makeHash(pin) {
-      var s = pin + 'sxt2026', h = 5381;
-      for (var i = 0; i < s.length; i++) { h = ((h << 5) + h) + s.charCodeAt(i); h = h & h; }
-      return 'p' + Math.abs(h).toString(16);
-    }
-    function init() {
-      loadData();
-      try { stored = localStorage.getItem('sxt_pin') || null; } catch (e) { }
-      var t; try { t = localStorage.getItem('sxt_theme'); } catch (e) { }
-      if (t) setTheme(t);
-      setMsg(stored ? 'Enter your PIN' : 'Create a 4-digit PIN', '');
-      mode = stored ? 'enter' : 'set';
-      // set today date default
-      try { document.getElementById('txDate').valueAsDate = new Date(); } catch (e) { }
-    }
-    function tap(d) {
-      if (waiting || attempt.length >= 4) return;
-      attempt += d; paint();
-      if (attempt.length === 4) { waiting = true; setTimeout(check, 300); }
-    }
-    function tapDel() {
-      if (waiting) return;
-      attempt = attempt.slice(0, -1); paint();
-    }
-    function tapBio() {
-      if (waiting) return;
-      setMsg('Authenticating…', ''); waiting = true; setTimeout(unlock, 800);
-    }
-    function check() {
-      if (mode === 'enter') {
-        if (makeHash(attempt) === stored) {
-          dotState('ok'); setMsg('Welcome!', 'ok'); setTimeout(unlock, 500);
-        } else {
-          dotState('err'); setMsg('Wrong PIN', 'err');
-          setTimeout(function () { reset(); setMsg('Enter your PIN', ''); }, 700);
-        }
-      } else if (mode === 'set') {
-        newBuf = attempt; attempt = ''; mode = 'confirm';
-        paint(); setMsg('Confirm your PIN', ''); waiting = false;
-      } else if (mode === 'confirm') {
-        if (attempt === newBuf) {
-          var h = makeHash(attempt);
-          try { localStorage.setItem('sxt_pin', h); } catch (e) { }
-          stored = h; dotState('ok'); setMsg('PIN saved!', 'ok'); setTimeout(unlock, 600);
-        } else {
-          dotState('err'); setMsg('No match. Try again.', 'err');
-          setTimeout(function () { newBuf = ''; mode = 'set'; reset(); setMsg('Create a 4-digit PIN', ''); }, 700);
-        }
-      }
-    }
-    function paint() {
-      for (var i = 0; i < 4; i++) document.getElementById('d' + i).className = 'dot' + (i < attempt.length ? ' on' : '');
-    }
-    function dotState(c) {
-      for (var i = 0; i < 4; i++) document.getElementById('d' + i).className = 'dot ' + c;
-    }
-    function reset() {
-      attempt = ''; waiting = false;
-      for (var i = 0; i < 4; i++) document.getElementById('d' + i).className = 'dot';
-    }
-    function setMsg(t, c) {
-      var el = document.getElementById('msg'); el.textContent = t; el.className = c || '';
-    }
-    function unlock() {
-      document.getElementById('pinScreen').style.display = 'none';
-      document.getElementById('app').style.display = 'flex';
-      document.getElementById('fabCenter').classList.add('show');
-      refreshAll();
-    }
-    function lockApp() {
-      attempt = ''; newBuf = ''; waiting = false;
-      mode = stored ? 'enter' : 'set'; reset();
-      setMsg(stored ? 'Enter your PIN' : 'Create a 4-digit PIN', '');
-      document.getElementById('fabCenter').classList.remove('show');
-      document.getElementById('app').style.display = 'none';
-      document.getElementById('pinScreen').style.display = 'flex';
-    }
-    document.addEventListener('keydown', function (e) {
-      if (document.getElementById('pinScreen').style.display === 'none') return;
-      if (e.key >= '0' && e.key <= '9') tap(e.key);
-      if (e.key === 'Backspace') tapDel();
-    });
-
-
-    /* navigation and analytics — see Phase 4 section below */
-
-    /* ════════════════════════════════════════════════════════
-       THEME
-    ════════════════════════════════════════════════════════ */
-    function setTheme(t) {
-      document.documentElement.setAttribute('data-theme', t);
-      try { localStorage.setItem('sxt_theme', t); } catch (e) { }
-      ['D', 'C', 'L'].forEach(function (b) { document.getElementById('t' + b).classList.remove('active'); });
-      document.getElementById('t' + { dark: 'D', color: 'C', light: 'L' }[t]).classList.add('active');
-    }
-
-    /* ════════════════════════════════════════════════════════
-       MODALS
-    ════════════════════════════════════════════════════════ */
-    function openModal(id) { document.getElementById(id).classList.add('open'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-    /* ════════════════════════════════════════════════════════
-       WALLETS
-    ════════════════════════════════════════════════════════ */
-    var WALLET_ICONS = {
-      'Bank Account': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22v-7M21 22v-7M3 15l9-13 9 13M6 22h12"/></svg>',
-      'UPI Wallet': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
-      'Cash': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>',
-      'Credit Card': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
-    };
-
-    function openAddWallet() { openModal('modalWallet'); }
-    function saveWallet() {
-      var name = document.getElementById('wName').value.trim();
-      var type = document.getElementById('wType').value;
-      var bal = parseFloat(document.getElementById('wBal').value) || 0;
-      if (!name) { showToast('Enter wallet name'); return; }
-      wallets.push({ id: Date.now(), name: name, type: type, balance: bal });
-      saveData();
-      closeModal('modalWallet');
-      document.getElementById('wName').value = '';
-      document.getElementById('wBal').value = '';
-      showToast('Wallet added');
-      refreshAll();
-    }
-
-    function refreshWalletScroll() {
-      var el = document.getElementById('walletScroll');
-      var html = wallets.map(function (w) {
-        var icon = WALLET_ICONS[w.type] || WALLET_ICONS['Cash'];
-        return '<div class="wallet-card">'
-          + '<div class="wc-icon">' + icon + '</div>'
-          + '<div class="wc-name">' + w.name + '</div>'
-          + '<div class="wc-bal">₹' + fmt(w.balance) + '</div>'
-          + '</div>';
-      }).join('');
-      html += '<div class="wallet-card add-card" onclick="openAddWallet()">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;color:var(--accent)"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>'
-        + '<span>Add Wallet</span></div>';
-      el.innerHTML = html;
-    }
-
-    function refreshWalletList() {
-      var el = document.getElementById('walletFullList');
-      if (wallets.length === 0) {
-        el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg><p>No wallets yet</p></div>';
-        return;
-      }
-      el.innerHTML = wallets.map(function (w) {
-        var icon = WALLET_ICONS[w.type] || WALLET_ICONS['Cash'];
-        return '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;">'
-          + '<div style="width:40px;height:40px;border-radius:10px;background:var(--accent-s);display:flex;align-items:center;justify-content:center;color:var(--accent)">' + icon + '</div>'
-          + '<div style="flex:1"><div style="font-size:14px;font-weight:500">' + w.name + '</div><div style="font-size:12px;color:var(--text2)">' + w.type + '</div></div>'
-          + '<div style="font-size:16px;font-weight:bold">₹' + fmt(w.balance) + '</div>'
-          + '</div>';
-      }).join('');
-    }
-
-    function walletSelectOptions() {
-      var sel = document.getElementById('txWallet');
-      sel.innerHTML = wallets.length === 0
-        ? '<option value="">No wallets</option>'
-        : wallets.map(function (w) { return '<option value="' + w.id + '">' + w.name + '</option>'; }).join('');
-    }
-
-    /* ════════════════════════════════════════════════════════
-       TRANSACTIONS
-    ════════════════════════════════════════════════════════ */
-    var txType = 'debit';
-    var txCat = 'food';
-
-    function setType(t) {
-      txType = t;
-      document.getElementById('typeDebit').classList.toggle('active', t === 'debit');
-      document.getElementById('typeCredit').classList.toggle('active', t === 'credit');
-    }
-    function setCat(c, btn) {
-      txCat = c;
-      document.querySelectorAll('.cat-btn').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-    }
-
-    function openAddTx() {
-      walletSelectOptions();
-      openModal('modalTx');
-    }
-
-    var CAT_ICONS = {
-      food: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>',
-      transport: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8zM5.5 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM18.5 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>',
-      shopping: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>',
-      bills: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-      health: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
-      income: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
-      other: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-    };
-
-    function saveTx() {
-      var amt = parseFloat(document.getElementById('txAmt').value);
-      var desc = document.getElementById('txDesc').value.trim();
-      var wId = document.getElementById('txWallet').value;
-      var date = document.getElementById('txDate').value || new Date().toISOString().split('T')[0];
-      if (!amt || amt <= 0) { showToast('Enter a valid amount'); return; }
-      if (!desc) { showToast('Enter a description'); return; }
-
-      var wName = '';
-      for (var i = 0; i < wallets.length; i++) { if (String(wallets[i].id) === String(wId)) { wName = wallets[i].name; break; } }
-
-      // update wallet balance
-      for (var j = 0; j < wallets.length; j++) {
-        if (String(wallets[j].id) === String(wId)) {
-          wallets[j].balance += (txType === 'credit' ? amt : -amt);
-          break;
-        }
-      }
-
-      txns.unshift({
-        id: Date.now(), type: txType, cat: txCat, amt: amt, desc: desc, wallet: wName, date: date,
-        notes: (document.getElementById('txNotes') ? document.getElementById('txNotes').value.trim() : '')
-      });
-      saveData();
-      closeModal('modalTx');
-      document.getElementById('txAmt').value = '';
-      document.getElementById('txDesc').value = '';
-      if (document.getElementById('txNotes')) document.getElementById('txNotes').value = '';
-      showToast((txType === 'debit' ? 'Expense' : 'Income') + ' saved');
-      refreshAll();
-    }
-
-    /* renderTxItem — see Phase 4 section */
-
-    function refreshTxList() {
-      var recent = document.getElementById('homeRecentList');
-      var full = document.getElementById('txFullList');
-      if (txns.length === 0) {
-        var empty = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><p>No transactions yet. Tap + to add one.</p></div>';
-        recent.innerHTML = empty;
-        full.innerHTML = empty;
-        return;
-      }
-      recent.innerHTML = txns.slice(0, 5).map(renderTxItem).join('');
-      full.innerHTML = txns.map(renderTxItem).join('');
-    }
-
-    var activeFilter = 'all';
-    function filterTx(btn, f) {
-      activeFilter = f;
-      document.querySelectorAll('.filter-chip').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var full = document.getElementById('txFullList');
-      var filtered = f === 'all' ? txns
-        : f === 'debit' || f === 'credit' ? txns.filter(function (t) { return t.type === f; })
-          : txns.filter(function (t) { return t.cat === f; });
-      full.innerHTML = filtered.length === 0
-        ? '<div class="empty-state"><p>No results</p></div>'
-        : filtered.map(renderTxItem).join('');
-    }
-
-    /* ════════════════════════════════════════════════════════
-       BALANCE
-    ════════════════════════════════════════════════════════ */
-    function refreshBalance() {
-      var total = wallets.reduce(function (s, w) { return s + w.balance; }, 0);
-      var now = new Date();
-      var thisM = txns.filter(function (t) {
-        var d = new Date(t.date);
-        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-      });
-      var income = thisM.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-      var expense = thisM.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-
-      document.getElementById('totalBal').textContent = '₹' + fmt(total);
-      document.getElementById('homeIncome').textContent = '₹' + fmt(income);
-      document.getElementById('homeExpense').textContent = '₹' + fmt(expense);
-      document.getElementById('aIncome').textContent = '₹' + fmt(income);
-      document.getElementById('aExpense').textContent = '₹' + fmt(expense);
-      document.getElementById('aSaved').textContent = '₹' + fmt(Math.max(0, income - expense));
-    }
-
-    /* ════════════════════════════════════════════════════════
-       ANALYTICS
-    ════════════════════════════════════════════════════════ */
-    var CAT_COLORS = { food: '#fb923c', transport: '#818cf8', shopping: '#ec4899', bills: '#eab308', health: '#14b8a6', income: '#22c55e', other: '#7c6dfa' };
-
-    /* refreshAnalytics — see Phase 4 section */
-
-    /* ════════════════════════════════════════════════════════
-       HELPERS
-    ════════════════════════════════════════════════════════ */
-    function fmt(n) {
-      return Number(n).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-    }
-
-    function refreshAll() {
-      refreshBalance();
-      refreshWalletScroll();
-      refreshTxList();
-      refreshTrend();
-      if (curPage === 'Subs') refreshSubsPage();
-      // home subs teaser
-      var el = document.getElementById('homeSubsTeaser');
-      if (!el) return;
-      var active = subs.filter(function (s) { return s.active !== false; });
-      if (active.length === 0) {
-        el.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:8px 0">No subscriptions tracked. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer" onclick="goPage(\'Subs\')">Add one →</button></div>';
-        return;
-      }
-      // show next 2 upcoming
-      var sorted = active.slice().sort(function (a, b) { return new Date(a.due) - new Date(b.due); });
-      el.innerHTML = sorted.slice(0, 2).map(function (s) {
-        var days = daysUntil(s.due);
-        var bColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--text2)';
-        var daysLbl = days < 0 ? 'Overdue' : days === 0 ? 'Due today' : 'Due in ' + days + 'd';
-        var clr = SUB_COLORS[s.cat] || '#7c6dfa';
-        return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
-          + '<div style="width:36px;height:36px;border-radius:10px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
-          + '<div style="flex:1"><div style="font-size:13px;font-weight:500">' + s.name + '</div>'
-          + '<div style="font-size:11px;color:' + bColor + '">' + daysLbl + '</div></div>'
-          + '<div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div>'
-          + '</div>';
-      }).join('');
-    }
-
-    var toastTimer;
-    function showToast(msg) {
-      var el = document.getElementById('toast');
-      el.textContent = msg; el.style.display = 'block';
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(function () { el.style.display = 'none'; }, 2500);
-    }
-
-    /* close modal on overlay tap */
-    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) overlay.classList.remove('open');
-      });
-    });
-
-    /* greeting */
-    function setGreeting() {
-      var h = new Date().getHours();
-      var g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-      var el = document.querySelector('.greeting');
-      if (el) el.innerHTML = g + ', <span>welcome back</span>';
-    }
-
-    /* ════════════════════════════════════════════════════════
-       PHASE 4 DATA
-    ════════════════════════════════════════════════════════ */
-    var budgets = [];
-    var goals = [];
-    var subs = [];
+    /* ════ DATA ════════════════════════════════════════════════ */
+    var wallets = [], txns = [], budgets = [], goals = [], subs = [];
 
     function saveData() {
       try {
@@ -2545,35 +1998,103 @@
     }
     function loadData() {
       try {
-        var w = localStorage.getItem('sxt_wallets');
-        var t = localStorage.getItem('sxt_txns');
-        var b = localStorage.getItem('sxt_budgets');
-        var g = localStorage.getItem('sxt_goals');
-        var s = localStorage.getItem('sxt_subs');
-        if (w) wallets = JSON.parse(w);
-        if (t) txns = JSON.parse(t);
-        if (b) budgets = JSON.parse(b);
-        if (g) goals = JSON.parse(g);
+        var w = localStorage.getItem('sxt_wallets'), t = localStorage.getItem('sxt_txns'),
+          b = localStorage.getItem('sxt_budgets'), g = localStorage.getItem('sxt_goals'),
+          s = localStorage.getItem('sxt_subs');
+        if (w) wallets = JSON.parse(w); if (t) txns = JSON.parse(t);
+        if (b) budgets = JSON.parse(b); if (g) goals = JSON.parse(g);
         if (s) subs = JSON.parse(s);
       } catch (e) { }
     }
 
-    /* ════════════════════════════════════════════════════════
-       NAVIGATION — updated to include Budget & Goals
-    ════════════════════════════════════════════════════════ */
+    /* ════ HELPERS ══════════════════════════════════════════════ */
+    function fmt(n) { return Number(n).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+    function setText(id, val) { var e = document.getElementById(id); if (e) e.textContent = val; }
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    var toastTimer;
+    function showToast(msg) {
+      var el = document.getElementById('toast'); el.textContent = msg; el.style.display = 'block';
+      clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.style.display = 'none'; }, 2500);
+    }
+    document.querySelectorAll('.modal-overlay').forEach(function (o) {
+      o.addEventListener('click', function (e) { if (e.target === o) o.classList.remove('open'); });
+    });
+
+    /* ════ PIN ══════════════════════════════════════════════════ */
+    var stored = null, mode = 'enter', attempt = '', newBuf = '', waiting = false;
+    function makeHash(pin) {
+      var s = pin + 'sxt2026', h = 5381;
+      for (var i = 0; i < s.length; i++) { h = ((h << 5) + h) + s.charCodeAt(i); h = h & h; }
+      return 'p' + Math.abs(h).toString(16);
+    }
+    function init() {
+      loadData();
+      try { stored = localStorage.getItem('sxt_pin') || null; } catch (e) { }
+      var t; try { t = localStorage.getItem('sxt_theme'); } catch (e) { }
+      if (t) setTheme(t);
+      setMsg(stored ? 'Enter your PIN' : 'Create a 4-digit PIN', '');
+      mode = stored ? 'enter' : 'set';
+      try { document.getElementById('txDate').valueAsDate = new Date(); } catch (e) { }
+      try { document.getElementById('subDue').valueAsDate = new Date(); } catch (e) { }
+    }
+    function tap(d) {
+      if (waiting || attempt.length >= 4) return;
+      attempt += d; paint();
+      if (attempt.length === 4) { waiting = true; setTimeout(check, 300); }
+    }
+    function tapDel() { if (waiting) return; attempt = attempt.slice(0, -1); paint(); }
+    function tapBio() { if (waiting) return; setMsg('Authenticating…', ''); waiting = true; setTimeout(unlock, 800); }
+    function check() {
+      if (mode === 'enter') {
+        if (makeHash(attempt) === stored) { dotState('ok'); setMsg('Welcome!', 'ok'); setTimeout(unlock, 500); }
+        else { dotState('err'); setMsg('Wrong PIN', 'err'); setTimeout(function () { reset(); setMsg('Enter your PIN', ''); }, 700); }
+      } else if (mode === 'set') {
+        newBuf = attempt; attempt = ''; mode = 'confirm'; paint(); setMsg('Confirm PIN', ''); waiting = false;
+      } else if (mode === 'confirm') {
+        if (attempt === newBuf) {
+          var h = makeHash(attempt);
+          try { localStorage.setItem('sxt_pin', h); } catch (e) { }
+          stored = h; dotState('ok'); setMsg('PIN saved!', 'ok'); setTimeout(unlock, 600);
+        } else {
+          dotState('err'); setMsg('No match. Try again.', 'err');
+          setTimeout(function () { newBuf = ''; mode = 'set'; reset(); setMsg('Create a 4-digit PIN', ''); }, 700);
+        }
+      }
+    }
+    function paint() { for (var i = 0; i < 4; i++) document.getElementById('d' + i).className = 'dot' + (i < attempt.length ? ' on' : ''); }
+    function dotState(c) { for (var i = 0; i < 4; i++) document.getElementById('d' + i).className = 'dot ' + c; }
+    function reset() { attempt = ''; waiting = false; for (var i = 0; i < 4; i++) document.getElementById('d' + i).className = 'dot'; }
+    function setMsg(t, c) { var el = document.getElementById('msg'); el.textContent = t; el.className = c || ''; }
+    function unlock() {
+      document.getElementById('pinScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+      document.getElementById('fabCenter').classList.add('show');
+      refreshAll();
+    }
+    function lockApp() {
+      attempt = ''; newBuf = ''; waiting = false; mode = stored ? 'enter' : 'set'; reset();
+      setMsg(stored ? 'Enter your PIN' : 'Create a 4-digit PIN', '');
+      document.getElementById('fabCenter').classList.remove('show');
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('pinScreen').style.display = 'flex';
+    }
+    document.addEventListener('keydown', function (e) {
+      if (document.getElementById('pinScreen').style.display === 'none') return;
+      if (e.key >= '0' && e.key <= '9') tap(e.key);
+      if (e.key === 'Backspace') tapDel();
+    });
+
+    /* ════ NAVIGATION ═══════════════════════════════════════════ */
     var curPage = 'Home';
     function goPage(name) {
       document.getElementById('page' + curPage).classList.remove('active');
-      document.getElementById('nav' + curPage) && document.getElementById('nav' + curPage).classList.remove('active');
+      var oldNav = document.getElementById('nav' + curPage); if (oldNav) oldNav.classList.remove('active');
       curPage = name;
       document.getElementById('page' + curPage).classList.add('active');
-      document.getElementById('nav' + curPage) && document.getElementById('nav' + curPage).classList.add('active');
-      // show FAB only on Home and Transactions
+      var newNav = document.getElementById('nav' + curPage); if (newNav) newNav.classList.add('active');
       var fab = document.getElementById('fabCenter');
-      if (fab) {
-        if (name === 'Home' || name === 'Tx') fab.classList.add('show');
-        else fab.classList.remove('show');
-      }
+      if (fab) { if (name === 'Home' || name === 'Tx') fab.classList.add('show'); else fab.classList.remove('show'); }
       if (name === 'Analytics') refreshAnalytics();
       if (name === 'More') refreshWalletList();
       if (name === 'Budget') refreshBudgetPage();
@@ -2581,546 +2102,354 @@
       if (name === 'Subs') refreshSubsPage();
     }
 
-    /* ════════════════════════════════════════════════════════
-       MONTH NAVIGATION (shared between Budget & Analytics)
-    ════════════════════════════════════════════════════════ */
-    var viewYear = new Date().getFullYear();
-    var viewMonth = new Date().getMonth();
-    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    /* ════ THEME ════════════════════════════════════════════════ */
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      try { localStorage.setItem('sxt_theme', t); } catch (e) { }
+      ['D', 'C', 'L'].forEach(function (b) { document.getElementById('t' + b).classList.remove('active'); });
+      document.getElementById('t' + { dark: 'D', color: 'C', light: 'L' }[t]).classList.add('active');
+    }
 
+    /* ════ MONTH NAV ════════════════════════════════════════════ */
+    var viewYear = new Date().getFullYear(), viewMonth = new Date().getMonth();
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     function shiftMonth(d) {
       viewMonth += d;
-      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
-      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
-      refreshBudgetPage();
-      refreshAnalytics();
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; } if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      refreshBudgetPage(); refreshAnalytics();
     }
-
     function getMonthTxns() {
-      return txns.filter(function (t) {
-        var d = new Date(t.date);
-        return d.getFullYear() === viewYear && d.getMonth() === viewMonth;
-      });
+      return txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === viewYear && d.getMonth() === viewMonth; });
     }
 
-    /* ════════════════════════════════════════════════════════
-       BUDGET PAGE
-    ════════════════════════════════════════════════════════ */
-    var budgetCat = 'food';
-
-    function setBudgetCat(c, btn) {
-      budgetCat = c;
-      document.querySelectorAll('#bcRow .bc-btn').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
+    /* ════ WALLETS ══════════════════════════════════════════════ */
+    var WALLET_ICONS = {
+      'Bank Account': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22v-7M21 22v-7M3 15l9-13 9 13M6 22h12"/></svg>',
+      'UPI Wallet': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
+      'Cash': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>',
+      'Credit Card': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
+    };
+    function openAddWallet() { openModal('modalWallet'); }
+    function saveWallet() {
+      var name = document.getElementById('wName').value.trim(), type = document.getElementById('wType').value, bal = parseFloat(document.getElementById('wBal').value) || 0;
+      if (!name) { showToast('Enter wallet name'); return; }
+      wallets.push({ id: Date.now(), name: name, type: type, balance: bal });
+      saveData(); closeModal('modalWallet');
+      document.getElementById('wName').value = ''; document.getElementById('wBal').value = '';
+      showToast('Wallet added'); refreshAll();
     }
-
-    function openAddBudget() { openModal('modalBudget'); }
-
-    function saveBudgetCat() {
-      var limit = parseFloat(document.getElementById('budgetLimitInput').value);
-      if (!limit || limit <= 0) { showToast('Enter a valid limit'); return; }
-      var existing = -1;
-      for (var i = 0; i < budgets.length; i++) { if (budgets[i].cat === budgetCat) { existing = i; break; } }
-      if (existing >= 0) budgets[existing].limit = limit;
-      else budgets.push({ cat: budgetCat, limit: limit });
-      saveData();
-      closeModal('modalBudget');
-      document.getElementById('budgetLimitInput').value = '';
-      showToast('Budget limit saved');
-      refreshBudgetPage();
-      checkBudgetAlerts();
-    }
-
-    function deleteBudget(cat) {
-      budgets = budgets.filter(function (b) { return b.cat !== cat; });
-      saveData();
-      refreshBudgetPage();
-      showToast('Budget removed');
-    }
-
-    function refreshBudgetPage() {
-      var label = document.getElementById('budgetMonthLabel');
-      if (label) label.textContent = MONTHS[viewMonth] + ' ' + viewYear;
-
-      var monthTxns = getMonthTxns();
-      var totalLimit = budgets.reduce(function (s, b) { return s + b.limit; }, 0);
-
-      // per-category spend
-      var catSpend = {};
-      monthTxns.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) {
-        catSpend[t.cat] = (catSpend[t.cat] || 0) + t.amt;
-      });
-
-      var totalSpent = Object.values ? Object.keys(catSpend).reduce(function (s, k) { return s + catSpend[k]; }, 0)
-        : budgets.reduce(function (s, b) { return s + (catSpend[b.cat] || 0); }, 0);
-
-      // also count spending in categories that have no budget set
-      monthTxns.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) {
-        if (!catSpend[t.cat]) catSpend[t.cat] = 0;
-        catSpend[t.cat] += 0; // already counted above
-      });
-      // recalc total from all debit txns
-      totalSpent = monthTxns.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-
-      var pct = totalLimit > 0 ? Math.min(Math.round((totalSpent / totalLimit) * 100), 100) : 0;
-      var remain = Math.max(0, totalLimit - totalSpent);
-      var now = new Date();
-      var isNow = now.getFullYear() === viewYear && now.getMonth() === viewMonth;
-      var daysInM = new Date(viewYear, viewMonth + 1, 0).getDate();
-      var daysLeft = isNow ? Math.max(1, daysInM - now.getDate() + 1) : daysInM;
-      var daily = daysLeft > 0 ? Math.round(remain / daysLeft) : 0;
-
-      setText('budgetPct', pct + '%');
-      setText('budgetSpent', '₹' + fmt(totalSpent));
-      setText('budgetTotal', '₹' + fmt(totalLimit));
-      setText('budgetRemain', '₹' + fmt(remain));
-      setText('budgetDailyLeft', '₹' + fmt(daily));
-      setText('budgetDaysLeft', daysLeft);
-
-      // badge dot
-      var dot = document.getElementById('budgetDot');
-      if (dot) dot.classList.toggle('show', pct >= 80);
-
-      // ── MULTI-SEGMENT DONUT ─────────────────────────────
-      var svg = document.getElementById('budgetDonut');
-      var legend = document.getElementById('donutLegend');
-      if (!svg) return;
-
-      // Wipe SVG completely — redraw everything in JS so order is controlled
-      svg.innerHTML = '';
-
-      var R = 32;
-      var circ = 2 * Math.PI * R;
-      var CX = 40, CY = 40;
-      var GAP = 3;
-
-      function mkC(color, opacity, dash, offset) {
-        var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        c.setAttribute('cx', CX); c.setAttribute('cy', CY); c.setAttribute('r', R);
-        c.setAttribute('fill', 'none');
-        c.setAttribute('stroke', color);
-        c.setAttribute('stroke-opacity', String(opacity));
-        c.setAttribute('stroke-width', '9');
-        c.setAttribute('stroke-dasharray', dash);
-        c.setAttribute('stroke-dashoffset', String(offset));
-        c.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')');
-        return c;
-      }
-
-      // Grey base ring (drawn first = bottom layer)
-      svg.appendChild(mkC('var(--border)', 1, circ + ' 0', 0));
-
-      if (budgets.length === 0 || totalLimit === 0) {
-        if (legend) legend.innerHTML = '<div style="font-size:12px;color:var(--text2)">Set category limits to see breakdown</div>';
-      } else {
-        var startAt = 0;
-        var legendHtml = '';
-
-        budgets.forEach(function (b) {
-          var spent = catSpend[b.cat] || 0;
-          var segLen = (b.limit / totalLimit) * circ;
-          var fillLen = Math.min(spent / b.limit, 1) * segLen;
-          var drawSeg = Math.max(segLen - GAP, 0);
-          var drawFil = Math.min(fillLen, drawSeg);
-          var color = CAT_COLORS[b.cat] || '#7c6dfa';
-          var pctCat = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
-          var over = spent > b.limit;
-          var offset = circ - startAt;
-
-          // faded segment (limit share) — drawn above grey base
-          svg.appendChild(mkC(color, 0.28, drawSeg + ' ' + (circ - drawSeg), offset));
-
-          // bright fill (actual spend) — drawn on top
-          if (drawFil > 0.5) {
-            svg.appendChild(mkC(over ? '#ef4444' : color, 1, drawFil + ' ' + (circ - drawFil), offset));
-          }
-
-          startAt += segLen;
-
-          legendHtml += '<div style="display:flex;align-items:center;gap:5px;font-size:11px;">'
-            + '<div style="width:10px;height:10px;border-radius:3px;background:' + color + ';flex-shrink:0"></div>'
-            + '<span style="color:var(--text2)">'
-            + b.cat.charAt(0).toUpperCase() + b.cat.slice(1)
-            + ' <b style="color:var(--text)">' + pctCat + '%</b></span></div>';
-        });
-
-        if (legend) legend.innerHTML = legendHtml;
-      }
-
-      // ── CATEGORY LIST ────────────────────────────────────
-      var el = document.getElementById('catBudgetList');
-      if (!el) return;
-
-      if (budgets.length === 0) {
-        el.innerHTML = '<div class="empty-state" style="padding:24px 0">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 10px;opacity:0.4"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
-          + '<p>No budget limits set. Tap + Add to start.</p></div>';
-      } else {
-        el.innerHTML = budgets.map(function (b) {
-          var spent = catSpend[b.cat] || 0;
-          var pctC = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
-          var over = spent > b.limit;
-          var color = over ? 'var(--red)' : pctC >= 70 ? '#f59e0b' : CAT_COLORS[b.cat] || 'var(--accent)';
-          var bgCol = CAT_COLORS[b.cat] || '#7c6dfa';
-          return '<div class="cat-budget-item">'
-            + '<div class="cbi-icon" style="background:' + bgCol + '22;color:' + bgCol + '">' + (CAT_ICONS[b.cat] || CAT_ICONS.other) + '</div>'
-            + '<div class="cbi-info">'
-            + '<div class="cbi-name">' + b.cat.charAt(0).toUpperCase() + b.cat.slice(1) + '</div>'
-            + '<div class="cbi-bar"><div class="cbi-fill" style="width:' + pctC + '%;background:' + color + '"></div></div>'
-            + '<div class="cbi-nums">₹' + fmt(spent) + ' of ₹' + fmt(b.limit) + (over ? ' <b style="color:var(--red)">Over!</b>' : '') + '</div>'
-            + '</div>'
-            + '<div class="cbi-pct" style="color:' + color + '">' + pctC + '%</div>'
-            + '<button class="cbi-del" onclick="deleteBudget(\'' + b.cat + '\')">'
-            + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>'
-            + '</button>'
-            + '</div>';
-        }).join('');
-      }
-
-      // goals preview
-      var gPrev = document.getElementById('budgetGoalsPreview');
-      if (gPrev) {
-        if (goals.length === 0) {
-          gPrev.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:10px 0">No goals yet. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer" onclick="goPage(\'Goals\')">Create one →</button></div>';
-        } else {
-          gPrev.innerHTML = goals.slice(0, 2).map(function (g) {
-            var pctG = g.target > 0 ? Math.min(Math.round((g.saved / g.target) * 100), 100) : 0;
-            return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
-              + '<div style="font-size:24px">' + g.emoji + '</div>'
-              + '<div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:4px">' + g.name + '</div>'
-              + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">'
-              + '<div style="height:100%;width:' + pctG + '%;background:var(--accent);transition:width 0.6s"></div></div></div>'
-              + '<div style="font-size:12px;font-weight:bold;color:var(--accent)">' + pctG + '%</div>'
-              + '</div>';
-          }).join('');
-        }
-      }
-    }
-
-    function checkBudgetAlerts() {
-      budgets.forEach(function (b) {
-        var monthTxns = getMonthTxns();
-        var spent = monthTxns.filter(function (t) { return t.type === 'debit' && t.cat === b.cat; }).reduce(function (s, t) { return s + t.amt; }, 0);
-        var pct = b.limit > 0 ? Math.round((spent / b.limit) * 100) : 0;
-        if (pct >= 90) showToast('⚠️ ' + b.cat + ' budget at ' + pct + '%');
-      });
-    }
-
-    /* ════════════════════════════════════════════════════════
-       GOALS PAGE
-    ════════════════════════════════════════════════════════ */
-    var goalEmoji = '🎯';
-    var addingToGoal = null;
-
-    function setGoalEmoji(e, btn) {
-      goalEmoji = e;
-      document.querySelectorAll('.emoji-btn').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-    }
-
-    function openAddGoal() { openModal('modalGoal'); }
-
-    function saveGoal() {
-      var name = document.getElementById('goalName').value.trim();
-      var target = parseFloat(document.getElementById('goalTarget').value) || 0;
-      var saved = parseFloat(document.getElementById('goalSaved').value) || 0;
-      if (!name) { showToast('Enter a goal name'); return; }
-      if (target <= 0) { showToast('Enter a target amount'); return; }
-      goals.push({ id: Date.now(), emoji: goalEmoji, name: name, target: target, saved: saved });
-      saveData();
-      closeModal('modalGoal');
-      document.getElementById('goalName').value = '';
-      document.getElementById('goalTarget').value = '';
-      document.getElementById('goalSaved').value = '';
-      showToast('Goal created!');
-      refreshGoalsPage();
-    }
-
-    function deleteGoal(id) {
-      goals = goals.filter(function (g) { return g.id !== id; });
-      saveData();
-      refreshGoalsPage();
-      showToast('Goal deleted');
-    }
-
-    function openAddToGoal(id) {
-      addingToGoal = id;
-      var g = goals.find(function (g) { return g.id === id; });
-      if (!g) return;
-      var info = document.getElementById('addGoalInfo');
-      if (info) info.textContent = g.emoji + ' ' + g.name + ' — ₹' + fmt(g.saved) + ' of ₹' + fmt(g.target);
-      document.getElementById('addGoalAmt').value = '';
-      openModal('modalAddGoal');
-    }
-
-    function confirmAddToGoal() {
-      var amt = parseFloat(document.getElementById('addGoalAmt').value) || 0;
-      if (amt <= 0) { showToast('Enter a valid amount'); return; }
-      for (var i = 0; i < goals.length; i++) {
-        if (goals[i].id === addingToGoal) {
-          goals[i].saved = Math.min(goals[i].saved + amt, goals[i].target);
-          break;
-        }
-      }
-      saveData();
-      closeModal('modalAddGoal');
-      showToast('Added to goal!');
-      refreshGoalsPage();
-    }
-
-    function refreshGoalsPage() {
-      var el = document.getElementById('goalsList');
-      if (!el) return;
-      if (goals.length === 0) {
-        el.innerHTML = '<div class="empty-state" style="padding:32px 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>No goals yet. Tap the button below to create one.</p></div>';
-        return;
-      }
-      el.innerHTML = goals.map(function (g) {
-        var pct = g.target > 0 ? Math.min(Math.round((g.saved / g.target) * 100), 100) : 0;
-        var done = g.saved >= g.target;
-        return '<div class="goal-item">'
-          + '<div class="goal-head">'
-          + '<div class="goal-emoji">' + g.emoji + '</div>'
-          + '<div class="goal-info"><div class="goal-name">' + g.name + '</div><div class="goal-tgt">Target: ₹' + fmt(g.target) + '</div></div>'
-          + '<div class="goal-badge' + (done ? ' done' : '') + '">' + pct + '%' + (done ? ' ✓' : '') + '</div>'
-          + '</div>'
-          + '<div class="goal-bar"><div class="goal-fill' + (done ? ' done' : '') + '" style="width:' + pct + '%"></div></div>'
-          + '<div class="goal-foot">'
-          + '<div class="goal-saved-txt">Saved: <b>₹' + fmt(g.saved) + '</b></div>'
-          + '<div class="goal-btns">'
-          + (done ? '' : '<button class="goal-add-btn" onclick="openAddToGoal(' + g.id + ')">+ Add</button>')
-          + '<button class="goal-del-btn" onclick="deleteGoal(' + g.id + ')">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>'
-          + '</button>'
-          + '</div></div>'
-          + '</div>';
-      }).join('');
-    }
-
-    /* ════════════════════════════════════════════════════════
-       DELETE TRANSACTION
-    ════════════════════════════════════════════════════════ */
-    function deleteTx(id) {
-      var tx = null;
-      for (var i = 0; i < txns.length; i++) { if (txns[i].id === id) { tx = txns[i]; break; } }
-      if (!tx) return;
-      // reverse wallet balance
-      for (var j = 0; j < wallets.length; j++) {
-        if (wallets[j].name === tx.wallet) {
-          wallets[j].balance += (tx.type === 'credit' ? -tx.amt : tx.amt);
-          break;
-        }
-      }
-      txns = txns.filter(function (t) { return t.id !== id; });
-      saveData();
-      showToast('Transaction deleted');
-      refreshAll();
-    }
-
-    /* ════════════════════════════════════════════════════════
-       UPDATED renderTxItem — with delete button
-    ════════════════════════════════════════════════════════ */
-    function renderTxItem(tx) {
-      var iconHtml = CAT_ICONS[tx.cat] || CAT_ICONS.other;
-      var sign = tx.type === 'debit' ? '−' : '+';
-      var amtClass = tx.type === 'debit' ? 'debit' : 'credit';
-      var noteLine = tx.notes ? '<div style="font-size:11px;color:var(--text2);margin-top:1px;font-style:italic">' + tx.notes + '</div>' : '';
-      return '<div class="tx-item" id="tx' + tx.id + '">'
-        + '<div class="tx-icon cat-' + tx.cat + '">' + iconHtml + '</div>'
-        + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div>'
-        + '<div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div>'
-        + noteLine + '</div>'
-        + '<div class="tx-amount ' + amtClass + '" style="cursor:pointer" onclick="toggleTxDel(' + tx.id + ')">'
-        + sign + '₹' + fmt(tx.amt) + '</div>'
-        + '<button class="tx-del-btn" onclick="deleteTx(' + tx.id + ')">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>'
-        + 'Delete</button>'
-        + '</div>';
-    }
-
-    function toggleTxDel(id) {
-      var el = document.getElementById('tx' + id);
-      if (el) el.classList.toggle('show-del');
-    }
-
-    /* ════════════════════════════════════════════════════════
-       UPDATED ANALYTICS — uses month nav
-    ════════════════════════════════════════════════════════ */
-    function refreshAnalytics() {
-      var label = document.getElementById('budgetMonthLabel');
-      if (label) label.textContent = MONTHS[viewMonth] + ' ' + viewYear;
-
-      var monthTxns = getMonthTxns();
-      var income = monthTxns.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-      var expense = monthTxns.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-
-      setText('aIncome', '₹' + fmt(income));
-      setText('aExpense', '₹' + fmt(expense));
-      setText('aSaved', '₹' + fmt(Math.max(0, income - expense)));
-
-      var byCat = {};
-      monthTxns.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { byCat[t.cat] = (byCat[t.cat] || 0) + t.amt; });
-      var cats = Object.keys(byCat).sort(function (a, b) { return byCat[b] - byCat[a]; });
-      var total = monthTxns.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
-      var el = document.getElementById('catBreakdown');
-      if (!el) return;
-      if (cats.length === 0) {
-        el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg><p>No expenses in ' + MONTHS[viewMonth] + ' ' + viewYear + '</p></div>';
-        return;
-      }
-      el.innerHTML = cats.map(function (c) {
-        var pct = total > 0 ? Math.round((byCat[c] / total) * 100) : 0;
-        var clr = CAT_COLORS[c] || '#7c6dfa';
-        var budget = budgets.find(function (b) { return b.cat === c; });
-        var budgetNote = budget ? ' / ₹' + fmt(budget.limit) + ' budget' : '';
-        return '<div style="margin-bottom:14px;">'
-          + '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;">'
-          + '<span>' + c.charAt(0).toUpperCase() + c.slice(1) + '</span>'
-          + '<span style="color:var(--text2)">₹' + fmt(byCat[c]) + budgetNote + ' (' + pct + '%)</span>'
-          + '</div>'
-          + '<div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;">'
-          + '<div style="height:100%;width:' + pct + '%;background:' + clr + ';border-radius:4px;transition:width 0.6s;"></div>'
-          + '</div></div>';
-      }).join('');
-    }
-
-    /* ════════════════════════════════════════════════════════
-       PHASE 5 — Search, Change PIN, Edit Wallet, Export, Clear
-    ════════════════════════════════════════════════════════ */
-
-    /* ── SEARCH TRANSACTIONS ── */
-    function searchTx() {
-      var q = (document.getElementById('txSearch').value || '').toLowerCase().trim();
-      var list = document.getElementById('txFullList');
-      if (!q) { refreshTxList(); return; }
-      var filtered = txns.filter(function (t) {
-        return t.desc.toLowerCase().includes(q)
-          || t.cat.toLowerCase().includes(q)
-          || t.wallet.toLowerCase().includes(q)
-          || t.date.includes(q);
-      });
-      list.innerHTML = filtered.length === 0
-        ? '<div class="empty-state"><p>No results for "' + q + '"</p></div>'
-        : filtered.map(renderTxItem).join('');
-    }
-
-    /* ── CHANGE PIN ── */
-    function openChangePin() {
-      document.getElementById('cpOld').value = '';
-      document.getElementById('cpNew').value = '';
-      document.getElementById('cpConfirm').value = '';
-      openModal('modalChangePin');
-    }
-
-    function saveNewPin() {
-      var oldVal = document.getElementById('cpOld').value.trim();
-      var newVal = document.getElementById('cpNew').value.trim();
-      var conVal = document.getElementById('cpConfirm').value.trim();
-
-      if (oldVal.length !== 4) { showToast('Enter your 4-digit current PIN'); return; }
-      if (newVal.length !== 4) { showToast('New PIN must be 4 digits'); return; }
-      if (newVal !== conVal) { showToast('New PINs do not match'); return; }
-
-      // Verify current PIN
-      if (stored && makeHash(oldVal) !== stored) {
-        showToast('Current PIN is incorrect'); return;
-      }
-
-      var h = makeHash(newVal);
-      try { localStorage.setItem('sxt_pin', h); } catch (e) { }
-      stored = h;
-      closeModal('modalChangePin');
-      showToast('PIN changed successfully');
-    }
-
-    /* ── EDIT / DELETE WALLET ── */
     function openEditWallet(id) {
-      var w = null;
-      for (var i = 0; i < wallets.length; i++) { if (wallets[i].id === id) { w = wallets[i]; break; } }
+      var w = null; for (var i = 0; i < wallets.length; i++) { if (wallets[i].id === id) { w = wallets[i]; break; } }
       if (!w) return;
       document.getElementById('editWalletId').value = id;
       document.getElementById('editWalletName').value = w.name;
       document.getElementById('editWalletBal').value = w.balance;
       openModal('modalEditWallet');
     }
-
     function saveEditWallet() {
-      var id = parseInt(document.getElementById('editWalletId').value);
-      var name = document.getElementById('editWalletName').value.trim();
-      var bal = parseFloat(document.getElementById('editWalletBal').value) || 0;
+      var id = parseInt(document.getElementById('editWalletId').value), name = document.getElementById('editWalletName').value.trim(), bal = parseFloat(document.getElementById('editWalletBal').value) || 0;
       if (!name) { showToast('Enter wallet name'); return; }
-      for (var i = 0; i < wallets.length; i++) {
-        if (wallets[i].id === id) { wallets[i].name = name; wallets[i].balance = bal; break; }
-      }
-      saveData(); closeModal('modalEditWallet');
-      showToast('Wallet updated'); refreshAll(); refreshWalletList();
+      for (var i = 0; i < wallets.length; i++) { if (wallets[i].id === id) { wallets[i].name = name; wallets[i].balance = bal; break; } }
+      saveData(); closeModal('modalEditWallet'); showToast('Wallet updated'); refreshAll(); refreshWalletList();
     }
-
     function deleteWallet() {
       var id = parseInt(document.getElementById('editWalletId').value);
-      if (!confirm('Delete this wallet? This cannot be undone.')) return;
+      if (!confirm('Delete this wallet?')) return;
       wallets = wallets.filter(function (w) { return w.id !== id; });
-      saveData(); closeModal('modalEditWallet');
-      showToast('Wallet deleted'); refreshAll(); refreshWalletList();
+      saveData(); closeModal('modalEditWallet'); showToast('Wallet deleted'); refreshAll(); refreshWalletList();
     }
-
-    /* ── UPGRADED wallet list with edit button ── */
+    function refreshWalletScroll() {
+      var el = document.getElementById('walletScroll');
+      var html = wallets.map(function (w) {
+        var icon = WALLET_ICONS[w.type] || WALLET_ICONS['Cash'];
+        return '<div class="wallet-card"><div class="wc-icon">' + icon + '</div><div class="wc-name">' + w.name + '</div><div class="wc-bal">₹' + fmt(w.balance) + '</div></div>';
+      }).join('');
+      html += '<div class="wallet-card add-card" onclick="openAddWallet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;color:var(--accent)"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Add Wallet</span></div>';
+      el.innerHTML = html;
+    }
     function refreshWalletList() {
-      var el = document.getElementById('walletFullList');
-      if (!el) return;
-      if (wallets.length === 0) {
-        el.innerHTML = '<div class="empty-state">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 10px;opacity:0.4"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>'
-          + '<p>No wallets yet</p></div>';
-        return;
-      }
+      var el = document.getElementById('walletFullList'); if (!el) return;
+      if (wallets.length === 0) { el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 10px;opacity:0.4"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg><p>No wallets yet</p></div>'; return; }
       el.innerHTML = wallets.map(function (w) {
         var icon = WALLET_ICONS[w.type] || WALLET_ICONS['Cash'];
         return '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;">'
           + '<div style="width:40px;height:40px;border-radius:10px;background:var(--accent-s);display:flex;align-items:center;justify-content:center;color:var(--accent)">' + icon + '</div>'
           + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + w.name + '</div><div style="font-size:12px;color:var(--text2)">' + w.type + '</div></div>'
           + '<div style="font-size:16px;font-weight:bold;margin-right:8px">₹' + fmt(w.balance) + '</div>'
-          + '<button onclick="openEditWallet(' + w.id + ')" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
-          + '</button>'
+          + '<button onclick="openEditWallet(' + w.id + ')" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
           + '</div>';
       }).join('');
     }
-
-    /* ── EXPORT CSV ── */
-    function exportCSV() {
-      if (txns.length === 0) { showToast('No transactions to export'); return; }
-      var rows = ['Date,Description,Category,Type,Amount,Wallet'];
-      txns.forEach(function (t) {
-        rows.push([t.date, '"' + t.desc + '"', t.cat, t.type, t.amt, '"' + t.wallet + '"'].join(','));
-      });
-      var blob = new Blob([rows.join('\n')], { type: 'text/csv' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'sxt-transactions.csv';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast('CSV downloaded');
+    function walletSelectOptions() {
+      var sel = document.getElementById('txWallet');
+      sel.innerHTML = wallets.length === 0 ? '<option value="">No wallets</option>' : wallets.map(function (w) { return '<option value="' + w.id + '">' + w.name + '</option>'; }).join('');
     }
 
-    /* ── CLEAR ALL DATA ── */
-    function clearAllData() {
-      if (!confirm('This will delete ALL your data including wallets, transactions, budgets and goals. This cannot be undone.\n\nType OK to confirm.')) return;
-      wallets = []; txns = []; budgets = []; goals = [];
-      try {
-        localStorage.removeItem('sxt_wallets');
-        localStorage.removeItem('sxt_txns');
-        localStorage.removeItem('sxt_budgets');
-        localStorage.removeItem('sxt_goals');
-      } catch (e) { }
-      showToast('All data cleared');
-      refreshAll(); refreshWalletList();
+    /* ════ TRANSACTIONS ═════════════════════════════════════════ */
+    var txType = 'debit', txCat = 'food';
+    var CAT_ICONS = {
+      food: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>',
+      transport: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8zM5.5 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM18.5 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>',
+      shopping: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>',
+      bills: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+      health: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+      income: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      other: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    };
+    var CAT_COLORS = { food: '#fb923c', transport: '#818cf8', shopping: '#ec4899', bills: '#eab308', health: '#14b8a6', income: '#22c55e', other: '#7c6dfa' };
+    function setType(t) {
+      txType = t;
+      document.getElementById('typeDebit').classList.toggle('active', t === 'debit');
+      document.getElementById('typeCredit').classList.toggle('active', t === 'credit');
+    }
+    function setCat(c, btn) {
+      txCat = c;
+      document.querySelectorAll('.cat-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+    function openAddTx() { walletSelectOptions(); openModal('modalTx'); }
+    function saveTx() {
+      var amt = parseFloat(document.getElementById('txAmt').value), desc = document.getElementById('txDesc').value.trim();
+      var wId = document.getElementById('txWallet').value, date = document.getElementById('txDate').value || new Date().toISOString().split('T')[0];
+      var notes = document.getElementById('txNotes').value.trim();
+      if (!amt || amt <= 0) { showToast('Enter a valid amount'); return; }
+      if (!desc) { showToast('Enter a description'); return; }
+      var wName = '';
+      for (var i = 0; i < wallets.length; i++) { if (String(wallets[i].id) === String(wId)) { wName = wallets[i].name; break; } }
+      for (var j = 0; j < wallets.length; j++) { if (String(wallets[j].id) === String(wId)) { wallets[j].balance += (txType === 'credit' ? amt : -amt); break; } }
+      txns.unshift({ id: Date.now(), type: txType, cat: txCat, amt: amt, desc: desc, wallet: wName, date: date, notes: notes });
+      saveData(); closeModal('modalTx');
+      document.getElementById('txAmt').value = ''; document.getElementById('txDesc').value = ''; document.getElementById('txNotes').value = '';
+      showToast((txType === 'debit' ? 'Expense' : 'Income') + ' saved'); refreshAll();
+    }
+    function renderTxItem(tx) {
+      var icon = CAT_ICONS[tx.cat] || CAT_ICONS.other, sign = tx.type === 'debit' ? '−' : '+', amtCls = tx.type === 'debit' ? 'debit' : 'credit';
+      var noteHtml = tx.notes ? '<div class="tx-notes">' + tx.notes + '</div>' : '';
+      return '<div class="tx-item" id="tx' + tx.id + '">'
+        + '<div class="tx-icon cat-' + tx.cat + '">' + icon + '</div>'
+        + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div><div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div>' + noteHtml + '</div>'
+        + '<div class="tx-amount ' + amtCls + '" onclick="toggleTxDel(' + tx.id + ')">' + sign + '₹' + fmt(tx.amt) + '</div>'
+        + '<button class="tx-del-btn" onclick="deleteTx(' + tx.id + ')">'
+        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>Delete</button>'
+        + '</div>';
+    }
+    function toggleTxDel(id) { var el = document.getElementById('tx' + id); if (el) el.classList.toggle('show-del'); }
+    function deleteTx(id) {
+      var tx = null; for (var i = 0; i < txns.length; i++) { if (txns[i].id === id) { tx = txns[i]; break; } }
+      if (!tx) return;
+      for (var j = 0; j < wallets.length; j++) { if (wallets[j].name === tx.wallet) { wallets[j].balance += (tx.type === 'credit' ? -tx.amt : tx.amt); break; } }
+      txns = txns.filter(function (t) { return t.id !== id; });
+      saveData(); showToast('Transaction deleted'); refreshAll();
+    }
+    function refreshTxList() {
+      var recent = document.getElementById('homeRecentList'), full = document.getElementById('txFullList');
+      if (txns.length === 0) {
+        var empty = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><p>No transactions yet.</p></div>';
+        if (recent) recent.innerHTML = empty; if (full) full.innerHTML = empty; return;
+      }
+      if (recent) recent.innerHTML = txns.slice(0, 5).map(renderTxItem).join('');
+      if (full) full.innerHTML = txns.map(renderTxItem).join('');
+    }
+    var activeFilter = 'all';
+    function filterTx(btn, f) {
+      activeFilter = f;
+      document.querySelectorAll('.filter-chip').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var full = document.getElementById('txFullList');
+      var filtered = f === 'all' ? txns : f === 'debit' || f === 'credit' ? txns.filter(function (t) { return t.type === f; }) : txns.filter(function (t) { return t.cat === f; });
+      full.innerHTML = filtered.length === 0 ? '<div class="empty-state"><p>No results</p></div>' : filtered.map(renderTxItem).join('');
+    }
+    function searchTx() {
+      var q = (document.getElementById('txSearch').value || '').toLowerCase().trim();
+      var list = document.getElementById('txFullList');
+      if (!q) { refreshTxList(); return; }
+      var filtered = txns.filter(function (t) { return t.desc.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q) || t.wallet.toLowerCase().includes(q) || t.date.includes(q); });
+      list.innerHTML = filtered.length === 0 ? '<div class="empty-state"><p>No results for "' + q + '"</p></div>' : filtered.map(renderTxItem).join('');
     }
 
-    /* ════════════════════════════════════════════════════════
-       PHASE 6 — Subscriptions Tracker
-    ════════════════════════════════════════════════════════ */
+    /* ════ BALANCE ══════════════════════════════════════════════ */
+    function refreshBalance() {
+      var total = wallets.reduce(function (s, w) { return s + w.balance; }, 0);
+      var now = new Date(), thisM = txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); });
+      var income = thisM.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var expense = thisM.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      setText('totalBal', '₹' + fmt(total)); setText('homeIncome', '₹' + fmt(income)); setText('homeExpense', '₹' + fmt(expense));
+      setText('aIncome', '₹' + fmt(income)); setText('aExpense', '₹' + fmt(expense)); setText('aSaved', '₹' + fmt(Math.max(0, income - expense)));
+    }
 
+    /* ════ 7-DAY TREND ══════════════════════════════════════════ */
+    function refreshTrend() {
+      var barsEl = document.getElementById('trendBars'), labsEl = document.getElementById('trendLabels');
+      if (!barsEl || !labsEl) return;
+      var days = [], DAY = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], today = new Date(); today.setHours(0, 0, 0, 0);
+      for (var i = 6; i >= 0; i--) {
+        var d = new Date(today.getTime() - i * 86400000), key = d.toISOString().split('T')[0];
+        var total = txns.filter(function (t) { return t.date === key && t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+        days.push({ label: DAY[d.getDay()], amt: total, isToday: i === 0 });
+      }
+      var maxAmt = Math.max.apply(null, days.map(function (d) { return d.amt; })) || 1;
+      barsEl.innerHTML = days.map(function (d) {
+        var h = Math.max(Math.round((d.amt / maxAmt) * 40), d.amt > 0 ? 4 : 2), color = d.isToday ? 'var(--accent)' : (d.amt > 0 ? 'var(--text2)' : 'var(--border)');
+        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;"><div style="width:100%;height:' + h + 'px;background:' + color + ';border-radius:3px 3px 0 0;min-height:2px;"></div></div>';
+      }).join('');
+      labsEl.innerHTML = days.map(function (d) {
+        return '<div style="flex:1;text-align:center;font-size:9px;color:' + (d.isToday ? 'var(--accent)' : 'var(--text2)') + '">' + d.label + '</div>';
+      }).join('');
+    }
+
+    /* ════ ANALYTICS ════════════════════════════════════════════ */
+    function refreshAnalytics() {
+      setText('analyticsMonthLabel', MONTHS[viewMonth] + ' ' + viewYear);
+      var mt = getMonthTxns();
+      var income = mt.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var expense = mt.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      setText('aIncome', '₹' + fmt(income)); setText('aExpense', '₹' + fmt(expense)); setText('aSaved', '₹' + fmt(Math.max(0, income - expense)));
+      var byCat = {};
+      mt.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { byCat[t.cat] = (byCat[t.cat] || 0) + t.amt; });
+      var cats = Object.keys(byCat).sort(function (a, b) { return byCat[b] - byCat[a]; }), total = mt.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var el = document.getElementById('catBreakdown'); if (!el) return;
+      if (cats.length === 0) { el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg><p>No expenses in ' + MONTHS[viewMonth] + ' ' + viewYear + '</p></div>'; return; }
+      el.innerHTML = cats.map(function (c) {
+        var pct = total > 0 ? Math.round((byCat[c] / total) * 100) : 0, clr = CAT_COLORS[c] || '#7c6dfa';
+        var budget = budgets.filter(function (b) { return b.cat === c; })[0];
+        var budgetNote = budget ? ' / ₹' + fmt(budget.limit) + ' budget' : '';
+        return '<div style="margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span>' + c.charAt(0).toUpperCase() + c.slice(1) + '</span><span style="color:var(--text2)">₹' + fmt(byCat[c]) + budgetNote + ' (' + pct + '%)</span></div><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;width:' + pct + '%;background:' + clr + ';border-radius:4px;transition:width 0.6s;"></div></div></div>';
+      }).join('');
+    }
+
+    /* ════ BUDGET ═══════════════════════════════════════════════ */
+    var budgetCat = 'food';
+    function setBudgetCat(c, btn) {
+      budgetCat = c;
+      document.querySelectorAll('#bcRow .bc-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+    function openAddBudget() { openModal('modalBudget'); }
+    function saveBudgetCat() {
+      var limit = parseFloat(document.getElementById('budgetLimitInput').value);
+      if (!limit || limit <= 0) { showToast('Enter a valid limit'); return; }
+      var ex = -1; for (var i = 0; i < budgets.length; i++) { if (budgets[i].cat === budgetCat) { ex = i; break; } }
+      if (ex >= 0) budgets[ex].limit = limit; else budgets.push({ cat: budgetCat, limit: limit });
+      saveData(); closeModal('modalBudget'); document.getElementById('budgetLimitInput').value = '';
+      showToast('Budget limit saved'); refreshBudgetPage();
+    }
+    function deleteBudget(cat) {
+      budgets = budgets.filter(function (b) { return b.cat !== cat; }); saveData(); refreshBudgetPage(); showToast('Budget removed');
+    }
+    function refreshBudgetPage() {
+      setText('budgetMonthLabel', MONTHS[viewMonth] + ' ' + viewYear);
+      var mt = getMonthTxns(), totalLimit = budgets.reduce(function (s, b) { return s + b.limit; }, 0);
+      var catSpend = {};
+      mt.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { catSpend[t.cat] = (catSpend[t.cat] || 0) + t.amt; });
+      var totalSpent = mt.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var pct = totalLimit > 0 ? Math.min(Math.round((totalSpent / totalLimit) * 100), 100) : 0;
+      var remain = Math.max(0, totalLimit - totalSpent);
+      var now = new Date(), isNow = now.getFullYear() === viewYear && now.getMonth() === viewMonth;
+      var daysInM = new Date(viewYear, viewMonth + 1, 0).getDate(), daysLeft = isNow ? Math.max(1, daysInM - now.getDate() + 1) : daysInM;
+      var daily = daysLeft > 0 ? Math.round(remain / daysLeft) : 0;
+      setText('budgetPct', pct + '%'); setText('budgetSpent', '₹' + fmt(totalSpent)); setText('budgetTotal', '₹' + fmt(totalLimit));
+      setText('budgetRemain', '₹' + fmt(remain)); setText('budgetDailyLeft', '₹' + fmt(daily)); setText('budgetDaysLeft', daysLeft);
+      var dot = document.getElementById('budgetDot'); if (dot) dot.classList.toggle('show', pct >= 80);
+
+      /* DONUT */
+      var svg = document.getElementById('budgetDonut'), legend = document.getElementById('donutLegend');
+      if (!svg) return;
+      svg.innerHTML = '';
+      var R = 32, circ = 2 * Math.PI * R, CX = 40, CY = 40, GAP = 3;
+      function mkC(color, opacity, dash, offset) {
+        var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', CX); c.setAttribute('cy', CY); c.setAttribute('r', R);
+        c.setAttribute('fill', 'none'); c.setAttribute('stroke', color); c.setAttribute('stroke-opacity', String(opacity));
+        c.setAttribute('stroke-width', '9'); c.setAttribute('stroke-dasharray', dash); c.setAttribute('stroke-dashoffset', String(offset));
+        c.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')'); return c;
+      }
+      svg.appendChild(mkC('var(--border)', 1, circ + ' 0', 0));
+      if (budgets.length === 0 || totalLimit === 0) {
+        if (legend) legend.innerHTML = '<div style="font-size:12px;color:var(--text2)">Set category limits to see breakdown</div>';
+      } else {
+        var startAt = 0, legendHtml = '';
+        budgets.forEach(function (b) {
+          var spent = catSpend[b.cat] || 0, segLen = (b.limit / totalLimit) * circ;
+          var fillLen = Math.min(spent / b.limit, 1) * segLen, drawSeg = Math.max(segLen - GAP, 0), drawFil = Math.min(fillLen, drawSeg);
+          var color = CAT_COLORS[b.cat] || '#7c6dfa', pctCat = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
+          var over = spent > b.limit, offset = circ - startAt;
+          svg.appendChild(mkC(color, 0.28, drawSeg + ' ' + (circ - drawSeg), offset));
+          if (drawFil > 0.5) svg.appendChild(mkC(over ? '#ef4444' : color, 1, drawFil + ' ' + (circ - drawFil), offset));
+          startAt += segLen;
+          legendHtml += '<div style="display:flex;align-items:center;gap:5px;font-size:11px;"><div style="width:10px;height:10px;border-radius:3px;background:' + color + ';flex-shrink:0"></div><span style="color:var(--text2)">' + b.cat.charAt(0).toUpperCase() + b.cat.slice(1) + ' <b style="color:var(--text)">' + pctCat + '%</b></span></div>';
+        });
+        if (legend) legend.innerHTML = legendHtml;
+      }
+
+      /* category list */
+      var el = document.getElementById('catBudgetList'); if (!el) return;
+      if (budgets.length === 0) {
+        el.innerHTML = '<div class="empty-state" style="padding:24px 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 10px;opacity:0.4"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><p>No budget limits set. Tap + Add.</p></div>';
+      } else {
+        el.innerHTML = budgets.map(function (b) {
+          var spent = catSpend[b.cat] || 0, pctC = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0, over = spent > b.limit;
+          var color = over ? 'var(--red)' : pctC >= 70 ? '#f59e0b' : (CAT_COLORS[b.cat] || 'var(--accent)'), bg = CAT_COLORS[b.cat] || '#7c6dfa';
+          return '<div class="cat-budget-item"><div class="cbi-icon" style="background:' + bg + '22;color:' + bg + '">' + (CAT_ICONS[b.cat] || CAT_ICONS.other) + '</div>'
+            + '<div class="cbi-info"><div class="cbi-name">' + b.cat.charAt(0).toUpperCase() + b.cat.slice(1) + '</div>'
+            + '<div class="cbi-bar"><div class="cbi-fill" style="width:' + pctC + '%;background:' + color + '"></div></div>'
+            + '<div class="cbi-nums">₹' + fmt(spent) + ' of ₹' + fmt(b.limit) + (over ? ' <b style="color:var(--red)">Over!</b>' : '') + '</div></div>'
+            + '<div class="cbi-pct" style="color:' + color + '">' + pctC + '%</div>'
+            + '<button class="cbi-del" onclick="deleteBudget(\'' + b.cat + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button></div>';
+        }).join('');
+      }
+
+      /* goals preview */
+      var gPrev = document.getElementById('budgetGoalsPreview'); if (!gPrev) return;
+      if (goals.length === 0) { gPrev.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:10px 0">No goals yet. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer" onclick="goPage(\'Goals\')">Create one →</button></div>'; return; }
+      gPrev.innerHTML = goals.slice(0, 2).map(function (g) {
+        var pctG = g.target > 0 ? Math.min(Math.round((g.saved / g.target) * 100), 100) : 0;
+        return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+          + '<div style="font-size:24px">' + g.emoji + '</div><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:4px">' + g.name + '</div>'
+          + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:' + pctG + '%;background:var(--accent);transition:width 0.6s"></div></div></div>'
+          + '<div style="font-size:12px;font-weight:bold;color:var(--accent)">' + pctG + '%</div></div>';
+      }).join('');
+    }
+
+    /* ════ GOALS ════════════════════════════════════════════════ */
+    var goalEmoji = '🎯', addingToGoal = null;
+    function setGoalEmoji(e, btn) { goalEmoji = e; document.querySelectorAll('.emoji-btn').forEach(function (b) { b.classList.remove('active'); }); btn.classList.add('active'); }
+    function openAddGoal() { openModal('modalGoal'); }
+    function saveGoal() {
+      var name = document.getElementById('goalName').value.trim(), target = parseFloat(document.getElementById('goalTarget').value) || 0, saved = parseFloat(document.getElementById('goalSaved').value) || 0;
+      if (!name) { showToast('Enter a goal name'); return; } if (target <= 0) { showToast('Enter a target amount'); return; }
+      goals.push({ id: Date.now(), emoji: goalEmoji, name: name, target: target, saved: saved });
+      saveData(); closeModal('modalGoal');
+      document.getElementById('goalName').value = ''; document.getElementById('goalTarget').value = ''; document.getElementById('goalSaved').value = '';
+      showToast('Goal created!'); refreshGoalsPage();
+    }
+    function deleteGoal(id) { goals = goals.filter(function (g) { return g.id !== id; }); saveData(); refreshGoalsPage(); showToast('Goal deleted'); }
+    function openAddToGoal(id) {
+      addingToGoal = id;
+      var g = goals.filter(function (g) { return g.id === id; })[0]; if (!g) return;
+      var info = document.getElementById('addGoalInfo'); if (info) info.textContent = g.emoji + ' ' + g.name + ' — ₹' + fmt(g.saved) + ' of ₹' + fmt(g.target);
+      document.getElementById('addGoalAmt').value = ''; openModal('modalAddGoal');
+    }
+    function confirmAddToGoal() {
+      var amt = parseFloat(document.getElementById('addGoalAmt').value) || 0;
+      if (amt <= 0) { showToast('Enter a valid amount'); return; }
+      for (var i = 0; i < goals.length; i++) { if (goals[i].id === addingToGoal) { goals[i].saved = Math.min(goals[i].saved + amt, goals[i].target); break; } }
+      saveData(); closeModal('modalAddGoal'); showToast('Added to goal!'); refreshGoalsPage();
+    }
+    function refreshGoalsPage() {
+      var el = document.getElementById('goalsList'); if (!el) return;
+      if (goals.length === 0) { el.innerHTML = '<div class="empty-state" style="padding:32px 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>No goals yet. Tap the button below.</p></div>'; return; }
+      el.innerHTML = goals.map(function (g) {
+        var pct = g.target > 0 ? Math.min(Math.round((g.saved / g.target) * 100), 100) : 0, done = g.saved >= g.target;
+        return '<div class="goal-item"><div class="goal-head"><div class="goal-emoji">' + g.emoji + '</div><div class="goal-info"><div class="goal-name">' + g.name + '</div><div class="goal-tgt">Target: ₹' + fmt(g.target) + '</div></div><div class="goal-badge' + (done ? ' done' : '') + '">' + pct + '%' + (done ? ' ✓' : '') + '</div></div>'
+          + '<div class="goal-bar"><div class="goal-fill' + (done ? ' done' : '') + '" style="width:' + pct + '%"></div></div>'
+          + '<div class="goal-foot"><div class="goal-saved-txt">Saved: <b>₹' + fmt(g.saved) + '</b></div><div class="goal-btns">'
+          + (done ? '' : '<button class="goal-add-btn" onclick="openAddToGoal(' + g.id + ')">+ Add</button>')
+          + '<button class="goal-del-btn" onclick="deleteGoal(' + g.id + ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
+          + '</div></div></div>';
+      }).join('');
+    }
+
+    /* ════ SUBSCRIPTIONS ════════════════════════════════════════ */
     var SUB_ICONS = {
       entertainment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>',
       utilities: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
@@ -3129,213 +2458,130 @@
       other: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
     };
     var SUB_COLORS = { entertainment: '#a855f7', utilities: '#eab308', health: '#14b8a6', shopping: '#ec4899', other: '#7c6dfa' };
-
     function openAddSub() {
-      document.getElementById('editSubId').value = '';
-      document.getElementById('subName').value = '';
-      document.getElementById('subAmt').value = '';
-      document.getElementById('subCycle').value = 'monthly';
+      document.getElementById('editSubId').value = ''; document.getElementById('subName').value = '';
+      document.getElementById('subAmt').value = ''; document.getElementById('subCycle').value = 'monthly';
       document.getElementById('subCat').value = 'entertainment';
       try { document.getElementById('subDue').valueAsDate = new Date(); } catch (e) { }
       openModal('modalSub');
     }
-
     function saveSub() {
-      var name = document.getElementById('subName').value.trim();
-      var amt = parseFloat(document.getElementById('subAmt').value) || 0;
-      var cycle = document.getElementById('subCycle').value;
-      var due = document.getElementById('subDue').value || new Date().toISOString().split('T')[0];
+      var name = document.getElementById('subName').value.trim(), amt = parseFloat(document.getElementById('subAmt').value) || 0;
+      var cycle = document.getElementById('subCycle').value, due = document.getElementById('subDue').value || new Date().toISOString().split('T')[0];
       var cat = document.getElementById('subCat').value;
-      if (!name) { showToast('Enter service name'); return; }
-      if (amt <= 0) { showToast('Enter a valid amount'); return; }
-
+      if (!name) { showToast('Enter service name'); return; } if (amt <= 0) { showToast('Enter a valid amount'); return; }
       var editId = document.getElementById('editSubId').value;
       if (editId) {
         var id = parseInt(editId);
-        for (var i = 0; i < subs.length; i++) {
-          if (subs[i].id === id) { subs[i].name = name; subs[i].amt = amt; subs[i].cycle = cycle; subs[i].due = due; subs[i].cat = cat; break; }
-        }
+        for (var i = 0; i < subs.length; i++) { if (subs[i].id === id) { subs[i].name = name; subs[i].amt = amt; subs[i].cycle = cycle; subs[i].due = due; subs[i].cat = cat; break; } }
         showToast('Subscription updated');
       } else {
         subs.push({ id: Date.now(), name: name, amt: amt, cycle: cycle, due: due, cat: cat, active: true });
         showToast('Subscription added');
       }
-      saveData();
-      closeModal('modalSub');
-      refreshSubsPage();
+      saveData(); closeModal('modalSub'); refreshSubsPage(); refreshAll();
     }
-
-    function deleteSub(id) {
-      subs = subs.filter(function (s) { return s.id !== id; });
-      saveData(); refreshSubsPage(); showToast('Removed');
-    }
-
+    function deleteSub(id) { subs = subs.filter(function (s) { return s.id !== id; }); saveData(); refreshSubsPage(); refreshAll(); showToast('Removed'); }
     function editSub(id) {
-      var s = null;
-      for (var i = 0; i < subs.length; i++) { if (subs[i].id === id) { s = subs[i]; break; } }
-      if (!s) return;
-      document.getElementById('editSubId').value = id;
-      document.getElementById('subName').value = s.name;
-      document.getElementById('subAmt').value = s.amt;
-      document.getElementById('subCycle').value = s.cycle;
-      document.getElementById('subDue').value = s.due;
-      document.getElementById('subCat').value = s.cat;
+      var s = null; for (var i = 0; i < subs.length; i++) { if (subs[i].id === id) { s = subs[i]; break; } } if (!s) return;
+      document.getElementById('editSubId').value = id; document.getElementById('subName').value = s.name;
+      document.getElementById('subAmt').value = s.amt; document.getElementById('subCycle').value = s.cycle;
+      document.getElementById('subDue').value = s.due; document.getElementById('subCat').value = s.cat;
       openModal('modalSub');
     }
-
-    function getMonthlyAmt(s) {
-      if (s.cycle === 'monthly') return s.amt;
-      if (s.cycle === 'yearly') return Math.round(s.amt / 12);
-      if (s.cycle === 'weekly') return Math.round(s.amt * 4.33);
-      return s.amt;
-    }
-
-    function daysUntil(dateStr) {
-      var now = new Date(); now.setHours(0, 0, 0, 0);
-      var d = new Date(dateStr); d.setHours(0, 0, 0, 0);
-      return Math.round((d - now) / 86400000);
-    }
-
-    function refreshSubsPage() {
-      var active = subs.filter(function (s) { return s.active !== false; });
-      var monthly = active.reduce(function (sum, s) { return sum + getMonthlyAmt(s); }, 0);
-      var yearly = monthly * 12;
-      setText('subMonthly', '₹' + fmt(monthly));
-      setText('subYearly', '₹' + fmt(yearly));
-      setText('subCount', active.length);
-
-      // due this month
-      var now = new Date();
-      var y = now.getFullYear(), m = now.getMonth();
-      var due = active.filter(function (s) {
-        var d = new Date(s.due); return d.getFullYear() === y && d.getMonth() === m;
-      }).sort(function (a, b) { return new Date(a.due) - new Date(b.due); });
-
-      var dueEl = document.getElementById('subsDueList');
-      if (dueEl) {
-        dueEl.innerHTML = due.length === 0
-          ? '<div style="font-size:13px;color:var(--text2);padding:8px 0">No subscriptions due this month</div>'
-          : due.map(function (s) {
-            var days = daysUntil(s.due);
-            var badge = days < 0 ? 'Overdue' : days === 0 ? 'Today' : 'In ' + days + 'd';
-            var bColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--green)';
-            var clr = SUB_COLORS[s.cat] || '#7c6dfa';
-            return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
-              + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
-              + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + s.name + '</div>'
-              + '<div style="font-size:12px;color:var(--text2)">' + s.cycle + ' · ' + s.due + '</div></div>'
-              + '<div style="text-align:right;flex-shrink:0">'
-              + '<div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div>'
-              + '<div style="font-size:11px;font-weight:bold;color:' + bColor + '">' + badge + '</div></div>'
-              + '</div>';
-          }).join('');
-      }
-
-      // all subs
-      var el = document.getElementById('subsList');
-      if (!el) return;
-      if (subs.length === 0) {
-        el.innerHTML = '<div class="empty-state" style="padding:24px 0">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>'
-          + '<p>No subscriptions yet. Tap + Add to track one.</p></div>';
-        return;
-      }
-      el.innerHTML = subs.map(function (s) {
-        var clr = SUB_COLORS[s.cat] || '#7c6dfa';
-        var mAmt = getMonthlyAmt(s);
-        var days = daysUntil(s.due);
-        var dueColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--text2)';
-        var dueTxt = days < 0 ? 'Overdue' : days === 0 ? 'Due today' : 'Due in ' + days + 'd';
-        return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
-          + '<div style="display:flex;align-items:center;gap:12px;">'
-          + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
-          + '<div style="flex:1;min-width:0">'
-          + '<div style="font-size:14px;font-weight:500">' + s.name + '</div>'
-          + '<div style="font-size:12px;color:' + dueColor + '">' + dueTxt + ' · ₹' + fmt(mAmt) + '/mo</div></div>'
-          + '<div style="display:flex;gap:6px;align-items:center;">'
-          + '<button onclick="payNow(' + s.id + ')" style="padding:6px 10px;border-radius:8px;border:none;background:var(--green-s);color:var(--green);font-size:11px;font-weight:bold;cursor:pointer;">Pay</button>'
-          + '<button onclick="editSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
-          + '<button onclick="deleteSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;">'
-          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
-          + '</div></div></div>';
-      }).join('');
-    }
-
-    // Also add Analytics link in More page subscriptions teaser on home
-    function refreshHomeSubTeaser() {
-      // show upcoming sub due on home dashboard
-    }
-
-    /* ════════════════════════════════════════════════════════
-       PHASE 7 — Notes, Pay Now, 7-day Trend
-    ════════════════════════════════════════════════════════ */
-
-    /* ── 7-DAY SPENDING TREND ── */
-    function refreshTrend() {
-      var barsEl = document.getElementById('trendBars');
-      var labsEl = document.getElementById('trendLabels');
-      if (!barsEl || !labsEl) return;
-
-      var days = [];
-      var DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-      var today = new Date(); today.setHours(0, 0, 0, 0);
-      for (var i = 6; i >= 0; i--) {
-        var d = new Date(today.getTime() - i * 86400000);
-        var key = d.toISOString().split('T')[0];
-        var total = txns.filter(function (t) { return t.date === key && t.type === 'debit'; })
-          .reduce(function (s, t) { return s + t.amt; }, 0);
-        days.push({ label: DAY_NAMES[d.getDay()], amt: total, isToday: i === 0 });
-      }
-
-      var maxAmt = Math.max.apply(null, days.map(function (d) { return d.amt; })) || 1;
-
-      barsEl.innerHTML = days.map(function (d) {
-        var h = Math.max(Math.round((d.amt / maxAmt) * 40), d.amt > 0 ? 4 : 2);
-        var color = d.isToday ? 'var(--accent)' : 'var(--border)';
-        if (d.amt > 0 && !d.isToday) color = 'var(--text2)';
-        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;">'
-          + '<div style="width:100%;height:' + h + 'px;background:' + color + ';border-radius:3px 3px 0 0;min-height:2px;"></div>'
-          + '</div>';
-      }).join('');
-
-      labsEl.innerHTML = days.map(function (d) {
-        var color = d.isToday ? 'var(--accent)' : 'var(--text2)';
-        return '<div style="flex:1;text-align:center;font-size:9px;color:' + color + '">' + d.label + '</div>';
-      }).join('');
-    }
-
-    /* ── SUBSCRIPTION PAY NOW ── */
+    function getMonthlyAmt(s) { if (s.cycle === 'monthly') return s.amt; if (s.cycle === 'yearly') return Math.round(s.amt / 12); if (s.cycle === 'weekly') return Math.round(s.amt * 4.33); return s.amt; }
+    function daysUntil(dateStr) { var now = new Date(); now.setHours(0, 0, 0, 0); var d = new Date(dateStr); d.setHours(0, 0, 0, 0); return Math.round((d - now) / 86400000); }
     function payNow(id) {
-      var s = null;
-      for (var i = 0; i < subs.length; i++) { if (subs[i].id === id) { s = subs[i]; break; } }
-      if (!s) return;
-
-      // Need a wallet to debit
+      var s = null; for (var i = 0; i < subs.length; i++) { if (subs[i].id === id) { s = subs[i]; break; } } if (!s) return;
       if (wallets.length === 0) { showToast('Add a wallet first'); return; }
-
-      // Use first wallet
-      var w = wallets[0];
-      w.balance -= s.amt;
-
-      // Add as transaction
-      txns.unshift({
-        id: Date.now(), type: 'debit', cat: 'bills', amt: s.amt,
-        desc: s.name + ' subscription', wallet: w.name,
-        date: new Date().toISOString().split('T')[0], notes: 'Auto from subscriptions'
-      });
-
-      // Advance due date
+      wallets[0].balance -= s.amt;
+      txns.unshift({ id: Date.now(), type: 'debit', cat: 'bills', amt: s.amt, desc: s.name + ' subscription', wallet: wallets[0].name, date: new Date().toISOString().split('T')[0], notes: 'Auto from subscriptions' });
       var due = new Date(s.due);
       if (s.cycle === 'monthly') due.setMonth(due.getMonth() + 1);
       else if (s.cycle === 'yearly') due.setFullYear(due.getFullYear() + 1);
       else if (s.cycle === 'weekly') due.setDate(due.getDate() + 7);
       s.due = due.toISOString().split('T')[0];
+      saveData(); showToast('₹' + fmt(s.amt) + ' paid for ' + s.name); refreshSubsPage(); refreshAll();
+    }
+    function refreshSubsPage() {
+      var active = subs.filter(function (s) { return s.active !== false; });
+      var monthly = active.reduce(function (sum, s) { return sum + getMonthlyAmt(s); }, 0);
+      setText('subMonthly', '₹' + fmt(monthly)); setText('subYearly', '₹' + fmt(monthly * 12)); setText('subCount', active.length);
+      var now = new Date(), y = now.getFullYear(), m = now.getMonth();
+      var due = active.filter(function (s) { var d = new Date(s.due); return d.getFullYear() === y && d.getMonth() === m; }).sort(function (a, b) { return new Date(a.due) - new Date(b.due); });
+      var dueEl = document.getElementById('subsDueList');
+      if (dueEl) {
+        dueEl.innerHTML = due.length === 0 ? '<div style="font-size:13px;color:var(--text2);padding:8px 0">No subscriptions due this month</div>' : due.map(function (s) {
+          var days = daysUntil(s.due), badge = days < 0 ? 'Overdue' : days === 0 ? 'Today' : 'In ' + days + 'd', bColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--green)', clr = SUB_COLORS[s.cat] || '#7c6dfa';
+          return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+            + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
+            + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + s.name + '</div><div style="font-size:12px;color:var(--text2)">' + s.cycle + ' · ' + s.due + '</div></div>'
+            + '<div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div><div style="font-size:11px;font-weight:bold;color:' + bColor + '">' + badge + '</div></div></div>';
+        }).join('');
+      }
+      var el = document.getElementById('subsList'); if (!el) return;
+      if (subs.length === 0) { el.innerHTML = '<div class="empty-state" style="padding:24px 0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4 4-4-4"/></svg><p>No subscriptions yet. Tap + Add to track one.</p></div>'; return; }
+      el.innerHTML = subs.map(function (s) {
+        var clr = SUB_COLORS[s.cat] || '#7c6dfa', mAmt = getMonthlyAmt(s), days = daysUntil(s.due);
+        var dueColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--text2)', dueTxt = days < 0 ? 'Overdue' : days === 0 ? 'Due today' : 'Due in ' + days + 'd';
+        return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+          + '<div style="display:flex;align-items:center;gap:12px;">'
+          + '<div style="width:40px;height:40px;border-radius:12px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
+          + '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">' + s.name + '</div><div style="font-size:12px;color:' + dueColor + '">' + dueTxt + ' · ₹' + fmt(mAmt) + '/mo</div></div>'
+          + '<div style="display:flex;gap:6px;align-items:center;">'
+          + '<button onclick="payNow(' + s.id + ')" style="padding:6px 10px;border-radius:8px;border:none;background:var(--green-s);color:var(--green);font-size:11px;font-weight:bold;cursor:pointer;">Pay</button>'
+          + '<button onclick="editSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
+          + '<button onclick="deleteSub(' + s.id + ')" style="width:30px;height:30px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
+          + '</div></div></div>';
+      }).join('');
+    }
 
-      saveData();
-      showToast('₹' + fmt(s.amt) + ' paid for ' + s.name);
-      refreshSubsPage();
-      refreshAll();
+    /* ════ CHANGE PIN ═══════════════════════════════════════════ */
+    function openChangePin() { document.getElementById('cpOld').value = ''; document.getElementById('cpNew').value = ''; document.getElementById('cpConfirm').value = ''; openModal('modalChangePin'); }
+    function saveNewPin() {
+      var o = document.getElementById('cpOld').value.trim(), n = document.getElementById('cpNew').value.trim(), c = document.getElementById('cpConfirm').value.trim();
+      if (o.length !== 4) { showToast('Enter your 4-digit current PIN'); return; } if (n.length !== 4) { showToast('New PIN must be 4 digits'); return; } if (n !== c) { showToast('New PINs do not match'); return; }
+      if (stored && makeHash(o) !== stored) { showToast('Current PIN is incorrect'); return; }
+      var h = makeHash(n); try { localStorage.setItem('sxt_pin', h); } catch (e) { } stored = h; closeModal('modalChangePin'); showToast('PIN changed successfully');
+    }
+
+    /* ════ EXPORT / CLEAR ═══════════════════════════════════════ */
+    function exportCSV() {
+      if (txns.length === 0) { showToast('No transactions to export'); return; }
+      var rows = ['Date,Description,Category,Type,Amount,Wallet,Notes'];
+      txns.forEach(function (t) { rows.push([t.date, '"' + t.desc + '"', t.cat, t.type, t.amt, '"' + t.wallet + '"', '"' + (t.notes || '') + '"'].join(',')); });
+      var blob = new Blob([rows.join('\n')], { type: 'text/csv' }), a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'sxt-transactions.csv'; a.click(); URL.revokeObjectURL(a.href); showToast('CSV downloaded');
+    }
+    function clearAllData() {
+      if (!confirm('Delete ALL data? Cannot be undone.')) return;
+      wallets = []; txns = []; budgets = []; goals = []; subs = [];
+      try { localStorage.removeItem('sxt_wallets'); localStorage.removeItem('sxt_txns'); localStorage.removeItem('sxt_budgets'); localStorage.removeItem('sxt_goals'); localStorage.removeItem('sxt_subs'); } catch (e) { }
+      showToast('All data cleared'); refreshAll(); refreshWalletList();
+    }
+
+    /* ════ REFRESH ALL ══════════════════════════════════════════ */
+    function refreshAll() {
+      refreshBalance(); refreshWalletScroll(); refreshTxList(); refreshTrend();
+      if (curPage === 'Subs') refreshSubsPage();
+      /* home subs teaser */
+      var el = document.getElementById('homeSubsTeaser'); if (!el) return;
+      var active = subs.filter(function (s) { return s.active !== false; });
+      if (active.length === 0) { el.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:8px 0">No subscriptions tracked. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer" onclick="goPage(\'Subs\')">Add one →</button></div>'; return; }
+      var sorted = active.slice().sort(function (a, b) { return new Date(a.due) - new Date(b.due); });
+      el.innerHTML = sorted.slice(0, 2).map(function (s) {
+        var days = daysUntil(s.due), bColor = days <= 0 ? 'var(--red)' : days <= 3 ? '#f59e0b' : 'var(--text2)', daysLbl = days < 0 ? 'Overdue' : days === 0 ? 'Due today' : 'Due in ' + days + 'd', clr = SUB_COLORS[s.cat] || '#7c6dfa';
+        return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+          + '<div style="width:36px;height:36px;border-radius:10px;background:' + clr + '22;color:' + clr + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (SUB_ICONS[s.cat] || SUB_ICONS.other) + '</div>'
+          + '<div style="flex:1"><div style="font-size:13px;font-weight:500">' + s.name + '</div><div style="font-size:11px;color:' + bColor + '">' + daysLbl + '</div></div>'
+          + '<div style="font-size:14px;font-weight:bold">₹' + fmt(s.amt) + '</div></div>';
+      }).join('');
+    }
+
+    /* ════ GREETING ═════════════════════════════════════════════ */
+    function setGreeting() {
+      var h = new Date().getHours(), g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+      var el = document.querySelector('.greeting'); if (el) el.innerHTML = g + ', <span>welcome back</span>';
     }
 
     init();
