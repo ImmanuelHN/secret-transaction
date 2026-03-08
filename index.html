@@ -1489,6 +1489,186 @@
       background: none;
       color: var(--text2);
     }
+
+    /* ══ PHASE 11 ════════════════════════════════════════════ */
+    [data-theme="oled"] {
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface2: #111111;
+      --border: #1c1c1c;
+      --text: #ffffff;
+      --text2: #555555;
+      --accent: #7c6dfa;
+      --accent-s: rgba(124, 109, 250, 0.15);
+      --green: #22c55e;
+      --green-s: rgba(34, 197, 94, 0.12);
+      --red: #ef4444;
+      --red-s: rgba(239, 68, 68, 0.12);
+      --nav-bg: #000000;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.95);
+    }
+
+    .report-bar-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 120px;
+      margin-bottom: 4px;
+    }
+
+    .report-bar-group {
+      flex: 1;
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .report-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      min-height: 2px;
+      transition: height 0.5s;
+    }
+
+    .report-month-label {
+      flex: 1;
+      text-align: center;
+      font-size: 9px;
+      color: var(--text2);
+      padding-top: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .report-legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .report-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .report-legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pie-wrap {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .pie-legend {
+      flex: 1;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pie-legend-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .pie-legend-bar-track {
+      flex: 1;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .pie-legend-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .setting-sub {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 2px;
+    }
+
+    .toggle-sw {
+      width: 44px;
+      height: 24px;
+      background: var(--border);
+      border-radius: 12px;
+      position: relative;
+      border: none;
+      flex-shrink: 0;
+      transition: background 0.2s;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .toggle-sw.on {
+      background: var(--accent);
+    }
+
+    .toggle-sw::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      top: 3px;
+      left: 3px;
+      transition: left 0.2s;
+    }
+
+    .toggle-sw.on::after {
+      left: 23px;
+    }
+
+    .tx-recurring {
+      font-size: 9px;
+      background: var(--accent-s);
+      color: var(--accent);
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-left: 4px;
+    }
   </style>
 </head>
 
@@ -1542,6 +1722,7 @@
           <button id="tD" onclick="setTheme('dark')" class="active">D</button>
           <button id="tC" onclick="setTheme('color')">C</button>
           <button id="tL" onclick="setTheme('light')">L</button>
+          <button id="tO" onclick="setTheme('oled')" style="font-size:9px;">OLED</button>
         </div>
         <button class="hdr-icon-btn" onclick="lockApp()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
@@ -1733,21 +1914,28 @@
         <div id="walletFullList" style="margin-bottom:22px;"></div>
         <!-- quick links -->
         <div class="section-title" style="margin-bottom:12px;">Quick Links</div>
-        <div style="display:flex;gap:10px;margin-bottom:18px;">
+        <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
           <button onclick="goPage('Analytics')"
-            style="flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"
+            style="flex:1;min-width:80px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"
               style="color:var(--accent)">
               <line x1="18" y1="20" x2="18" y2="10" />
               <line x1="12" y1="20" x2="12" y2="4" />
               <line x1="6" y1="20" x2="6" y2="14" />
             </svg>Analytics</button>
           <button onclick="goPage('Goals')"
-            style="flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"
+            style="flex:1;min-width:80px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"
               style="color:var(--green)">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>Goals</button>
+          <button onclick="goPage('Reports')"
+            style="flex:1;min-width:80px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"
+              style="color:var(--red)">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>Reports</button>
         </div>
         <!-- home currency -->
         <div class="section-title" style="margin-bottom:10px;">Home Currency</div>
@@ -1933,10 +2121,51 @@
             </svg>
           </div>
         </div>
+
+        <!-- preferences -->
+        <div class="section-title" style="margin-bottom:10px;">Preferences</div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;">
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-title">Auto-Lock</div>
+              <div class="setting-sub" id="autoLockSub">Lock after 5 min of inactivity</div>
+            </div>
+            <button class="toggle-sw on" id="autoLockToggle" onclick="toggleAutoLock()"></button>
+          </div>
+          <div class="setting-row" style="cursor:default;">
+            <div class="setting-info">
+              <div class="setting-title">Lock Timer</div>
+              <div class="setting-sub">Minutes before auto-lock</div>
+            </div>
+            <select id="autoLockMins" onchange="setAutoLockMins()"
+              style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;">
+              <option value="1">1 min</option>
+              <option value="5" selected>5 min</option>
+              <option value="10">10 min</option>
+              <option value="30">30 min</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-title">Recurring Reminders</div>
+              <div class="setting-sub">Badge on recurring transactions due today</div>
+            </div>
+            <button class="toggle-sw on" id="recurringAlertToggle" onclick="toggleRecurringAlerts()"></button>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-title">Compact View</div>
+              <div class="setting-sub">Smaller transaction rows</div>
+            </div>
+            <button class="toggle-sw" id="compactToggle" onclick="toggleCompact()"></button>
+          </div>
+        </div>
+
         <div style="text-align:center;padding:20px 0;color:var(--text2);font-size:12px;">
           <img src="logo.png" style="height:36px;margin:0 auto 8px;display:block;"
             onerror="this.style.display='none'" />
-          sXt — Secret Transactions<br />v7.0 · Your money. Your secret.
+          sXt — Secret Transactions<br />v11.0 · Your money. Your secret.
         </div>
       </div>
 
@@ -2035,6 +2264,70 @@
             Add</button>
         </div>
         <div id="subsList"></div>
+      </div>
+
+      <!-- REPORTS PAGE -->
+      <div class="page" id="pageReports">
+        <button class="back-btn" onclick="goPage('More')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg> Back
+        </button>
+        <div class="page-title">Reports</div>
+        <div class="page-sub">Income &amp; expense history</div>
+
+        <!-- month navigator -->
+        <div style="display:flex;gap:10px;margin-bottom:18px;">
+          <div
+            style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:3px;">THIS MONTH INCOME</div>
+            <div id="repIncome" style="font-size:18px;font-weight:bold;color:var(--green);">₹0</div>
+          </div>
+          <div
+            style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:3px;">THIS MONTH EXPENSE</div>
+            <div id="repExpense" style="font-size:18px;font-weight:bold;color:var(--red);">₹0</div>
+          </div>
+        </div>
+
+        <!-- 6-month income vs expense bar chart -->
+        <div class="section-title" style="margin-bottom:12px;">6-Month Overview</div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
+          <div class="report-legend" id="repLegend">
+            <div class="report-legend-item">
+              <div class="report-legend-dot" style="background:var(--green)"></div>Income
+            </div>
+            <div class="report-legend-item">
+              <div class="report-legend-dot" style="background:var(--red)"></div>Expenses
+            </div>
+          </div>
+          <div class="report-bar-wrap" id="repBars"></div>
+          <div style="display:flex;gap:6px;" id="repMonthLabels"></div>
+        </div>
+
+        <!-- category pie / breakdown -->
+        <div class="section-title" style="margin-bottom:12px;">Spending by Category</div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
+          <div class="pie-wrap">
+            <svg id="repPie" viewBox="0 0 80 80" width="80" height="80" style="flex-shrink:0;"></svg>
+            <div class="pie-legend" id="repPieLegend"></div>
+          </div>
+        </div>
+
+        <!-- top spending days -->
+        <div class="section-title" style="margin-bottom:12px;">Top Spending Days This Month</div>
+        <div id="repTopDays" style="margin-bottom:18px;"></div>
+
+        <!-- net worth trend -->
+        <div class="section-title" style="margin-bottom:12px;">Net Worth (Total Balance)</div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;text-align:center;">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">CURRENT NET WORTH</div>
+          <div id="repNetWorth" style="font-size:28px;font-weight:bold;color:var(--accent);">₹0</div>
+          <div id="repNetSub" style="font-size:12px;color:var(--text2);margin-top:4px;"></div>
+        </div>
       </div>
 
     </div><!-- /pages -->
@@ -2149,6 +2442,14 @@
       </div>
       <div class="form-group"><label>Notes (optional)</label><input type="text" id="txNotes"
           placeholder="Add a note…" /></div>
+      <div
+        style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);margin-top:2px;">
+        <div>
+          <div style="font-size:13px;font-weight:500;">Recurring Monthly</div>
+          <div style="font-size:11px;color:var(--text2);">Mark this as a monthly recurring transaction</div>
+        </div>
+        <button class="toggle-sw" id="txRecurring" onclick="this.classList.toggle('on')"></button>
+      </div>
       <button class="save-btn" id="txSaveBtn" onclick="saveTx()">Save Transaction</button>
       <button class="cancel-btn" onclick="cancelTxModal()">Cancel</button>
     </div>
@@ -2439,6 +2740,7 @@
       if (name === 'Budget') refreshBudgetPage();
       if (name === 'Goals') refreshGoalsPage();
       if (name === 'Subs') refreshSubsPage();
+      if (name === 'Reports') refreshReportsPage();
     }
 
     /* ════ THEME ════════════════════════════════════════════════ */
@@ -2582,9 +2884,10 @@
     function renderTxItem(tx) {
       var icon = CAT_ICONS[tx.cat] || CAT_ICONS.other, sign = tx.type === 'debit' ? '−' : '+', amtCls = tx.type === 'debit' ? 'debit' : 'credit';
       var noteHtml = tx.notes ? '<div class="tx-notes">' + tx.notes + '</div>' : '';
+      var recurBadge = tx.recurring ? '<span class="tx-recurring">↻ recurring</span>' : '';
       return '<div class="tx-item" id="tx' + tx.id + '">'
         + '<div class="tx-icon cat-' + tx.cat + '">' + icon + '</div>'
-        + '<div class="tx-info"><div class="tx-name">' + tx.desc + '</div><div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div>' + noteHtml + '</div>'
+        + '<div class="tx-info"><div class="tx-name">' + tx.desc + recurBadge + '</div><div class="tx-meta">' + tx.wallet + ' · ' + tx.date + '</div>' + noteHtml + '</div>'
         + '<div class="tx-amount ' + amtCls + '" onclick="toggleTxDel(' + tx.id + ')">' + sign + fmtC(tx.amt) + '</div>'
         + '<button class="tx-del-btn" style="width:90px;flex-direction:row;gap:4px;" onclick="event.stopPropagation();">'
         + '<span onclick="openEditTx(' + tx.id + ')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</span>'
@@ -3282,8 +3585,219 @@
       closeModal('modalTx');
     }
 
+    /* ════ PHASE 11 ═════════════════════════════════════════════ */
+
+    /* ── OLED THEME FIX ── */
+    var _origSetTheme = setTheme;
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      try { localStorage.setItem('sxt_theme', t); } catch (e) { }
+      ['D', 'C', 'L', 'O'].forEach(function (b) { var el = document.getElementById('t' + b); if (el) el.classList.remove('active'); });
+      var map = { dark: 'D', color: 'C', light: 'L', oled: 'O' };
+      var btn = document.getElementById('t' + (map[t] || 'D')); if (btn) btn.classList.add('active');
+    }
+
+    /* ── AUTO-LOCK ── */
+    var autoLockEnabled = true;
+    var autoLockMinutes = 5;
+    var autoLockTimer = null;
+    var recurringAlerts = true;
+    var compactView = false;
+
+    function resetAutoLockTimer() {
+      if (!autoLockEnabled) return;
+      clearTimeout(autoLockTimer);
+      autoLockTimer = setTimeout(function () {
+        if (document.getElementById('app').style.display !== 'none') {
+          lockApp();
+          showToast('Auto-locked due to inactivity');
+        }
+      }, autoLockMinutes * 60000);
+    }
+    document.addEventListener('touchstart', resetAutoLockTimer);
+    document.addEventListener('click', resetAutoLockTimer);
+    document.addEventListener('keydown', resetAutoLockTimer);
+
+    function toggleAutoLock() {
+      autoLockEnabled = !autoLockEnabled;
+      var btn = document.getElementById('autoLockToggle');
+      if (btn) btn.classList.toggle('on', autoLockEnabled);
+      var sub = document.getElementById('autoLockSub');
+      if (sub) sub.textContent = autoLockEnabled ? 'Lock after ' + autoLockMinutes + ' min of inactivity' : 'Auto-lock disabled';
+      try { localStorage.setItem('sxt_autolock', autoLockEnabled ? '1' : '0'); } catch (e) { }
+      if (autoLockEnabled) resetAutoLockTimer(); else clearTimeout(autoLockTimer);
+      showToast(autoLockEnabled ? 'Auto-lock enabled' : 'Auto-lock disabled');
+    }
+    function setAutoLockMins() {
+      autoLockMinutes = parseInt(document.getElementById('autoLockMins').value) || 5;
+      try { localStorage.setItem('sxt_autolock_mins', autoLockMinutes); } catch (e) { }
+      var sub = document.getElementById('autoLockSub');
+      if (sub) sub.textContent = autoLockEnabled ? 'Lock after ' + autoLockMinutes + ' min of inactivity' : 'Auto-lock disabled';
+      if (autoLockEnabled) resetAutoLockTimer();
+    }
+    function toggleRecurringAlerts() {
+      recurringAlerts = !recurringAlerts;
+      var btn = document.getElementById('recurringAlertToggle'); if (btn) btn.classList.toggle('on', recurringAlerts);
+      try { localStorage.setItem('sxt_recurring_alerts', recurringAlerts ? '1' : '0'); } catch (e) { }
+      showToast(recurringAlerts ? 'Recurring alerts on' : 'Recurring alerts off');
+    }
+    function toggleCompact() {
+      compactView = !compactView;
+      var btn = document.getElementById('compactToggle'); if (btn) btn.classList.toggle('on', compactView);
+      document.body.classList.toggle('compact', compactView);
+      try { localStorage.setItem('sxt_compact', compactView ? '1' : '0'); } catch (e) { }
+      showToast(compactView ? 'Compact view on' : 'Compact view off');
+      refreshTxList();
+    }
+    function loadSettings() {
+      try {
+        var al = localStorage.getItem('sxt_autolock');
+        var am = localStorage.getItem('sxt_autolock_mins');
+        var ra = localStorage.getItem('sxt_recurring_alerts');
+        var cv = localStorage.getItem('sxt_compact');
+        if (al !== null) autoLockEnabled = al === '1';
+        if (am !== null) autoLockMinutes = parseInt(am) || 5;
+        if (ra !== null) recurringAlerts = ra === '1';
+        if (cv !== null) compactView = cv === '1';
+      } catch (e) { }
+      var alBtn = document.getElementById('autoLockToggle'); if (alBtn) alBtn.classList.toggle('on', autoLockEnabled);
+      var amSel = document.getElementById('autoLockMins'); if (amSel) amSel.value = autoLockMinutes;
+      var raBtn = document.getElementById('recurringAlertToggle'); if (raBtn) raBtn.classList.toggle('on', recurringAlerts);
+      var cvBtn = document.getElementById('compactToggle'); if (cvBtn) cvBtn.classList.toggle('on', compactView);
+      if (compactView) document.body.classList.add('compact');
+      var sub = document.getElementById('autoLockSub');
+      if (sub) sub.textContent = autoLockEnabled ? 'Lock after ' + autoLockMinutes + ' min of inactivity' : 'Auto-lock disabled';
+      if (autoLockEnabled) resetAutoLockTimer();
+    }
+
+    /* ── RECURRING TRANSACTIONS ── */
+    function saveTxWithRecurring() {
+      var recurring = document.getElementById('txRecurring') && document.getElementById('txRecurring').classList.contains('on');
+      // Handled inline in saveTx override below
+      return recurring;
+    }
+
+    /* ── REPORTS PAGE ── */
+    function refreshReportsPage() {
+      var now = new Date();
+      var thisM = txns.filter(function (t) { var d = new Date(t.date); return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth(); });
+      var income = thisM.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      var expense = thisM.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+      setText('repIncome', fmtC(income));
+      setText('repExpense', fmtC(expense));
+
+      var total = wallets.reduce(function (s, w) { return s + w.balance; }, 0);
+      setText('repNetWorth', fmtC(total));
+      var sub = income > expense ? '↑ Saving ' + fmtC(income - expense) + ' this month' : income < expense ? '↓ Spending ' + fmtC(expense - income) + ' over income' : 'Breaking even this month';
+      setText('repNetSub', sub);
+
+      /* 6-month bar chart */
+      var months = [];
+      for (var i = 5; i >= 0; i--) {
+        var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        var y = d.getFullYear(), m = d.getMonth();
+        var mt = txns.filter(function (t) { var td = new Date(t.date); return td.getFullYear() === y && td.getMonth() === m; });
+        var inc = mt.filter(function (t) { return t.type === 'credit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+        var exp = mt.filter(function (t) { return t.type === 'debit'; }).reduce(function (s, t) { return s + t.amt; }, 0);
+        months.push({ label: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m], inc: inc, exp: exp });
+      }
+      var maxVal = Math.max.apply(null, months.map(function (m) { return Math.max(m.inc, m.exp); })) || 1;
+      var barsEl = document.getElementById('repBars'), labsEl = document.getElementById('repMonthLabels');
+      if (barsEl) {
+        barsEl.innerHTML = months.map(function (m) {
+          var ih = Math.max(Math.round((m.inc / maxVal) * 110), m.inc > 0 ? 4 : 2);
+          var eh = Math.max(Math.round((m.exp / maxVal) * 110), m.exp > 0 ? 4 : 2);
+          return '<div class="report-bar-group"><div class="report-bar" style="height:' + ih + 'px;background:var(--green);"></div>'
+            + '<div class="report-bar" style="height:' + eh + 'px;background:var(--red);"></div></div>';
+        }).join('');
+      }
+      if (labsEl) {
+        labsEl.innerHTML = months.map(function (m) {
+          return '<div class="report-month-label">' + m.label + '</div>';
+        }).join('');
+      }
+
+      /* Category pie donut */
+      var catSpend = {};
+      thisM.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { catSpend[t.cat] = (catSpend[t.cat] || 0) + t.amt; });
+      var cats = Object.keys(catSpend).sort(function (a, b) { return catSpend[b] - catSpend[a]; });
+      var totalExp = cats.reduce(function (s, c) { return s + catSpend[c]; }, 0) || 1;
+      var pieSvg = document.getElementById('repPie');
+      var pieLeg = document.getElementById('repPieLegend');
+      if (pieSvg) {
+        pieSvg.innerHTML = '';
+        var R = 32, circ = 2 * Math.PI * R, CX = 40, CY = 40, GAP = 2, start = 0;
+        function mkPieC(color, opacity, dash, offset) {
+          var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx', CX); c.setAttribute('cy', CY); c.setAttribute('r', R); c.setAttribute('fill', 'none');
+          c.setAttribute('stroke', color); c.setAttribute('stroke-opacity', String(opacity)); c.setAttribute('stroke-width', '10');
+          c.setAttribute('stroke-dasharray', dash); c.setAttribute('stroke-dashoffset', String(offset));
+          c.setAttribute('transform', 'rotate(-90 ' + CX + ' ' + CY + ')'); return c;
+        }
+        pieSvg.appendChild(mkPieC('var(--border)', 1, circ + ' 0', 0));
+        if (cats.length === 0) {
+          pieSvg.appendChild(mkPieC('var(--border)', 0.5, circ + ' 0', 0));
+        } else {
+          cats.forEach(function (c) {
+            var seg = (catSpend[c] / totalExp) * circ, draw = Math.max(seg - GAP, 0), offset = circ - start;
+            var color = CAT_COLORS[c] || '#7c6dfa';
+            pieSvg.appendChild(mkPieC(color, 0.3, draw + ' ' + (circ - draw), offset));
+            pieSvg.appendChild(mkPieC(color, 1, draw + ' ' + (circ - draw), offset));
+            start += seg;
+          });
+        }
+      }
+      if (pieLeg) {
+        if (cats.length === 0) {
+          pieLeg.innerHTML = '<div style="font-size:12px;color:var(--text2)">No expenses this month</div>';
+        } else {
+          pieLeg.innerHTML = cats.slice(0, 6).map(function (c) {
+            var pct = Math.round((catSpend[c] / totalExp) * 100), color = CAT_COLORS[c] || '#7c6dfa';
+            return '<div class="pie-legend-row">'
+              + '<div style="width:9px;height:9px;border-radius:50%;background:' + color + ';flex-shrink:0;"></div>'
+              + '<div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">' + c.charAt(0).toUpperCase() + c.slice(1) + '</div>'
+              + '<div style="font-size:11px;font-weight:bold;white-space:nowrap;">' + pct + '%</div></div>';
+          }).join('');
+        }
+      }
+
+      /* top spending days */
+      var dayMap = {};
+      thisM.filter(function (t) { return t.type === 'debit'; }).forEach(function (t) { dayMap[t.date] = (dayMap[t.date] || 0) + t.amt; });
+      var days = Object.keys(dayMap).sort(function (a, b) { return dayMap[b] - dayMap[a]; }).slice(0, 3);
+      var tdEl = document.getElementById('repTopDays');
+      if (tdEl) {
+        tdEl.innerHTML = days.length === 0
+          ? '<div style="font-size:13px;color:var(--text2);padding:8px 0">No expense data this month</div>'
+          : days.map(function (d, i) {
+            var medals = ['🥇', '🥈', '🥉'];
+            return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+              + '<div style="font-size:22px;">' + medals[i] + '</div>'
+              + '<div style="flex:1;font-size:13px;color:var(--text2);">' + d + '</div>'
+              + '<div style="font-size:15px;font-weight:bold;color:var(--red);">' + fmtC(dayMap[d]) + '</div></div>';
+          }).join('');
+      }
+    }
+
+    /* ── SAVE TX OVERRIDE FOR RECURRING ── */
+    var _origSaveTx = saveTx;
+    function saveTx() {
+      var recToggle = document.getElementById('txRecurring');
+      var isRecurring = recToggle && recToggle.classList.contains('on');
+      // call original — we'll tag after
+      _origSaveTx();
+      // tag the most recently added transaction as recurring
+      if (isRecurring && txns.length > 0) {
+        txns[0].recurring = true;
+        saveData();
+        if (recToggle) recToggle.classList.remove('on');
+      }
+    }
+
     init();
+    loadSettings();
     setGreeting();
+    resetAutoLockTimer();
   </script>
 </body>
 
