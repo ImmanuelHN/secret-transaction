@@ -88,8 +88,8 @@ svg{display:block;}
 /* ══ HOME PAGE ═══════════════════════════════════════════ */
 .greeting{font-size:13px;color:var(--text2);margin-bottom:16px;}
 .greeting span{color:var(--text);font-weight:bold;}
-.balance-card{background:var(--accent);border-radius:18px;padding:22px 20px;margin-bottom:18px;color:#fff;position:relative;}
-.balance-card::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07);top:-60px;right:-40px;pointer-events:none;z-index:0;}
+.balance-card{background:var(--accent);border-radius:18px;padding:22px 20px;margin-bottom:18px;color:#fff;position:relative;overflow:hidden;}
+.balance-card .bal-orb{position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07);top:-60px;right:-40px;pointer-events:none;z-index:0;}
 .balance-card>*{position:relative;z-index:1;}
 .bal-label{font-size:12px;opacity:0.75;margin-bottom:6px;letter-spacing:1px;}
 .bal-amount{font-size:32px;font-weight:bold;margin-bottom:14px;}
@@ -364,6 +364,7 @@ svg{display:block;}
       </div>
 
       <div class="balance-card">
+        <div class="bal-orb"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
           <div class="bal-label" style="margin-bottom:0;">TOTAL BALANCE</div>
           <button id="balEye" onclick="toggleBalVis()"
@@ -608,6 +609,13 @@ svg{display:block;}
       <div class="section-title" style="margin-bottom:10px;">Preferences</div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;">
         <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-title">🔒 Privacy Mode</div>
+            <div class="setting-sub" id="privacySub">All balances visible</div>
+          </div>
+          <button class="toggle-sw" id="privacyToggle" onclick="toggleBalVis()"></button>
+        </div>
+        <div class="setting-row">
           <div class="setting-info"><div class="setting-title">Auto-Lock</div><div class="setting-sub" id="autoLockSub">Lock after 5 min of inactivity</div></div>
           <button class="toggle-sw on" id="autoLockToggle" onclick="toggleAutoLock()"></button>
         </div>
@@ -816,6 +824,9 @@ svg{display:block;}
     </div>
     <button class="save-btn" id="txSaveBtn" onclick="saveTx()">Save Transaction</button>
     <button class="cancel-btn" onclick="cancelTxModal()">Cancel</button>
+    <button id="txDeleteBtn" onclick="deleteTxFromModal()" style="display:none;width:100%;padding:12px;border-radius:12px;border:1px solid var(--red);background:var(--red-s);color:var(--red);font-size:14px;font-weight:bold;cursor:pointer;margin-top:4px;">
+      🗑️ Delete This Transaction
+    </button>
   </div>
 </div>
 
@@ -1187,16 +1198,22 @@ function refreshWalletScroll() {
   }).join('');
   html+='<div class="wallet-card add-card" onclick="openAddWallet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px;color:var(--accent)"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Add Wallet</span></div>';
   el.innerHTML=html;
+  // Re-apply privacy if hidden
+  if (!balVisible) {
+    var wcBals = el.querySelectorAll('.wc-bal');
+    wcBals.forEach(function(b){ b.textContent='• • • •'; });
+  }
 }
 function refreshWalletList() {
   var el=document.getElementById('walletFullList'); if(!el) return;
   if(wallets.length===0){el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 10px;opacity:0.4"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg><p>No wallets yet</p></div>';return;}
   el.innerHTML=wallets.map(function(w){
     var icon=WALLET_ICONS[w.type]||WALLET_ICONS['Cash'];
+    var balDisplay = balVisible ? fmtC(w.balance) : '• • • •';
     return '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;">'
       +'<div style="width:40px;height:40px;border-radius:10px;background:var(--accent-s);display:flex;align-items:center;justify-content:center;color:var(--accent)">'+icon+'</div>'
       +'<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">'+w.name+'</div><div style="font-size:12px;color:var(--text2)">'+w.type+'</div></div>'
-      +'<div style="font-size:16px;font-weight:bold;margin-right:8px">'+fmtC(w.balance)+'</div>'
+      +'<div class="wl-bal" style="font-size:16px;font-weight:bold;margin-right:8px">'+balDisplay+'</div>'
       +'<button onclick="openEditWallet('+w.id+')" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'
       +'</div>';
   }).join('');
@@ -1228,7 +1245,13 @@ function setCat(c,btn) {
   document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
 }
-function openAddTx() { walletSelectOptions(); openModal('modalTx'); }
+function openAddTx() {
+  walletSelectOptions();
+  var delBtn=document.getElementById('txDeleteBtn'); if(delBtn) delBtn.style.display='none';
+  var title=document.getElementById('modalTx') && document.getElementById('modalTx').querySelector('.modal-title');
+  if(title) title.textContent='Add Transaction';
+  openModal('modalTx');
+}
 function saveTx() {
   var amt=parseFloat(document.getElementById('txAmt').value), desc=document.getElementById('txDesc').value.trim();
   var wId=document.getElementById('txWallet').value, date=document.getElementById('txDate').value||new Date().toISOString().split('T')[0];
@@ -1273,13 +1296,9 @@ function renderTxItem(tx) {
     +'<div class="tx-info"><div class="tx-name">'+tx.desc+recurBadge+'</div><div class="tx-meta">'+tx.wallet+' · '+tx.date+'</div>'+noteHtml+'</div>'
     +'<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">'
     +'<div class="tx-amount '+amtCls+'">'+sign+fmtC(tx.amt)+'</div>'
-    +'<button onclick="openEditTx('+tx.id+')" title="Edit" '
-    +'style="width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">'
+    +'<button onclick="openEditTx('+tx.id+')" title="Edit transaction" '
+    +'style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">'
     +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
-    +'</button>'
-    +'<button onclick="deleteTx('+tx.id+')" title="Delete" '
-    +'style="width:28px;height:28px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">'
-    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>'
     +'</button>'
     +'</div>'
     +'</div>';
@@ -1319,13 +1338,16 @@ function searchTx() {
 
 /* ════ BALANCE ══════════════════════════════════════════════ */
 function refreshBalance() {
-  var total=wallets.reduce(function(s,w){return s+w.balance;},0);
-  var now=new Date(), thisM=txns.filter(function(t){var d=new Date(t.date);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();});
-  var income=thisM.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
-  var expense=thisM.filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+  var total  = wallets.reduce(function(s,w){return s+w.balance;},0);
+  var now    = new Date(), thisM=txns.filter(function(t){var d=new Date(t.date);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();});
+  var income = thisM.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
+  var expense= thisM.filter(function(t){return t.type==='debit'; }).reduce(function(s,t){return s+t.amt;},0);
   setText('aIncome',fmtC(income)); setText('aExpense',fmtC(expense)); setText('aSaved',fmtC(Math.max(0,income-expense)));
-  if(!balVisible) return;
+  // Always set real values first, then applyBalVis will hide if needed
   setText('totalBal',fmtC(total)); setText('homeIncome',fmtC(income)); setText('homeExpense',fmtC(expense));
+  if (!balVisible) {
+    setText('totalBal','• • • •'); setText('homeIncome','• • •'); setText('homeExpense','• • •');
+  }
 }
 
 /* ════ 7-DAY TREND ══════════════════════════════════════════ */
@@ -1854,15 +1876,41 @@ function resetConversion() {
 var balVisible = true;
 function toggleBalVis() {
   balVisible = !balVisible;
-  var eyeSvg = document.getElementById('eyeIcon');
-  if(!balVisible) {
-    setText('totalBal',   '• • • •');
-    setText('homeIncome',  '• • •');
-    setText('homeExpense', '• • •');
-    if(eyeSvg) eyeSvg.innerHTML='<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  applyBalVis();
+}
+function applyBalVis() {
+  var eyeSvg      = document.getElementById('eyeIcon');
+  var privToggle  = document.getElementById('privacyToggle');
+  var privSub     = document.getElementById('privacySub');
+  var hidden      = '• • • •';
+  var hiddenSm    = '• • •';
+
+  if (!balVisible) {
+    // Home card
+    setText('totalBal',   hidden);
+    setText('homeIncome', hiddenSm);
+    setText('homeExpense',hiddenSm);
+    // Eye icon → closed
+    if (eyeSvg) eyeSvg.innerHTML='<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+    // Wallet scroll — hide balances
+    var wcBals = document.querySelectorAll('.wc-bal');
+    wcBals.forEach(function(el){ el.setAttribute('data-orig', el.textContent); el.textContent = hidden; });
+    // Wallet full list — hide balances (More page)
+    var wlBals = document.querySelectorAll('.wl-bal');
+    wlBals.forEach(function(el){ el.setAttribute('data-orig', el.textContent); el.textContent = hidden; });
+    // More toggle sync
+    if (privToggle) privToggle.classList.add('on');
+    if (privSub)    privSub.textContent = 'Balances hidden';
   } else {
-    if(eyeSvg) eyeSvg.innerHTML='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    // Eye icon → open
+    if (eyeSvg) eyeSvg.innerHTML='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    // Refresh to restore real values
     refreshBalance();
+    refreshWalletScroll();
+    refreshWalletList();
+    // More toggle sync
+    if (privToggle) privToggle.classList.remove('on');
+    if (privSub)    privSub.textContent = 'All balances visible';
   }
 }
 
@@ -1981,13 +2029,25 @@ function openEditTx(id) {
   walletSelectOptions();
   var sel=document.getElementById('txWallet');
   for(var j=0;j<wallets.length;j++){if(wallets[j].name===tx.wallet){sel.value=wallets[j].id;break;}}
-  var btn=document.getElementById('txSaveBtn'); if(btn) btn.textContent='Update Transaction';
+  var saveBtn=document.getElementById('txSaveBtn'); if(saveBtn) saveBtn.textContent='Update Transaction';
+  var delBtn=document.getElementById('txDeleteBtn'); if(delBtn) delBtn.style.display='block';
+  document.getElementById('modalTx').querySelector('.modal-title').textContent='Edit Transaction';
   openModal('modalTx');
 }
 function cancelTxModal() {
   editingTxId=null;
-  var btn=document.getElementById('txSaveBtn'); if(btn) btn.textContent='Save Transaction';
+  var saveBtn=document.getElementById('txSaveBtn'); if(saveBtn) saveBtn.textContent='Save Transaction';
+  var delBtn=document.getElementById('txDeleteBtn'); if(delBtn) delBtn.style.display='none';
+  var title=document.getElementById('modalTx') && document.getElementById('modalTx').querySelector('.modal-title');
+  if(title) title.textContent='Add Transaction';
   closeModal('modalTx');
+}
+function deleteTxFromModal() {
+  if(!editingTxId) return;
+  var id=editingTxId;
+  cancelTxModal();
+  deleteTx(id);
+  showToast('Transaction deleted');
 }
 
 /* ════ PHASE 11 ═════════════════════════════════════════════ */
