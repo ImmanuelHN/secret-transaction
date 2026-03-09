@@ -88,8 +88,9 @@ svg{display:block;}
 /* ══ HOME PAGE ═══════════════════════════════════════════ */
 .greeting{font-size:13px;color:var(--text2);margin-bottom:16px;}
 .greeting span{color:var(--text);font-weight:bold;}
-.balance-card{background:var(--accent);border-radius:18px;padding:22px 20px;margin-bottom:18px;color:#fff;position:relative;overflow:hidden;}
-.balance-card::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07);top:-60px;right:-40px;}
+.balance-card{background:var(--accent);border-radius:18px;padding:22px 20px;margin-bottom:18px;color:#fff;position:relative;}
+.balance-card::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07);top:-60px;right:-40px;pointer-events:none;z-index:0;}
+.balance-card>*{position:relative;z-index:1;}
 .bal-label{font-size:12px;opacity:0.75;margin-bottom:6px;letter-spacing:1px;}
 .bal-amount{font-size:32px;font-weight:bold;margin-bottom:14px;}
 .bal-row{display:flex;gap:24px;}
@@ -927,7 +928,24 @@ svg{display:block;}
     <div class="form-group"><label>Service Name</label><input type="text" id="subName" placeholder="e.g. Netflix, Spotify, Amazon Prime"/></div>
     <div class="form-row">
       <div class="form-group"><label>Amount (₹)</label><input type="number" id="subAmt" placeholder="499" inputmode="decimal"/></div>
-      <div class="form-group"><label>Cycle</label><select id="subCycle"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="weekly">Weekly</option></select></div>
+      <div class="form-group">
+        <label>Cycle</label>
+        <select id="subCycle" onchange="toggleCustomCycle()">
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+          <option value="weekly">Weekly</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+    </div>
+    <div id="customCycleRow" style="display:none;margin-bottom:13px;">
+      <label style="font-size:11px;color:var(--text2);display:block;margin-bottom:5px;letter-spacing:0.5px;text-transform:uppercase;">Every how many days?</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="number" id="subCustomDays" placeholder="e.g. 90 for quarterly, 45 for 6-weekly" inputmode="numeric"
+          style="flex:1;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:14px;"/>
+        <span style="font-size:13px;color:var(--text2);white-space:nowrap;">days</span>
+      </div>
+      <div style="font-size:11px;color:var(--text2);margin-top:5px;">Examples: 30=monthly, 90=quarterly, 120=4-monthly, 180=half-yearly</div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Next Due Date</label><input type="date" id="subDue"/></div>
@@ -1249,15 +1267,22 @@ function saveTx() {
 function renderTxItem(tx) {
   var icon=CAT_ICONS[tx.cat]||CAT_ICONS.other, sign=tx.type==='debit'?'−':'+', amtCls=tx.type==='debit'?'debit':'credit';
   var noteHtml=tx.notes?'<div class="tx-notes">'+tx.notes+'</div>':'';
-  var recurBadge=tx.recurring?'<span class="tx-recurring">↻ recurring</span>':'';
+  var recurBadge=tx.recurring?'<span class="tx-recurring">↻</span>':'';
   return '<div class="tx-item" id="tx'+tx.id+'">'
     +'<div class="tx-icon cat-'+tx.cat+'">'+icon+'</div>'
     +'<div class="tx-info"><div class="tx-name">'+tx.desc+recurBadge+'</div><div class="tx-meta">'+tx.wallet+' · '+tx.date+'</div>'+noteHtml+'</div>'
-    +'<div class="tx-amount '+amtCls+'" onclick="toggleTxDel('+tx.id+')">'+sign+fmtC(tx.amt)+'</div>'
-    +'<button class="tx-del-btn" style="width:90px;flex-direction:row;gap:4px;" onclick="event.stopPropagation();">'
-    +'<span onclick="openEditTx('+tx.id+')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</span>'
-    +'<span onclick="deleteTx('+tx.id+')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>Del</span>'
-    +'</button></div>';
+    +'<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">'
+    +'<div class="tx-amount '+amtCls+'">'+sign+fmtC(tx.amt)+'</div>'
+    +'<button onclick="openEditTx('+tx.id+')" title="Edit" '
+    +'style="width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+    +'</button>'
+    +'<button onclick="deleteTx('+tx.id+')" title="Delete" '
+    +'style="width:28px;height:28px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>'
+    +'</button>'
+    +'</div>'
+    +'</div>';
 }
 function toggleTxDel(id) { var el=document.getElementById('tx'+id); if(el) el.classList.toggle('show-del'); }
 function deleteTx(id) {
@@ -1483,25 +1508,42 @@ var SUB_ICONS={
   other:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
 };
 var SUB_COLORS={entertainment:'#a855f7',utilities:'#eab308',health:'#14b8a6',shopping:'#ec4899',other:'#7c6dfa'};
+function toggleCustomCycle() {
+  var cycle = document.getElementById('subCycle').value;
+  var row   = document.getElementById('customCycleRow');
+  if (row) row.style.display = (cycle === 'custom') ? 'block' : 'none';
+}
 function openAddSub() {
   document.getElementById('editSubId').value=''; document.getElementById('subName').value='';
   document.getElementById('subAmt').value=''; document.getElementById('subCycle').value='monthly';
   document.getElementById('subCat').value='entertainment';
+  var row = document.getElementById('customCycleRow'); if(row) row.style.display='none';
+  var cd  = document.getElementById('subCustomDays');  if(cd)  cd.value='';
   try { document.getElementById('subDue').valueAsDate=new Date(); } catch(e) {}
   openModal('modalSub');
 }
 function saveSub() {
-  var name=document.getElementById('subName').value.trim(), amt=parseFloat(document.getElementById('subAmt').value)||0;
-  var cycle=document.getElementById('subCycle').value, due=document.getElementById('subDue').value||new Date().toISOString().split('T')[0];
-  var cat=document.getElementById('subCat').value;
-  if(!name){showToast('Enter service name');return;} if(amt<=0){showToast('Enter a valid amount');return;}
-  var editId=document.getElementById('editSubId').value;
-  if(editId) {
-    var id=parseInt(editId);
-    for(var i=0;i<subs.length;i++){if(subs[i].id===id){subs[i].name=name;subs[i].amt=amt;subs[i].cycle=cycle;subs[i].due=due;subs[i].cat=cat;break;}}
+  var name  = document.getElementById('subName').value.trim();
+  var amt   = parseFloat(document.getElementById('subAmt').value)||0;
+  var cycle = document.getElementById('subCycle').value;
+  var due   = document.getElementById('subDue').value||new Date().toISOString().split('T')[0];
+  var cat   = document.getElementById('subCat').value;
+  var customDays = 0;
+  if (cycle === 'custom') {
+    customDays = parseInt(document.getElementById('subCustomDays').value)||0;
+    if (customDays < 1) { showToast('Enter number of days for custom cycle'); return; }
+  }
+  if (!name) { showToast('Enter service name'); return; }
+  if (amt <= 0) { showToast('Enter a valid amount'); return; }
+  var editId = document.getElementById('editSubId').value;
+  if (editId) {
+    var id = parseInt(editId);
+    for (var i=0; i<subs.length; i++) {
+      if (subs[i].id===id) { subs[i].name=name; subs[i].amt=amt; subs[i].cycle=cycle; subs[i].customDays=customDays; subs[i].due=due; subs[i].cat=cat; break; }
+    }
     showToast('Subscription updated');
   } else {
-    subs.push({id:Date.now(),name:name,amt:amt,cycle:cycle,due:due,cat:cat,active:true});
+    subs.push({id:Date.now(),name:name,amt:amt,cycle:cycle,customDays:customDays,due:due,cat:cat,active:true});
     showToast('Subscription added');
   }
   saveData(); closeModal('modalSub'); refreshSubsPage(); refreshAll();
@@ -1512,9 +1554,26 @@ function editSub(id) {
   document.getElementById('editSubId').value=id; document.getElementById('subName').value=s.name;
   document.getElementById('subAmt').value=s.amt; document.getElementById('subCycle').value=s.cycle;
   document.getElementById('subDue').value=s.due; document.getElementById('subCat').value=s.cat;
+  var row = document.getElementById('customCycleRow');
+  var cd  = document.getElementById('subCustomDays');
+  if (s.cycle==='custom') { if(row) row.style.display='block'; if(cd) cd.value=s.customDays||''; }
+  else { if(row) row.style.display='none'; }
   openModal('modalSub');
 }
-function getMonthlyAmt(s) { if(s.cycle==='monthly') return s.amt; if(s.cycle==='yearly') return Math.round(s.amt/12); if(s.cycle==='weekly') return Math.round(s.amt*4.33); return s.amt; }
+function getCycleLabel(s) {
+  if (s.cycle==='monthly') return 'Monthly';
+  if (s.cycle==='yearly')  return 'Yearly';
+  if (s.cycle==='weekly')  return 'Weekly';
+  if (s.cycle==='custom')  return 'Every '+(s.customDays||'?')+'d';
+  return s.cycle;
+}
+function getMonthlyAmt(s) {
+  if (s.cycle==='monthly') return s.amt;
+  if (s.cycle==='yearly')  return Math.round(s.amt/12);
+  if (s.cycle==='weekly')  return Math.round(s.amt*4.33);
+  if (s.cycle==='custom' && s.customDays > 0) return Math.round(s.amt * (30/s.customDays));
+  return s.amt;
+}
 function daysUntil(dateStr) { var now=new Date(); now.setHours(0,0,0,0); var d=new Date(dateStr); d.setHours(0,0,0,0); return Math.round((d-now)/86400000); }
 function payNow(id) {
   var s=null; for(var i=0;i<subs.length;i++){if(subs[i].id===id){s=subs[i];break;}} if(!s) return;
@@ -1522,9 +1581,10 @@ function payNow(id) {
   wallets[0].balance-=s.amt;
   txns.unshift({id:Date.now(),type:'debit',cat:'bills',amt:s.amt,desc:s.name+' subscription',wallet:wallets[0].name,date:new Date().toISOString().split('T')[0],notes:'Auto from subscriptions'});
   var due=new Date(s.due);
-  if(s.cycle==='monthly') due.setMonth(due.getMonth()+1);
-  else if(s.cycle==='yearly') due.setFullYear(due.getFullYear()+1);
-  else if(s.cycle==='weekly') due.setDate(due.getDate()+7);
+  if (s.cycle==='monthly')     due.setMonth(due.getMonth()+1);
+  else if (s.cycle==='yearly') due.setFullYear(due.getFullYear()+1);
+  else if (s.cycle==='weekly') due.setDate(due.getDate()+7);
+  else if (s.cycle==='custom' && s.customDays>0) due.setDate(due.getDate()+s.customDays);
   s.due=due.toISOString().split('T')[0];
   saveData(); showToast(fmtC(s.amt)+' paid for '+s.name); refreshSubsPage(); refreshAll();
 }
@@ -1540,7 +1600,7 @@ function refreshSubsPage() {
       var days=daysUntil(s.due), badge=days<0?'Overdue':days===0?'Today':'In '+days+'d', bColor=days<=0?'var(--red)':days<=3?'#f59e0b':'var(--green)', clr=SUB_COLORS[s.cat]||'#7c6dfa';
       return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
         +'<div style="width:40px;height:40px;border-radius:12px;background:'+clr+'22;color:'+clr+';display:flex;align-items:center;justify-content:center;flex-shrink:0">'+(SUB_ICONS[s.cat]||SUB_ICONS.other)+'</div>'
-        +'<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">'+s.name+'</div><div style="font-size:12px;color:var(--text2)">'+s.cycle+' · '+s.due+'</div></div>'
+        +'<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">'+s.name+'</div><div style="font-size:12px;color:var(--text2)">'+getCycleLabel(s)+' · '+s.due+'</div></div>'
         +'<div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:bold"'+fmtC(s.amt)+'</div><div style="font-size:11px;font-weight:bold;color:'+bColor+'">'+badge+'</div></div></div>';
     }).join('');
   }
