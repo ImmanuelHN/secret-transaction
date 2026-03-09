@@ -624,6 +624,21 @@ svg{display:block;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text2)"><path d="M9 18l6-6-6-6"/></svg>
         </div>
       </div>
+      <!-- notifications -->
+      <div class="section-title" style="margin-bottom:12px;">Notifications</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;">
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-title">🔔 Push Notifications</div>
+            <div class="setting-sub" id="notifStatusLabel">Tap to enable alerts</div>
+          </div>
+          <button class="toggle-sw" id="notifToggle" onclick="requestNotifPermission()"></button>
+        </div>
+        <div style="padding:10px 16px 14px;font-size:11px;color:var(--text2);line-height:1.6;">
+          Alerts for: subscription due dates · warranty expiry · wishlist cooloff done · budget exceeded · debt reminders
+        </div>
+      </div>
+
       <!-- data -->
       <div class="section-title" style="margin-bottom:12px;">Data</div>
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;">
@@ -632,6 +647,17 @@ svg{display:block;}
           <span style="flex:1;font-size:14px;">Export Transactions (CSV)</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text2)"><path d="M9 18l6-6-6-6"/></svg>
         </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="exportFullBackup()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--accent)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div style="flex:1;"><div style="font-size:14px;">Export Full Backup (JSON)</div><div style="font-size:11px;color:var(--text2);">All data — wallets, transactions, goals, subs, debts…</div></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text2)"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="document.getElementById('importFileInput').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--accent)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 5 17 10"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="flex:1;"><div style="font-size:14px;">Restore from Backup (JSON)</div><div style="font-size:11px;color:var(--text2);">Select a backup file to restore all data</div></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text2)"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importBackup(this)"/>
         <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;" onclick="clearAllData()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--red)"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>
           <span style="flex:1;font-size:14px;color:var(--red);">Clear All Data</span>
@@ -1379,6 +1405,7 @@ function unlock() {
   document.getElementById('fabCenter').classList.add('show');
   refreshAll();
   refreshSafeToSpend();
+  setTimeout(runNotificationChecks, 1500); // run checks 1.5s after unlock
 }
 function lockApp() {
   attempt=''; newBuf=''; waiting=false; mode=stored?'enter':'set'; reset();
@@ -1404,7 +1431,7 @@ function goPage(name) {
   var fab=document.getElementById('fabCenter');
   if(fab){ if(name==='Home'||name==='Tx') fab.classList.add('show'); else fab.classList.remove('show'); }
   if(name==='Analytics') refreshAnalytics();
-  if(name==='More')      refreshWalletList();
+  if(name==='More')      { refreshWalletList(); updateNotifUI(); }
   if(name==='Budget')    refreshBudgetPage();
   if(name==='Goals')     refreshGoalsPage();
   if(name==='Subs')      { refreshSubsPage(); setTimeout(renderSubDetector, 100); }
@@ -3085,6 +3112,178 @@ function refreshWarrantyPage() {
       +'<button onclick="deleteWarranty('+w.id+')" style="padding:6px 10px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);font-size:12px;cursor:pointer;">✕</button>'
       +'</div></div>';
   }).join('');
+}
+
+/* ════ PHASE 17 — Notifications + Backup & Restore ══════════ */
+
+/* ── WEB NOTIFICATIONS ── */
+function updateNotifUI() {
+  var toggle = document.getElementById('notifToggle');
+  var label  = document.getElementById('notifStatusLabel');
+  if (!('Notification' in window)) {
+    if (label) label.textContent = 'Not supported on this browser';
+    return;
+  }
+  var perm = Notification.permission;
+  if (toggle) toggle.classList.toggle('on', perm === 'granted');
+  if (label)  label.textContent = perm === 'granted' ? 'Enabled — you will receive alerts' :
+                                   perm === 'denied'  ? 'Blocked — enable in browser settings' :
+                                                        'Tap to enable push alerts';
+}
+
+function requestNotifPermission() {
+  if (!('Notification' in window)) { showToast('Notifications not supported'); return; }
+  if (Notification.permission === 'granted') {
+    showToast('Notifications already enabled!'); return;
+  }
+  if (Notification.permission === 'denied') {
+    showToast('Notifications blocked. Please enable in your browser settings.'); return;
+  }
+  Notification.requestPermission().then(function(perm) {
+    updateNotifUI();
+    if (perm === 'granted') {
+      sendNotif('sXt Notifications Enabled 🔔', 'You will now receive alerts for subscriptions, warranties, wishlists and more!', '🔔');
+      showToast('Notifications enabled!');
+    } else {
+      showToast('Notifications permission denied');
+    }
+  });
+}
+
+function sendNotif(title, body, icon) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    new Notification(title, {
+      body:  body,
+      icon:  'logo.png',
+      badge: 'logo.png',
+      tag:   title, // prevents duplicate notifications
+      silent: false
+    });
+  } catch(e) { /* notification failed silently */ }
+}
+
+/* ── SMART NOTIFICATION CHECKS — runs on every app open ── */
+function runNotificationChecks() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  var today = new Date(); today.setHours(0,0,0,0);
+
+  /* 1. Subscription due alerts */
+  subs.filter(function(s){ return s.active !== false; }).forEach(function(s) {
+    var days = daysUntil(s.due);
+    if (days === 1) sendNotif('Subscription Due Tomorrow 💳', s.name + ' — ' + fmtC(s.amt) + ' due tomorrow', '💳');
+    else if (days === 0) sendNotif('Subscription Due Today! 💳', s.name + ' — ' + fmtC(s.amt) + ' is due today. Tap Pay in Subs tab.', '💳');
+    else if (days < 0)  sendNotif('Overdue Subscription ⚠️', s.name + ' was due ' + Math.abs(days) + ' day(s) ago!', '⚠️');
+  });
+
+  /* 2. Warranty expiry alerts */
+  warranties.forEach(function(w) {
+    var exp = new Date(w.expiry); exp.setHours(0,0,0,0);
+    var days = Math.round((exp - today) / 86400000);
+    if (days === 30) sendNotif('Warranty Expiring in 30 Days 🛡️', w.emoji + ' ' + w.name + ' — get it checked while still under warranty!', '🛡️');
+    else if (days === 7) sendNotif('Warranty Expiring in 7 Days! 🛡️', w.emoji + ' ' + w.name + ' — only 7 days of warranty left!', '🛡️');
+    else if (days === 1) sendNotif('Warranty Expires Tomorrow! ⚠️', w.emoji + ' ' + w.name + ' — last day of warranty!', '⚠️');
+  });
+
+  /* 3. Wishlist cooloff done */
+  wishlist.forEach(function(w) {
+    if (w.status === 'waiting' && Date.now() >= w.unlockAt) {
+      sendNotif('Wishlist Item Ready to Decide 🧊', w.emoji + ' ' + w.name + ' — your cooling-off period is over. Still want it?', '🧊');
+      w.status = 'unlocked'; // mark as notified
+    }
+  });
+
+  /* 4. Budget exceeded */
+  var now2 = new Date();
+  var thisM = txns.filter(function(t){
+    var d=new Date(t.date);
+    return d.getFullYear()===now2.getFullYear() && d.getMonth()===now2.getMonth() && !t.isTransfer;
+  });
+  budgets.forEach(function(b) {
+    var spent = thisM.filter(function(t){return t.type==='debit'&&t.cat===b.cat;}).reduce(function(s,t){return s+t.amt;},0);
+    if (spent > b.limit) {
+      sendNotif('Budget Exceeded 🚨', (b.label||b.cat)+' budget exceeded by '+fmtC(spent-b.limit)+'. Review spending in Budget tab.', '🚨');
+    }
+  });
+
+  /* 5. Daily safe-to-spend (morning check) */
+  var totalLimit = budgets.reduce(function(s,b){return s+b.limit;},0);
+  if (totalLimit > 0) {
+    var spent2 = thisM.filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+    var remain = Math.max(0, totalLimit - spent2);
+    var daysInM = new Date(now2.getFullYear(), now2.getMonth()+1, 0).getDate();
+    var daysLeft2 = Math.max(1, daysInM - now2.getDate() + 1);
+    var daily = Math.round(remain / daysLeft2);
+    var lastNotifDay = '';
+    try { lastNotifDay = localStorage.getItem('sxt_last_daily_notif')||''; } catch(e){}
+    var todayStr = now2.toISOString().split('T')[0];
+    if (lastNotifDay !== todayStr && daily >= 0) {
+      sendNotif('Your Safe to Spend Today 💰', 'You can safely spend ' + fmtC(daily) + ' today without breaking your budget.', '💰');
+      try { localStorage.setItem('sxt_last_daily_notif', todayStr); } catch(e){}
+    }
+  }
+
+  saveData(); // save any status changes (wishlist unlocked)
+}
+
+/* ── JSON BACKUP ── */
+function exportFullBackup() {
+  var data = {
+    version:    17,
+    exportedAt: new Date().toISOString(),
+    app:        'sXt Secret Transactions',
+    wallets:    wallets,
+    txns:       txns,
+    budgets:    budgets,
+    goals:      goals,
+    subs:       subs,
+    debts:      debts,
+    wishlist:   wishlist,
+    warranties: warranties
+  };
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], {type:'application/json'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href   = url;
+  a.download = 'sxt-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup downloaded! Save it to Google Drive or email it to yourself.');
+  sendNotif('sXt Backup Complete ✅', 'Your backup file has been downloaded. Store it safely!', '✅');
+}
+
+/* ── JSON RESTORE ── */
+function importBackup(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  if (!confirm('This will REPLACE all current data with the backup. Are you sure?')) {
+    input.value = ''; return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      if (!data.app || !data.wallets) { showToast('Invalid backup file'); return; }
+      // Restore all data
+      wallets    = data.wallets    || [];
+      txns       = data.txns       || [];
+      budgets    = data.budgets    || [];
+      goals      = data.goals      || [];
+      subs       = data.subs       || [];
+      debts      = data.debts      || [];
+      wishlist   = data.wishlist   || [];
+      warranties = data.warranties || [];
+      saveData();
+      showToast('✅ Backup restored! ' + txns.length + ' transactions, ' + wallets.length + ' wallets loaded.');
+      refreshAll();
+      if (curPage === 'More') refreshWalletList();
+    } catch(err) {
+      showToast('Failed to restore — file may be corrupt');
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
 }
 
 init();
