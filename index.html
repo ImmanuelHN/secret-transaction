@@ -280,6 +280,26 @@ svg{display:block;}
 .toggle-sw::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left 0.2s;}
 .toggle-sw.on::after{left:23px;}
 .tx-recurring{font-size:9px;background:var(--accent-s);color:var(--accent);border-radius:4px;padding:1px 5px;margin-left:4px;}
+/* ══ PHASE 15 — Wishlist Vault ════════════════════════════ */
+.wish-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
+.wish-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);transition:background 0.4s;}
+.wish-card.unlocked::before{background:var(--green);}
+.wish-card.bought::before{background:var(--border);}
+.wish-emoji{font-size:32px;line-height:1;margin-bottom:8px;}
+.wish-name{font-size:16px;font-weight:700;margin-bottom:2px;}
+.wish-price{font-size:13px;color:var(--text2);margin-bottom:6px;}
+.wish-reason{font-size:12px;color:var(--text2);font-style:italic;margin-bottom:10px;}
+.wish-progress-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px;}
+.wish-progress-fill{height:100%;border-radius:3px;transition:width 0.8s,background 0.4s;}
+.wish-timer{font-size:11px;font-weight:600;margin-bottom:12px;}
+.wish-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.wish-btn{padding:8px 14px;border-radius:10px;border:none;font-size:12px;font-weight:600;cursor:pointer;}
+.wish-btn-buy{background:var(--green-s);color:var(--green);border:1px solid var(--green);}
+.wish-btn-skip{background:var(--red-s);color:var(--red);border:1px solid var(--red);}
+.wish-btn-edit{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.wish-ring{position:relative;width:52px;height:52px;flex-shrink:0;}
+.wish-ring svg{width:52px;height:52px;}
+.wish-ring-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;}
   </style>
 </head>
 <body>
@@ -481,6 +501,8 @@ svg{display:block;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--red)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Reports</button>
         <button onclick="goPage('Debt')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#f59e0b"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Debts</button>
+        <button onclick="goPage('Wishlist')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#ec4899"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Wishlist</button>
       </div>
       <!-- home currency -->
       <div class="section-title" style="margin-bottom:10px;">Home Currency</div>
@@ -793,6 +815,42 @@ svg{display:block;}
       <div id="debtList"></div>
     </div>
 
+    <!-- ═══ WISHLIST VAULT PAGE ═══ -->
+    <div class="page" id="pageWishlist">
+      <button class="back-btn" onclick="goPage('More')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+      </button>
+      <div class="page-title">Wishlist Vault 🧊</div>
+      <div class="page-sub">Cool off before you buy</div>
+
+      <!-- info banner -->
+      <div style="background:var(--accent-s);border:1px solid var(--accent);border-radius:12px;padding:13px 15px;margin-bottom:18px;font-size:12px;color:var(--text2);line-height:1.6;">
+        <b style="color:var(--text);">How it works:</b> Add something you want to buy. A cooling-off timer starts. Once it expires, the app asks if you still want it. Studies show 70% of impulse buys are regretted — this helps you decide wisely. 🧠
+      </div>
+
+      <!-- stats bar -->
+      <div style="display:flex;gap:10px;margin-bottom:18px;">
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--text2);letter-spacing:0.5px;margin-bottom:3px;">COOLING OFF</div>
+          <div id="wishCountActive" style="font-size:20px;font-weight:bold;color:var(--accent);">0</div>
+        </div>
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--text2);letter-spacing:0.5px;margin-bottom:3px;">UNLOCKED</div>
+          <div id="wishCountUnlocked" style="font-size:20px;font-weight:bold;color:var(--green);">0</div>
+        </div>
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--text2);letter-spacing:0.5px;margin-bottom:3px;">SAVED</div>
+          <div id="wishAmtSaved" style="font-size:20px;font-weight:bold;color:var(--green);">₹0</div>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-bottom:14px;">
+        <div class="section-title">My Wishlist</div>
+        <button class="section-link" onclick="openAddWishlist()">+ Add Item</button>
+      </div>
+      <div id="wishlistItems"></div>
+    </div>
+
   </div><!-- /pages -->
 
   <!-- bottom nav -->
@@ -1025,6 +1083,45 @@ svg{display:block;}
   </div>
 </div>
 
+<!-- ═══ MODAL: ADD / EDIT WISHLIST ITEM ═══ -->
+<div class="modal-overlay" id="modalWishlist">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="wishModalTitle">Add to Wishlist</div>
+    <input type="hidden" id="editWishId" value=""/>
+    <div style="display:flex;gap:12px;align-items:flex-start;">
+      <div class="form-group" style="flex:1;">
+        <label>Item Name</label>
+        <input type="text" id="wishName" placeholder="e.g. Sony headphones, PS5…"/>
+      </div>
+      <div class="form-group" style="width:64px;">
+        <label>Emoji</label>
+        <input type="text" id="wishEmoji" placeholder="🛒" maxlength="2"
+          style="font-size:22px;text-align:center;padding:10px 6px;"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Price (approx)</label><input type="number" id="wishPrice" placeholder="4999" inputmode="decimal"/></div>
+      <div class="form-group">
+        <label>Cooling-off Period</label>
+        <select id="wishCooloff">
+          <option value="1">1 day</option>
+          <option value="2" selected>2 days</option>
+          <option value="7">7 days</option>
+          <option value="14">14 days</option>
+          <option value="30">30 days</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Why do you want it? <span style="color:var(--text2);font-weight:normal;">(helps you decide later)</span></label>
+      <input type="text" id="wishReason" placeholder="e.g. For gaming, upgrade from old one…"/>
+    </div>
+    <button class="save-btn" onclick="saveWishlistItem()">Start Countdown ⏳</button>
+    <button class="cancel-btn" onclick="closeModal('modalWishlist')">Cancel</button>
+  </div>
+</div>
+
 <!-- ═══ MODAL: CHANGE PIN ═══ -->
 <div class="modal-overlay" id="modalChangePin">
   <div class="modal-sheet">
@@ -1042,7 +1139,7 @@ svg{display:block;}
 
 <script>
 /* ════ DATA ════════════════════════════════════════════════ */
-var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [];
+var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [], wishlist = [];
 
 function saveData() {
   try {
@@ -1051,7 +1148,8 @@ function saveData() {
     localStorage.setItem('sxt_budgets', JSON.stringify(budgets));
     localStorage.setItem('sxt_goals',   JSON.stringify(goals));
     localStorage.setItem('sxt_subs',    JSON.stringify(subs));
-    localStorage.setItem('sxt_debts',   JSON.stringify(debts));
+    localStorage.setItem('sxt_debts',    JSON.stringify(debts));
+    localStorage.setItem('sxt_wishlist', JSON.stringify(wishlist));
   } catch(e) {}
 }
 function loadData() {
@@ -1062,6 +1160,7 @@ function loadData() {
     if(w) wallets=JSON.parse(w); if(t) txns=JSON.parse(t);
     if(b) budgets=JSON.parse(b); if(g) goals=JSON.parse(g);
     if(s) subs=JSON.parse(s);   if(d) debts=JSON.parse(d);
+    var wl=localStorage.getItem('sxt_wishlist'); if(wl) wishlist=JSON.parse(wl);
   } catch(e) {}
 }
 
@@ -1259,6 +1358,7 @@ function goPage(name) {
   if(name==='Reports')   refreshReportsPage();
   if(name==='Home')      refreshSafeToSpend();
   if(name==='Debt')      refreshDebtPage();
+  if(name==='Wishlist')  refreshWishlistPage();
 }
 
 /* ════ THEME ════════════════════════════════════════════════ */
@@ -2624,6 +2724,179 @@ function refreshDebtPage() {
           +'<button onclick="deleteDebt('+d.id+')" style="padding:7px 10px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);font-size:12px;cursor:pointer;margin-left:auto;">✕</button>'
         ))
       +'</div></div>';
+  }).join('');
+}
+
+/* ════ PHASE 15 — Wishlist / Impulse Buy Vault ═══════════════ */
+
+function openAddWishlist() {
+  document.getElementById('editWishId').value = '';
+  document.getElementById('wishName').value   = '';
+  document.getElementById('wishEmoji').value  = '🛒';
+  document.getElementById('wishPrice').value  = '';
+  document.getElementById('wishCooloff').value= '2';
+  document.getElementById('wishReason').value = '';
+  document.getElementById('wishModalTitle').textContent = 'Add to Wishlist';
+  openModal('modalWishlist');
+}
+
+function saveWishlistItem() {
+  var name    = document.getElementById('wishName').value.trim();
+  var emoji   = document.getElementById('wishEmoji').value || '🛒';
+  var price   = parseFloat(document.getElementById('wishPrice').value) || 0;
+  var cooloff = parseInt(document.getElementById('wishCooloff').value) || 2;
+  var reason  = document.getElementById('wishReason').value.trim();
+  if (!name) { showToast('Enter an item name'); return; }
+
+  var editId = document.getElementById('editWishId').value;
+  if (editId) {
+    var id = parseInt(editId);
+    for (var i=0; i<wishlist.length; i++) {
+      if (wishlist[i].id === id) {
+        wishlist[i].name=name; wishlist[i].emoji=emoji; wishlist[i].price=price; wishlist[i].reason=reason;
+        break;
+      }
+    }
+    showToast('Wishlist item updated');
+  } else {
+    var now     = Date.now();
+    var unlockAt = now + (cooloff * 86400000);
+    wishlist.unshift({
+      id: now, name:name, emoji:emoji, price:price, reason:reason,
+      cooloffDays: cooloff, addedAt: now, unlockAt: unlockAt,
+      status: 'waiting' // 'waiting' | 'unlocked' | 'bought' | 'skipped'
+    });
+    showToast('Added! Cooling off for ' + cooloff + ' day' + (cooloff>1?'s':'') + ' 🧊');
+  }
+  saveData(); closeModal('modalWishlist'); refreshWishlistPage();
+}
+
+function editWishlistItem(id) {
+  var item = null;
+  for (var i=0; i<wishlist.length; i++) { if (wishlist[i].id===id){item=wishlist[i];break;} }
+  if (!item) return;
+  document.getElementById('editWishId').value  = id;
+  document.getElementById('wishName').value    = item.name;
+  document.getElementById('wishEmoji').value   = item.emoji;
+  document.getElementById('wishPrice').value   = item.price || '';
+  document.getElementById('wishCooloff').value = item.cooloffDays || 2;
+  document.getElementById('wishReason').value  = item.reason || '';
+  document.getElementById('wishModalTitle').textContent = 'Edit Item';
+  openModal('modalWishlist');
+}
+
+function markWishBought(id) {
+  for (var i=0; i<wishlist.length; i++) {
+    if (wishlist[i].id===id) { wishlist[i].status='bought'; break; }
+  }
+  saveData(); refreshWishlistPage();
+  showToast('Marked as bought 🎉 Great choice!');
+}
+
+function skipWishItem(id) {
+  var item = null;
+  for (var i=0; i<wishlist.length; i++) { if (wishlist[i].id===id){item=wishlist[i];break;} }
+  if (!item) return;
+  var saved = item.price || 0;
+  for (var j=0; j<wishlist.length; j++) {
+    if (wishlist[j].id===id) { wishlist[j].status='skipped'; break; }
+  }
+  saveData(); refreshWishlistPage();
+  showToast('Great discipline! ' + (saved>0?'You saved '+fmtC(saved)+'!':'Skipped.'));
+}
+
+function deleteWishItem(id) {
+  wishlist = wishlist.filter(function(w){ return w.id!==id; });
+  saveData(); refreshWishlistPage(); showToast('Removed');
+}
+
+function refreshWishlistPage() {
+  var el = document.getElementById('wishlistItems'); if (!el) return;
+
+  var now = Date.now();
+  // auto-upgrade status: waiting → unlocked when timer done
+  wishlist.forEach(function(w) {
+    if (w.status==='waiting' && now >= w.unlockAt) w.status='unlocked';
+  });
+
+  var active   = wishlist.filter(function(w){ return w.status==='waiting'; });
+  var unlocked = wishlist.filter(function(w){ return w.status==='unlocked'; });
+  var saved    = wishlist.filter(function(w){ return w.status==='skipped'; })
+                         .reduce(function(s,w){ return s+(w.price||0); },0);
+
+  setText('wishCountActive',   active.length);
+  setText('wishCountUnlocked', unlocked.length);
+  setText('wishAmtSaved',      fmtC(saved));
+
+  if (wishlist.length === 0) {
+    el.innerHTML = '<div class="empty-state" style="padding:40px 0;">'
+      + '<div style="font-size:48px;margin-bottom:14px;text-align:center;">🧊</div>'
+      + '<p>Your wishlist is empty.<br/>Add something you\'re tempted to buy!</p></div>';
+    return;
+  }
+
+  el.innerHTML = wishlist.map(function(w) {
+    var elapsed  = Math.min(now - w.addedAt, w.unlockAt - w.addedAt);
+    var total    = w.unlockAt - w.addedAt;
+    var pct      = total > 0 ? Math.round((elapsed / total) * 100) : 100;
+    pct          = Math.min(Math.max(pct, 0), 100);
+    var msLeft   = Math.max(0, w.unlockAt - now);
+    var daysLeft = Math.floor(msLeft / 86400000);
+    var hrsLeft  = Math.floor((msLeft % 86400000) / 3600000);
+    var timeStr  = daysLeft > 0 ? daysLeft+'d '+hrsLeft+'h left' : hrsLeft > 0 ? hrsLeft+'h left' : 'A few minutes left';
+
+    var isBought  = w.status === 'bought';
+    var isSkipped = w.status === 'skipped';
+    var isUnlocked= w.status === 'unlocked';
+    var isWaiting = w.status === 'waiting';
+
+    var ringColor = isBought  ? 'var(--green)' :
+                   isSkipped ? 'var(--border)' :
+                   isUnlocked? 'var(--green)'  :
+                   pct >= 75 ? '#f59e0b'       : 'var(--accent)';
+
+    var fillColor = isUnlocked||isBought ? 'var(--green)' : isSkipped ? 'var(--border)' : pct>=75?'#f59e0b':'var(--accent)';
+    var ringCirc  = 2 * Math.PI * 20; // r=20
+    var ringDash  = ringCirc * (pct / 100);
+
+    var statusBadge = isBought  ? '<span style="font-size:11px;background:var(--green-s);color:var(--green);border-radius:6px;padding:2px 8px;font-weight:600;">✓ Bought</span>'
+                    : isSkipped ? '<span style="font-size:11px;background:var(--border);color:var(--text2);border-radius:6px;padding:2px 8px;">Skipped — '+fmtC(w.price||0)+' saved!</span>'
+                    : isUnlocked? '<span style="font-size:11px;background:var(--green-s);color:var(--green);border-radius:6px;padding:2px 8px;font-weight:600;">🟢 Cooled off! Still want it?</span>'
+                    : '<span style="font-size:11px;background:var(--accent-s);color:var(--accent);border-radius:6px;padding:2px 8px;">⏳ '+timeStr+'</span>';
+
+    var cardClass = 'wish-card' + (isUnlocked?' unlocked':'') + (isBought||isSkipped?' bought':'');
+
+    return '<div class="'+cardClass+'" style="opacity:'+(isBought||isSkipped?'0.65':'1')+'">'
+      // top row: emoji + info + ring
+      + '<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">'
+      + '<div style="font-size:34px;line-height:1;flex-shrink:0;">'+w.emoji+'</div>'
+      + '<div style="flex:1;min-width:0;">'
+      + '<div class="wish-name">'+w.name+'</div>'
+      + (w.price>0 ? '<div class="wish-price">'+fmtC(w.price)+'</div>' : '')
+      + (w.reason  ? '<div class="wish-reason">'+w.reason+'</div>' : '')
+      + statusBadge
+      + '</div>'
+      // countdown ring
+      + '<div class="wish-ring">'
+      + '<svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="20" fill="none" stroke="var(--border)" stroke-width="5"/>'
+      + '<circle cx="23" cy="23" r="20" fill="none" stroke="'+ringColor+'" stroke-width="5"'
+      + ' stroke-dasharray="'+ringDash+' '+(ringCirc-ringDash)+'"'
+      + ' stroke-dashoffset="'+(ringCirc*0.25)+'" transform="rotate(-90 23 23)"/></svg>'
+      + '<div class="wish-ring-txt" style="color:'+ringColor+'">'+(isBought?'✓':pct+'%')+'</div>'
+      + '</div>'
+      + '</div>'
+      // progress bar
+      + (isWaiting||isUnlocked ? '<div class="wish-progress-track"><div class="wish-progress-fill" style="width:'+pct+'%;background:'+fillColor+'"></div></div>' : '')
+      + (isWaiting ? '<div style="font-size:11px;color:var(--text2);margin-bottom:10px;">'+w.cooloffDays+'-day cooling off · added '+new Date(w.addedAt).toLocaleDateString('en-IN')+'</div>' : '')
+      // action buttons
+      + '<div class="wish-actions">'
+      + (isUnlocked ? '<button class="wish-btn wish-btn-buy" onclick="markWishBought('+w.id+')">🎉 Buy it!</button>' : '')
+      + (isUnlocked ? '<button class="wish-btn wish-btn-skip" onclick="skipWishItem('+w.id+')">🚫 Skip & Save</button>' : '')
+      + (isWaiting  ? '<button class="wish-btn wish-btn-skip" onclick="skipWishItem('+w.id+')">Skip now</button>' : '')
+      + ((!isBought&&!isSkipped) ? '<button class="wish-btn wish-btn-edit" onclick="editWishlistItem('+w.id+')">✏️</button>' : '')
+      + '<button style="margin-left:auto;padding:8px 10px;border-radius:10px;border:none;background:var(--red-s);color:var(--red);font-size:12px;cursor:pointer;" onclick="deleteWishItem('+w.id+')">✕</button>'
+      + '</div>'
+      + '</div>';
   }).join('');
 }
 
