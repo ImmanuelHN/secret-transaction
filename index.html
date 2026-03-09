@@ -473,12 +473,14 @@ svg{display:block;}
       <!-- quick links -->
       <div class="section-title" style="margin-bottom:12px;">Quick Links</div>
       <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
-        <button onclick="goPage('Analytics')" style="flex:1;min-width:80px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+        <button onclick="goPage('Analytics')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--accent)"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</button>
-        <button onclick="goPage('Goals')" style="flex:1;min-width:80px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+        <button onclick="goPage('Goals')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--green)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Goals</button>
-        <button onclick="goPage('Reports')" style="flex:1;min-width:80px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+        <button onclick="goPage('Reports')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--red)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Reports</button>
+        <button onclick="goPage('Debt')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#f59e0b"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Debts</button>
       </div>
       <!-- home currency -->
       <div class="section-title" style="margin-bottom:10px;">Home Currency</div>
@@ -582,6 +584,14 @@ svg{display:block;}
         <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="openChangePin()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--accent)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <span style="flex:1;font-size:14px;">Change PIN</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text2)"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="resetBiometric()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--accent)"><path d="M12 10a2 2 0 0 1 2 2c0 1.5-.5 3-1.5 4.5M8.5 8.5A5 5 0 0 1 17 12c0 2-.4 3.8-1.2 5.3M6 7a7 7 0 0 1 12 5c0 2.5-.6 4.8-1.8 6.7M3.5 5.5A10 10 0 0 1 22 12c0 3-.8 5.8-2.3 8.2"/></svg>
+          <div style="flex:1;">
+            <div style="font-size:14px;">Reset Fingerprint</div>
+            <div id="bioStatusLabel" style="font-size:11px;color:var(--text2);margin-top:1px;">Tap fingerprint icon on lock screen to set up</div>
+          </div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text2)"><path d="M9 18l6-6-6-6"/></svg>
         </div>
         <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;" onclick="lockApp()">
@@ -754,6 +764,33 @@ svg{display:block;}
         <div id="repNetWorth" style="font-size:28px;font-weight:bold;color:var(--accent);">₹0</div>
         <div id="repNetSub" style="font-size:12px;color:var(--text2);margin-top:4px;"></div>
       </div>
+    </div>
+
+    <!-- ═══ DEBT TRACKER PAGE ═══ -->
+    <div class="page" id="pageDebt">
+      <button class="back-btn" onclick="goPage('More')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+      </button>
+      <div class="page-title">Debt Tracker</div>
+      <div class="page-sub">Track money lent &amp; borrowed</div>
+
+      <!-- summary cards -->
+      <div style="display:flex;gap:10px;margin-bottom:18px;">
+        <div style="flex:1;background:var(--green-s);border:1px solid var(--green);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:10px;color:var(--green);letter-spacing:0.5px;margin-bottom:4px;">THEY OWE YOU</div>
+          <div id="debtOwedToMe" style="font-size:20px;font-weight:bold;color:var(--green);">₹0</div>
+        </div>
+        <div style="flex:1;background:var(--red-s);border:1px solid var(--red);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:10px;color:var(--red);letter-spacing:0.5px;margin-bottom:4px;">YOU OWE</div>
+          <div id="debtIOwed" style="font-size:20px;font-weight:bold;color:var(--red);">₹0</div>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-bottom:12px;">
+        <div class="section-title">All Debts</div>
+        <button class="section-link" onclick="openAddDebt()">+ Add</button>
+      </div>
+      <div id="debtList"></div>
     </div>
 
   </div><!-- /pages -->
@@ -967,6 +1004,27 @@ svg{display:block;}
   </div>
 </div>
 
+<!-- ═══ MODAL: ADD/EDIT DEBT ═══ -->
+<div class="modal-overlay" id="modalDebt">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="debtModalTitle">Add Debt</div>
+    <input type="hidden" id="editDebtId" value=""/>
+    <div style="display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;">
+      <button class="type-btn active" id="debtTypeLent" onclick="setDebtType('lent')" style="flex:1;padding:10px;border:none;background:var(--green-s);color:var(--green);font-weight:bold;cursor:pointer;">💸 I Lent</button>
+      <button class="type-btn" id="debtTypeBorrow" onclick="setDebtType('borrow')" style="flex:1;padding:10px;border:none;background:none;color:var(--text2);cursor:pointer;">🤝 I Borrowed</button>
+    </div>
+    <div class="form-group"><label>Person's Name</label><input type="text" id="debtPerson" placeholder="Rahul, Priya, Ankit…"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Amount</label><input type="number" id="debtAmt" placeholder="500" inputmode="decimal"/></div>
+      <div class="form-group"><label>Date</label><input type="date" id="debtDate"/></div>
+    </div>
+    <div class="form-group"><label>Reason (optional)</label><input type="text" id="debtReason" placeholder="Lunch, Movie tickets, Petrol…"/></div>
+    <button class="save-btn" onclick="saveDebt()">Save</button>
+    <button class="cancel-btn" onclick="closeModal('modalDebt')">Cancel</button>
+  </div>
+</div>
+
 <!-- ═══ MODAL: CHANGE PIN ═══ -->
 <div class="modal-overlay" id="modalChangePin">
   <div class="modal-sheet">
@@ -984,7 +1042,7 @@ svg{display:block;}
 
 <script>
 /* ════ DATA ════════════════════════════════════════════════ */
-var wallets = [], txns = [], budgets = [], goals = [], subs = [];
+var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [];
 
 function saveData() {
   try {
@@ -993,16 +1051,17 @@ function saveData() {
     localStorage.setItem('sxt_budgets', JSON.stringify(budgets));
     localStorage.setItem('sxt_goals',   JSON.stringify(goals));
     localStorage.setItem('sxt_subs',    JSON.stringify(subs));
+    localStorage.setItem('sxt_debts',   JSON.stringify(debts));
   } catch(e) {}
 }
 function loadData() {
   try {
     var w=localStorage.getItem('sxt_wallets'), t=localStorage.getItem('sxt_txns'),
         b=localStorage.getItem('sxt_budgets'), g=localStorage.getItem('sxt_goals'),
-        s=localStorage.getItem('sxt_subs');
+        s=localStorage.getItem('sxt_subs'),    d=localStorage.getItem('sxt_debts');
     if(w) wallets=JSON.parse(w); if(t) txns=JSON.parse(t);
     if(b) budgets=JSON.parse(b); if(g) goals=JSON.parse(g);
-    if(s) subs=JSON.parse(s);
+    if(s) subs=JSON.parse(s);   if(d) debts=JSON.parse(d);
   } catch(e) {}
 }
 
@@ -1028,7 +1087,7 @@ function makeHash(pin) {
   return 'p'+Math.abs(h).toString(16);
 }
 function init() {
-  loadData(); loadHomeCurrency(); loadDisplayCurrency();
+  loadData(); loadHomeCurrency(); loadDisplayCurrency(); loadBioCredId();
   try { stored=localStorage.getItem('sxt_pin')||null; } catch(e) {}
   var t; try { t=localStorage.getItem('sxt_theme'); } catch(e) {}
   if(t) setTheme(t);
@@ -1043,34 +1102,102 @@ function tap(d) {
   if(attempt.length===4){ waiting=true; setTimeout(check,300); }
 }
 function tapDel() { if(waiting) return; attempt=attempt.slice(0,-1); paint(); }
+/* ── BIOMETRIC AUTH (WebAuthn proper register + authenticate) ── */
+var bioCredId = null; // stored as base64 in localStorage
+
+function loadBioCredId() {
+  try { var s=localStorage.getItem('sxt_biocred'); bioCredId=s||null; } catch(e){}
+}
+function saveBioCredId(id) {
+  bioCredId=id;
+  try { localStorage.setItem('sxt_biocred',id); } catch(e){}
+}
+function strToUint8(str) {
+  var b=[]; for(var i=0;i<str.length;i++) b.push(str.charCodeAt(i)&0xff); return new Uint8Array(b);
+}
+function uint8ToBase64(arr) {
+  return btoa(String.fromCharCode.apply(null,Array.from(arr)));
+}
+function base64ToUint8(b64) {
+  var s=atob(b64), a=new Uint8Array(s.length);
+  for(var i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a;
+}
+
 function tapBio() {
   if (waiting) return;
-  // Check if WebAuthn platform authenticator is available (fingerprint/face ID)
   if (!window.PublicKeyCredential) {
-    setMsg('Biometric not supported on this device','err');
-    setTimeout(function(){ reset(); setMsg(stored?'Enter your PIN':'Create a 4-digit PIN',''); }, 2000);
+    setMsg('Biometric not available — use PIN','err');
+    setTimeout(function(){ reset(); setMsg(stored?'Enter your PIN':'Create a 4-digit PIN',''); },2000);
     return;
   }
+  // Check if platform authenticator (fingerprint/face) is available
+  PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(function(available) {
+    if (!available) {
+      setMsg('No fingerprint sensor found — use PIN','err');
+      setTimeout(function(){ reset(); setMsg(stored?'Enter your PIN':'Create a 4-digit PIN',''); },2000);
+      return;
+    }
+    loadBioCredId();
+    if (bioCredId) {
+      // Already registered — authenticate
+      bioAuthenticate();
+    } else {
+      // First time — register fingerprint, then authenticate
+      bioRegister();
+    }
+  }).catch(function() {
+    setMsg('Biometric check failed — use PIN','err');
+    setTimeout(function(){ reset(); setMsg(stored?'Enter your PIN':'Create a 4-digit PIN',''); },2000);
+  });
+}
+
+function bioRegister() {
+  setMsg('Register fingerprint…','');
+  waiting = true;
+  var userId = new Uint8Array(16);
+  if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(userId);
+  navigator.credentials.create({
+    publicKey: {
+      challenge:          strToUint8('sxt-register-challenge'),
+      rp:                 { name:'sXt Finance', id: window.location.hostname||'localhost' },
+      user:               { id:userId, name:'sxt-user', displayName:'sXt User' },
+      pubKeyCredParams:   [{ type:'public-key', alg:-7 },{ type:'public-key', alg:-257 }],
+      authenticatorSelection: { authenticatorAttachment:'platform', userVerification:'required' },
+      timeout:            60000
+    }
+  }).then(function(cred) {
+    saveBioCredId(uint8ToBase64(new Uint8Array(cred.rawId)));
+    // Immediately authenticate after registering
+    bioAuthenticate();
+  }).catch(function(err) {
+    waiting = false;
+    setMsg('Fingerprint setup cancelled — use PIN','err');
+    setTimeout(function(){ reset(); setMsg(stored?'Enter your PIN':'Create a 4-digit PIN',''); },2000);
+  });
+}
+
+function bioAuthenticate() {
   setMsg('Touch the fingerprint sensor…','');
   waiting = true;
-  // Request biometric verification — no stored credential needed, just userVerification
+  loadBioCredId();
+  var credId = bioCredId ? base64ToUint8(bioCredId) : null;
+  var allowCreds = credId ? [{ type:'public-key', id:credId, transports:['internal'] }] : [];
   navigator.credentials.get({
     publicKey: {
-      challenge:          new Uint8Array(32),
-      rpId:               window.location.hostname || 'localhost',
-      allowCredentials:   [],
-      userVerification:   'required',
-      timeout:            30000
+      challenge:        strToUint8('sxt-auth-challenge'),
+      rpId:             window.location.hostname||'localhost',
+      allowCredentials: allowCreds,
+      userVerification: 'required',
+      timeout:          30000
     }
   }).then(function() {
-    dotState('ok');
-    setMsg('Fingerprint verified!', 'ok');
+    dotState('ok'); setMsg('Fingerprint verified! ✓','ok');
     setTimeout(unlock, 500);
   }).catch(function(err) {
     waiting = false;
-    var msg = err && err.name === 'NotAllowedError' ? 'Biometric cancelled — use PIN' : 'Biometric failed — use PIN';
-    setMsg(msg, 'err');
-    setTimeout(function(){ reset(); setMsg(stored?'Enter your PIN':'Create a 4-digit PIN',''); }, 2000);
+    var msg = (err&&err.name==='NotAllowedError') ? 'Cancelled — use PIN' : 'Biometric failed — use PIN';
+    setMsg(msg,'err');
+    setTimeout(function(){ reset(); setMsg(stored?'Enter your PIN':'Create a 4-digit PIN',''); },2000);
   });
 }
 function check() {
@@ -1131,6 +1258,7 @@ function goPage(name) {
   if(name==='Subs')      { refreshSubsPage(); setTimeout(renderSubDetector, 100); }
   if(name==='Reports')   refreshReportsPage();
   if(name==='Home')      refreshSafeToSpend();
+  if(name==='Debt')      refreshDebtPage();
 }
 
 /* ════ THEME ════════════════════════════════════════════════ */
@@ -2374,6 +2502,130 @@ document.addEventListener('click', function(e) {
     if (desc && cat) setTimeout(function(){ learnCatFromDesc(desc, cat); }, 200);
   }
 });
+
+/* ════ PHASE 14 — Biometric fix + Debt Tracker ══════════════ */
+
+/* ── BIOMETRIC RESET ── */
+function resetBiometric() {
+  if (confirm('Remove saved fingerprint? You will need to re-register it next time you tap the fingerprint button.')) {
+    bioCredId = null;
+    try { localStorage.removeItem('sxt_biocred'); } catch(e) {}
+    var lbl = document.getElementById('bioStatusLabel');
+    if (lbl) lbl.textContent = 'Fingerprint removed. Tap fingerprint icon to re-register.';
+    showToast('Fingerprint reset. Use PIN to unlock.');
+  }
+}
+
+/* ── UPDATE goPage FOR DEBT ── */
+
+function setDebtType(t) {
+  debtType = t;
+  var lent   = document.getElementById('debtTypeLent');
+  var borrow = document.getElementById('debtTypeBorrow');
+  if (lent)   { lent.style.background   = t==='lent'   ? 'var(--green-s)' : 'none'; lent.style.color   = t==='lent'   ? 'var(--green)'  : 'var(--text2)'; lent.style.fontWeight   = t==='lent'   ? 'bold' : 'normal'; }
+  if (borrow) { borrow.style.background = t==='borrow' ? 'var(--red-s)'   : 'none'; borrow.style.color = t==='borrow' ? 'var(--red)'    : 'var(--text2)'; borrow.style.fontWeight = t==='borrow' ? 'bold' : 'normal'; }
+}
+function openAddDebt() {
+  document.getElementById('editDebtId').value = '';
+  document.getElementById('debtPerson').value  = '';
+  document.getElementById('debtAmt').value     = '';
+  document.getElementById('debtReason').value  = '';
+  document.getElementById('debtModalTitle').textContent = 'Add Debt';
+  try { document.getElementById('debtDate').valueAsDate = new Date(); } catch(e) {}
+  setDebtType('lent');
+  openModal('modalDebt');
+}
+function saveDebt() {
+  var person = document.getElementById('debtPerson').value.trim();
+  var amt    = parseFloat(document.getElementById('debtAmt').value) || 0;
+  var date   = document.getElementById('debtDate').value || new Date().toISOString().split('T')[0];
+  var reason = document.getElementById('debtReason').value.trim();
+  if (!person) { showToast('Enter the person\'s name'); return; }
+  if (amt <= 0){ showToast('Enter a valid amount'); return; }
+  var editId = document.getElementById('editDebtId').value;
+  if (editId) {
+    var id = parseInt(editId);
+    for (var i=0; i<debts.length; i++) {
+      if (debts[i].id === id) { debts[i].person=person; debts[i].amt=amt; debts[i].date=date; debts[i].reason=reason; debts[i].type=debtType; break; }
+    }
+    showToast('Debt updated');
+  } else {
+    debts.unshift({ id:Date.now(), person:person, amt:amt, date:date, reason:reason, type:debtType, settled:false });
+    showToast(debtType==='lent' ? 'Recorded: you lent '+fmtC(amt)+' to '+person : 'Recorded: you borrowed '+fmtC(amt)+' from '+person);
+  }
+  saveData(); closeModal('modalDebt'); refreshDebtPage();
+}
+function editDebt(id) {
+  var d = null; for (var i=0; i<debts.length; i++) { if (debts[i].id===id){d=debts[i];break;} } if(!d) return;
+  document.getElementById('editDebtId').value  = id;
+  document.getElementById('debtPerson').value  = d.person;
+  document.getElementById('debtAmt').value     = d.amt;
+  document.getElementById('debtDate').value    = d.date;
+  document.getElementById('debtReason').value  = d.reason || '';
+  document.getElementById('debtModalTitle').textContent = 'Edit Debt';
+  setDebtType(d.type);
+  openModal('modalDebt');
+}
+function settleDebt(id) {
+  for (var i=0; i<debts.length; i++) { if (debts[i].id===id){ debts[i].settled=true; break; } }
+  saveData(); refreshDebtPage(); showToast('Marked as settled ✓');
+}
+function deleteDebt(id) {
+  if (!confirm('Remove this debt entry?')) return;
+  debts = debts.filter(function(d){ return d.id!==id; });
+  saveData(); refreshDebtPage(); showToast('Removed');
+}
+function whatsappRemind(id) {
+  var d=null; for(var i=0;i<debts.length;i++){if(debts[i].id===id){d=debts[i];break;}} if(!d) return;
+  var msg = 'Hi '+d.person+', just a friendly reminder — you owe me '+fmtC(d.amt)+(d.reason?' for '+d.reason:'')+'. No rush at all, just checking in! 😊';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');
+}
+function refreshDebtPage() {
+  var active = debts.filter(function(d){ return !d.settled; });
+  var lent   = active.filter(function(d){ return d.type==='lent'; }).reduce(function(s,d){ return s+d.amt; },0);
+  var owed   = active.filter(function(d){ return d.type==='borrow'; }).reduce(function(s,d){ return s+d.amt; },0);
+  setText('debtOwedToMe', fmtC(lent));
+  setText('debtIOwed',    fmtC(owed));
+  var el = document.getElementById('debtList'); if(!el) return;
+  if (debts.length === 0) {
+    el.innerHTML = '<div class="empty-state" style="padding:40px 0;">'
+      +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:44px;height:44px;margin:0 auto 14px;opacity:0.35"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
+      +'<p>No debts tracked yet.<br/>Tap + Add to record a debt.</p></div>';
+    return;
+  }
+  el.innerHTML = debts.map(function(d) {
+    var isLent    = d.type === 'lent';
+    var settled   = d.settled;
+    var avatarBg  = settled ? 'var(--border)' : isLent ? 'var(--green-s)' : 'var(--red-s)';
+    var avatarClr = settled ? 'var(--text2)'  : isLent ? 'var(--green)'   : 'var(--red)';
+    var amtClr    = settled ? 'var(--text2)'  : isLent ? 'var(--green)'   : 'var(--red)';
+    var tagTxt    = settled ? 'Settled' : isLent ? 'They owe you' : 'You owe';
+    var initial   = d.person.charAt(0).toUpperCase();
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;opacity:'+(settled?'0.55':'1')+'">'
+      // row 1: avatar + name + amount
+      +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">'
+      +'<div style="width:42px;height:42px;border-radius:50%;background:'+avatarBg+';color:'+avatarClr+';display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:bold;flex-shrink:0;">'+initial+'</div>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:15px;font-weight:600;">'+d.person+'</div>'
+      +'<div style="font-size:11px;color:var(--text2);">'+(d.reason?d.reason+' · ':'')+d.date+'</div>'
+      +'</div>'
+      +'<div style="text-align:right;flex-shrink:0;">'
+      +'<div style="font-size:18px;font-weight:bold;color:'+amtClr+';">'+fmtC(d.amt)+'</div>'
+      +'<div style="font-size:10px;color:'+amtClr+';font-weight:500;">'+tagTxt+'</div>'
+      +'</div></div>'
+      // row 2: action buttons
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+      +(settled ? '<span style="font-size:12px;color:var(--green);">✓ Settled</span>'
+        : (
+          (isLent ? '<button onclick="whatsappRemind('+d.id+')" style="display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;border:1px solid #25d366;background:rgba(37,211,102,0.1);color:#25d366;font-size:12px;cursor:pointer;font-weight:500;">'
+            +'<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.853L.054 23.999l6.344-1.454A11.956 11.956 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.898 0-3.672-.519-5.193-1.424l-.37-.22-3.764.863.933-3.667-.242-.378A9.95 9.95 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>WhatsApp</button>' : '')
+          +'<button onclick="settleDebt('+d.id+')" style="padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);font-size:12px;cursor:pointer;">✓ Settle</button>'
+          +'<button onclick="editDebt('+d.id+')" style="padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);font-size:12px;cursor:pointer;">✏️ Edit</button>'
+          +'<button onclick="deleteDebt('+d.id+')" style="padding:7px 10px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);font-size:12px;cursor:pointer;margin-left:auto;">✕</button>'
+        ))
+      +'</div></div>';
+  }).join('');
+}
 
 init();
 loadSettings();
