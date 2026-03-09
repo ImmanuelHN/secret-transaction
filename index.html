@@ -1070,6 +1070,7 @@ function unlock() {
   document.getElementById('app').style.display='flex';
   document.getElementById('fabCenter').classList.add('show');
   refreshAll();
+  refreshSafeToSpend();
 }
 function lockApp() {
   attempt=''; newBuf=''; waiting=false; mode=stored?'enter':'set'; reset();
@@ -1098,8 +1099,9 @@ function goPage(name) {
   if(name==='More')      refreshWalletList();
   if(name==='Budget')    refreshBudgetPage();
   if(name==='Goals')     refreshGoalsPage();
-  if(name==='Subs')      refreshSubsPage();
+  if(name==='Subs')      { refreshSubsPage(); setTimeout(renderSubDetector, 100); }
   if(name==='Reports')   refreshReportsPage();
+  if(name==='Home')      refreshSafeToSpend();
 }
 
 /* ════ THEME ════════════════════════════════════════════════ */
@@ -1844,25 +1846,6 @@ function refreshHealthScore() {
 }
 
 /* ── 7-DAY TREND ── */
-function refreshTrend() {
-  var barsEl=document.getElementById('trendBars'), labsEl=document.getElementById('trendLabels');
-  if(!barsEl||!labsEl) return;
-  var days=[],DAY=['Su','Mo','Tu','We','Th','Fr','Sa'],today=new Date(); today.setHours(0,0,0,0);
-  for(var i=6;i>=0;i--){
-    var d=new Date(today.getTime()-i*86400000), key=d.toISOString().split('T')[0];
-    var total=txns.filter(function(t){return t.date===key&&t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
-    days.push({label:DAY[d.getDay()],amt:total,isToday:i===0});
-  }
-  var maxAmt=Math.max.apply(null,days.map(function(d){return d.amt;}))||1;
-  barsEl.innerHTML=days.map(function(d){
-    var h=Math.max(Math.round((d.amt/maxAmt)*40),d.amt>0?4:2), color=d.isToday?'var(--accent)':(d.amt>0?'var(--text2)':'var(--border)');
-    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;"><div style="width:100%;height:'+h+'px;background:'+color+';border-radius:3px 3px 0 0;"></div></div>';
-  }).join('');
-  labsEl.innerHTML=days.map(function(d){
-    return '<div style="flex:1;text-align:center;font-size:9px;color:'+(d.isToday?'var(--accent)':'var(--text2)')+'">'+d.label+'</div>';
-  }).join('');
-}
-
 /* ── FINANCIAL TIPS ── */
 var TIPS=[
   {icon:'💡',text:'<b>50/30/20 rule:</b> Spend 50% on needs, 30% on wants, 20% on savings.'},
@@ -1948,16 +1931,6 @@ function cancelTxModal() {
 }
 
 /* ════ PHASE 11 ═════════════════════════════════════════════ */
-
-/* ── OLED THEME FIX ── */
-var _origSetTheme = setTheme;
-function setTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-  try { localStorage.setItem('sxt_theme', t); } catch(e) {}
-  ['D','C','L','O'].forEach(function(b){ var el=document.getElementById('t'+b); if(el) el.classList.remove('active'); });
-  var map={dark:'D',color:'C',light:'L',oled:'O'};
-  var btn=document.getElementById('t'+(map[t]||'D')); if(btn) btn.classList.add('active');
-}
 
 /* ── AUTO-LOCK ── */
 var autoLockEnabled = true;
@@ -2271,29 +2244,11 @@ function addDetectedSub(name, amt) {
 }
 
 /* ── HOOK INTO EXISTING FUNCTIONS ── */
-/* refreshAll already exists — add safe-to-spend update here */
-var _origRefreshAll_p12 = null; // don't override — call directly from goPage and refreshAll
+/* All p12 hooks added directly into the original functions — no overrides */
 
-/* Instead of overriding, patch init's unlock to run safe-to-spend */
-var _origUnlock = unlock;
-function unlock() {
-  _origUnlock();
-  refreshSafeToSpend();
-}
-
-/* Patch goPage to call detector on subs page */
-var _origGoPage_p12 = goPage;
-function goPage(name) {
-  _origGoPage_p12(name);
-  if (name === 'Subs') { setTimeout(renderSubDetector, 100); }
-  if (name === 'Home') { refreshSafeToSpend(); }
-}
-
-/* Learn category each time a tx is saved — patch saveTx */
-/* NOTE: Using addEventListener on save button instead to avoid double-declaration */
+/* Learn category each time save button is clicked */
 document.addEventListener('click', function(e) {
   if (e.target && e.target.id === 'txSaveBtn') {
-    /* After a brief delay (let saveTx run first), learn the category */
     var desc = (document.getElementById('txDesc')||{}).value || '';
     var cat  = txCat;
     if (desc && cat) setTimeout(function(){ learnCatFromDesc(desc, cat); }, 200);
