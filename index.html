@@ -396,7 +396,7 @@ svg{display:block;}
         </div>
         <div class="bal-amount" id="totalBal">₹0</div>
         <div class="bal-row">
-          <div class="bal-item">Income <span id="homeIncome">₹0</span></div>
+          <div class="bal-item">Received <span id="homeIncome">₹0</span></div>
           <div class="bal-item">Expenses <span id="homeExpense">₹0</span></div>
         </div>
       </div>
@@ -503,6 +503,8 @@ svg{display:block;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#f59e0b"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Debts</button>
         <button onclick="goPage('Wishlist')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#ec4899"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Wishlist</button>
+        <button onclick="goPage('Warranty')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--green)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Warranty</button>
       </div>
       <!-- home currency -->
       <div class="section-title" style="margin-bottom:10px;">Home Currency</div>
@@ -851,6 +853,24 @@ svg{display:block;}
       <div id="wishlistItems"></div>
     </div>
 
+    <!-- ═══ WARRANTY VAULT PAGE ═══ -->
+    <div class="page" id="pageWarranty">
+      <button class="back-btn" onclick="goPage('More')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+      </button>
+      <div class="page-title">Warranty Vault 🛡️</div>
+      <div class="page-sub">Track purchase warranties & expiry alerts</div>
+
+      <!-- expiring soon banner -->
+      <div id="warrantyAlertBanner" style="display:none;background:var(--red-s);border:1px solid var(--red);border-radius:12px;padding:13px 15px;margin-bottom:16px;font-size:13px;color:var(--red);"></div>
+
+      <div class="section-header" style="margin-bottom:14px;">
+        <div class="section-title">My Products</div>
+        <button class="section-link" onclick="openAddWarranty()">+ Add Product</button>
+      </div>
+      <div id="warrantyList"></div>
+    </div>
+
   </div><!-- /pages -->
 
   <!-- bottom nav -->
@@ -905,6 +925,11 @@ svg{display:block;}
         <button class="cat-btn" id="cat-other" onclick="setCat('other',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Other</button>
       </div>
     </div>
+    <div id="otherCatRow" style="display:none;">
+      <label style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Custom Category Name <span style="color:var(--red);">*</span></label>
+      <input type="text" id="otherCatName" placeholder="e.g. Brother, Doctor, Grocery, Pet…"
+        style="width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:14px;margin-bottom:14px;"/>
+    </div>
     <div class="form-row">
       <div class="form-group"><label>Wallet</label><select id="txWallet"></select></div>
       <div class="form-group"><label>Date</label><input type="date" id="txDate"/></div>
@@ -944,7 +969,7 @@ svg{display:block;}
     <div class="modal-handle"></div>
     <div class="modal-title">Add Wallet</div>
     <div class="form-group"><label>Wallet Name</label><input type="text" id="wName" placeholder="e.g. SBI, Paytm, Cash"/></div>
-    <div class="form-group"><label>Type</label><select id="wType"><option>Bank Account</option><option>UPI Wallet</option><option>Cash</option><option>Credit Card</option></select></div>
+    <div class="form-group"><label>Type</label><select id="wType"><option>Bank Account</option><option>Credit Card</option><option>Cash</option></select></div>
     <div class="form-group"><label>Opening Balance (₹)</label><input type="number" id="wBal" placeholder="0" inputmode="decimal"/></div>
     <button class="save-btn" onclick="saveWallet()">Add Wallet</button>
     <button class="cancel-btn" onclick="closeModal('modalWallet')">Cancel</button>
@@ -979,6 +1004,11 @@ svg{display:block;}
         <button class="bc-btn" onclick="setBudgetCat('health',this)">Health</button>
         <button class="bc-btn" onclick="setBudgetCat('other',this)">Other</button>
       </div>
+    </div>
+    <div id="budgetOtherRow" style="display:none;margin-bottom:14px;">
+      <label style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Custom Name <span style="color:var(--red);">*</span></label>
+      <input type="text" id="budgetOtherName" placeholder="e.g. Brother, Doctor, Gym, Pet…"
+        style="width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:14px;"/>
     </div>
     <div class="form-group"><label>Monthly Limit (₹)</label><input type="number" id="budgetLimitInput" placeholder="e.g. 5000" inputmode="decimal"/></div>
     <button class="save-btn" onclick="saveBudgetCat()">Save Limit</button>
@@ -1122,6 +1152,27 @@ svg{display:block;}
   </div>
 </div>
 
+<!-- ═══ MODAL: ADD WARRANTY ═══ -->
+<div class="modal-overlay" id="modalWarranty">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="warModalTitle">Add Product Warranty</div>
+    <input type="hidden" id="editWarId" value=""/>
+    <div style="display:flex;gap:12px;align-items:flex-start;">
+      <div class="form-group" style="flex:1;"><label>Product Name</label><input type="text" id="warName" placeholder="e.g. Samsung TV, Refrigerator…"/></div>
+      <div class="form-group" style="width:64px;"><label>Emoji</label><input type="text" id="warEmoji" placeholder="📺" maxlength="2" style="font-size:22px;text-align:center;padding:10px 6px;"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Purchase Price</label><input type="number" id="warPrice" placeholder="25000" inputmode="decimal"/></div>
+      <div class="form-group"><label>Purchase Date</label><input type="date" id="warBuyDate"/></div>
+    </div>
+    <div class="form-group"><label>Warranty Expires On</label><input type="date" id="warExpiry"/></div>
+    <div class="form-group"><label>Store / Brand (optional)</label><input type="text" id="warBrand" placeholder="e.g. Reliance Digital, Amazon…"/></div>
+    <button class="save-btn" onclick="saveWarranty()">Save</button>
+    <button class="cancel-btn" onclick="closeModal('modalWarranty')">Cancel</button>
+  </div>
+</div>
+
 <!-- ═══ MODAL: CHANGE PIN ═══ -->
 <div class="modal-overlay" id="modalChangePin">
   <div class="modal-sheet">
@@ -1139,7 +1190,7 @@ svg{display:block;}
 
 <script>
 /* ════ DATA ════════════════════════════════════════════════ */
-var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [], wishlist = [];
+var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [], wishlist = [], warranties = [];
 
 function saveData() {
   try {
@@ -1149,7 +1200,8 @@ function saveData() {
     localStorage.setItem('sxt_goals',   JSON.stringify(goals));
     localStorage.setItem('sxt_subs',    JSON.stringify(subs));
     localStorage.setItem('sxt_debts',    JSON.stringify(debts));
-    localStorage.setItem('sxt_wishlist', JSON.stringify(wishlist));
+    localStorage.setItem('sxt_wishlist',   JSON.stringify(wishlist));
+    localStorage.setItem('sxt_warranties', JSON.stringify(warranties));
   } catch(e) {}
 }
 function loadData() {
@@ -1160,7 +1212,8 @@ function loadData() {
     if(w) wallets=JSON.parse(w); if(t) txns=JSON.parse(t);
     if(b) budgets=JSON.parse(b); if(g) goals=JSON.parse(g);
     if(s) subs=JSON.parse(s);   if(d) debts=JSON.parse(d);
-    var wl=localStorage.getItem('sxt_wishlist'); if(wl) wishlist=JSON.parse(wl);
+    var wl=localStorage.getItem('sxt_wishlist');    if(wl) wishlist=JSON.parse(wl);
+    var wa=localStorage.getItem('sxt_warranties');  if(wa) warranties=JSON.parse(wa);
   } catch(e) {}
 }
 
@@ -1359,6 +1412,7 @@ function goPage(name) {
   if(name==='Home')      refreshSafeToSpend();
   if(name==='Debt')      refreshDebtPage();
   if(name==='Wishlist')  refreshWishlistPage();
+  if(name==='Warranty')  refreshWarrantyPage();
 }
 
 /* ════ THEME ════════════════════════════════════════════════ */
@@ -1472,6 +1526,9 @@ function setCat(c,btn) {
   txCat=c;
   document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
+  var row = document.getElementById('otherCatRow');
+  if (row) row.style.display = (c==='other') ? 'block' : 'none';
+  if (c !== 'other') { var inp=document.getElementById('otherCatName'); if(inp) inp.value=''; }
 }
 function openAddTx() {
   walletSelectOptions();
@@ -1487,6 +1544,14 @@ function saveTx() {
   if(!amt||amt<=0){showToast('Enter a valid amount');return;}
   if(!desc){showToast('Enter a description');return;}
 
+  // Resolve custom "other" category name
+  var resolvedCat = txCat;
+  if (txCat === 'other') {
+    var customName = (document.getElementById('otherCatName')||{}).value;
+    if (customName && customName.trim()) resolvedCat = customName.trim().toLowerCase();
+    else { showToast('Please enter a name for "Other" category'); return; }
+  }
+
   if(editingTxId) {
     // EDIT MODE — reverse old, apply new
     var oldTx=null; for(var i=0;i<txns.length;i++){if(txns[i].id===editingTxId){oldTx=txns[i];break;}}
@@ -1494,7 +1559,7 @@ function saveTx() {
       for(var k=0;k<wallets.length;k++){if(wallets[k].name===oldTx.wallet){wallets[k].balance+=(oldTx.type==='credit'?-oldTx.amt:oldTx.amt);break;}}
       var wName2=''; for(var m=0;m<wallets.length;m++){if(String(wallets[m].id)===String(wId)){wName2=wallets[m].name;break;}}
       for(var n=0;n<wallets.length;n++){if(String(wallets[n].id)===String(wId)){wallets[n].balance+=(txType==='credit'?amt:-amt);break;}}
-      oldTx.type=txType; oldTx.cat=txCat; oldTx.amt=amt; oldTx.desc=desc; oldTx.wallet=wName2; oldTx.date=date; oldTx.notes=notes;
+      oldTx.type=txType; oldTx.cat=resolvedCat; oldTx.amt=amt; oldTx.desc=desc; oldTx.wallet=wName2; oldTx.date=date; oldTx.notes=notes;
     }
     saveData(); closeModal('modalTx');
     document.getElementById('txAmt').value=''; document.getElementById('txDesc').value=''; document.getElementById('txNotes').value='';
@@ -1509,8 +1574,11 @@ function saveTx() {
   for(var l=0;l<wallets.length;l++){if(String(wallets[l].id)===String(wId)){wallets[l].balance+=(txType==='credit'?amt:-amt);break;}}
   var recEl=document.getElementById('txRecurring');
   var isRec=recEl&&recEl.classList.contains('on');
-  txns.unshift({id:Date.now(),type:txType,cat:txCat,amt:amt,desc:desc,wallet:wName,date:date,notes:notes,recurring:isRec});
+  txns.unshift({id:Date.now(),type:txType,cat:resolvedCat,amt:amt,desc:desc,wallet:wName,date:date,notes:notes,recurring:isRec});
   if(recEl) recEl.classList.remove('on');
+  // reset other name field
+  var otherInp = document.getElementById('otherCatName'); if(otherInp) otherInp.value='';
+  var otherRow = document.getElementById('otherCatRow'); if(otherRow) otherRow.style.display='none';
   saveData(); closeModal('modalTx');
   document.getElementById('txAmt').value=''; document.getElementById('txDesc').value=''; document.getElementById('txNotes').value='';
   showToast((txType==='debit'?'Expense':'Income')+' saved'); refreshAll();
@@ -1568,10 +1636,9 @@ function searchTx() {
 function refreshBalance() {
   var total  = wallets.reduce(function(s,w){return s+w.balance;},0);
   var now    = new Date(), thisM=txns.filter(function(t){var d=new Date(t.date);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();});
-  var income = thisM.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
-  var expense= thisM.filter(function(t){return t.type==='debit'; }).reduce(function(s,t){return s+t.amt;},0);
+  var income = thisM.filter(function(t){return t.type==='credit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
+  var expense= thisM.filter(function(t){return t.type==='debit'&&!t.isTransfer &&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
   setText('aIncome',fmtC(income)); setText('aExpense',fmtC(expense)); setText('aSaved',fmtC(Math.max(0,income-expense)));
-  // Always set real values first, then applyBalVis will hide if needed
   setText('totalBal',fmtC(total)); setText('homeIncome',fmtC(income)); setText('homeExpense',fmtC(expense));
   if (!balVisible) {
     setText('totalBal','• • • •'); setText('homeIncome','• • •'); setText('homeExpense','• • •');
@@ -1585,7 +1652,7 @@ function refreshTrend() {
   var days=[], DAY=['Su','Mo','Tu','We','Th','Fr','Sa'], today=new Date(); today.setHours(0,0,0,0);
   for(var i=6;i>=0;i--){
     var d=new Date(today.getTime()-i*86400000), key=d.toISOString().split('T')[0];
-    var total=txns.filter(function(t){return t.date===key&&t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+    var total=txns.filter(function(t){return t.date===key&&t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
     days.push({label:DAY[d.getDay()],amt:total,isToday:i===0});
   }
   var maxAmt=Math.max.apply(null,days.map(function(d){return d.amt;}))||1;
@@ -1602,12 +1669,12 @@ function refreshTrend() {
 function refreshAnalytics() {
   setText('analyticsMonthLabel',MONTHS[viewMonth]+' '+viewYear);
   var mt=getMonthTxns();
-  var income=mt.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
-  var expense=mt.filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+  var income=mt.filter(function(t){return t.type==='credit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
+  var expense=mt.filter(function(t){return t.type==='debit'&&!t.isTransfer; }).reduce(function(s,t){return s+t.amt;},0);
   setText('aIncome',fmtC(income)); setText('aExpense',fmtC(expense)); setText('aSaved',fmtC(Math.max(0,income-expense)));
   var byCat={};
-  mt.filter(function(t){return t.type==='debit';}).forEach(function(t){byCat[t.cat]=(byCat[t.cat]||0)+t.amt;});
-  var cats=Object.keys(byCat).sort(function(a,b){return byCat[b]-byCat[a];}), total=mt.filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+  mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){byCat[t.cat]=(byCat[t.cat]||0)+t.amt;});
+  var cats=Object.keys(byCat).sort(function(a,b){return byCat[b]-byCat[a];}), total=mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
   var el=document.getElementById('catBreakdown'); if(!el) return;
   if(cats.length===0){el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg><p>No expenses in '+MONTHS[viewMonth]+' '+viewYear+'</p></div>';return;}
   el.innerHTML=cats.map(function(c){
@@ -1624,14 +1691,28 @@ function setBudgetCat(c,btn) {
   budgetCat=c;
   document.querySelectorAll('#bcRow .bc-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
+  var row = document.getElementById('budgetOtherRow');
+  if (row) row.style.display = (c==='other') ? 'block' : 'none';
+  if (c !== 'other') { var inp=document.getElementById('budgetOtherName'); if(inp) inp.value=''; }
 }
-function openAddBudget() { openModal('modalBudget'); }
+function openAddBudget() {
+  var row = document.getElementById('budgetOtherRow'); if(row) row.style.display='none';
+  var inp = document.getElementById('budgetOtherName'); if(inp) inp.value='';
+  openModal('modalBudget');
+}
 function saveBudgetCat() {
   var limit=parseFloat(document.getElementById('budgetLimitInput').value);
   if(!limit||limit<=0){showToast('Enter a valid limit');return;}
-  var ex=-1; for(var i=0;i<budgets.length;i++){if(budgets[i].cat===budgetCat){ex=i;break;}}
-  if(ex>=0) budgets[ex].limit=limit; else budgets.push({cat:budgetCat,limit:limit});
+  var resolvedBudgetCat = budgetCat;
+  if (budgetCat === 'other') {
+    var cname = (document.getElementById('budgetOtherName')||{}).value;
+    if (cname && cname.trim()) resolvedBudgetCat = cname.trim().toLowerCase();
+    else { showToast('Please enter a name for this custom budget'); return; }
+  }
+  var ex=-1; for(var i=0;i<budgets.length;i++){if(budgets[i].cat===resolvedBudgetCat){ex=i;break;}}
+  if(ex>=0) budgets[ex].limit=limit; else budgets.push({cat:resolvedBudgetCat,limit:limit,label:resolvedBudgetCat});
   saveData(); closeModal('modalBudget'); document.getElementById('budgetLimitInput').value='';
+  var row=document.getElementById('budgetOtherRow'); if(row) row.style.display='none';
   showToast('Budget limit saved'); refreshBudgetPage();
 }
 function deleteBudget(cat) {
@@ -1641,8 +1722,8 @@ function refreshBudgetPage() {
   setText('budgetMonthLabel',MONTHS[viewMonth]+' '+viewYear);
   var mt=getMonthTxns(), totalLimit=budgets.reduce(function(s,b){return s+b.limit;},0);
   var catSpend={};
-  mt.filter(function(t){return t.type==='debit';}).forEach(function(t){catSpend[t.cat]=(catSpend[t.cat]||0)+t.amt;});
-  var totalSpent=mt.filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+  mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){catSpend[t.cat]=(catSpend[t.cat]||0)+t.amt;});
+  var totalSpent=mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
   var pct=totalLimit>0?Math.min(Math.round((totalSpent/totalLimit)*100),100):0;
   var remain=Math.max(0,totalLimit-totalSpent);
   var now=new Date(), isNow=now.getFullYear()===viewYear&&now.getMonth()===viewMonth;
@@ -2146,14 +2227,14 @@ function applyBalVis() {
 function refreshHealthScore() {
   if(txns.length===0) return;
   var now=new Date(), thisM=txns.filter(function(t){var d=new Date(t.date);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();});
-  var income =thisM.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
-  var expense=thisM.filter(function(t){return t.type==='debit'; }).reduce(function(s,t){return s+t.amt;},0);
+  var income =thisM.filter(function(t){return t.type==='credit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
+  var expense=thisM.filter(function(t){return t.type==='debit'&&!t.isTransfer; }).reduce(function(s,t){return s+t.amt;},0);
   var savingsRate=income>0?Math.max(0,(income-expense)/income):0;
   var savingsPts=Math.min(Math.round(savingsRate*40),40);
   var budgetPts=30;
   if(budgets.length>0){
     var catSpend={};
-    thisM.filter(function(t){return t.type==='debit';}).forEach(function(t){catSpend[t.cat]=(catSpend[t.cat]||0)+t.amt;});
+    thisM.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){catSpend[t.cat]=(catSpend[t.cat]||0)+t.amt;});
     var over=budgets.filter(function(b){return(catSpend[b.cat]||0)>b.limit;}).length;
     budgetPts=Math.max(0,30-over*10);
   }
@@ -2206,7 +2287,7 @@ function renderTxListGrouped(list, containerId) {
   var today=new Date().toISOString().split('T')[0], yest=new Date(Date.now()-86400000).toISOString().split('T')[0];
   el.innerHTML=order.map(function(date){
     var label=date===today?'Today':date===yest?'Yesterday':date;
-    var dayTotal=groups[date].filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+    var dayTotal=groups[date].filter(function(t){return t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
     return '<div class="tx-date-group"><span>'+label+'</span>'+(dayTotal>0?'<span style="color:var(--red);font-size:10px;">−'+fmtC(dayTotal)+'</span>':'')+'</div>'
       +groups[date].map(renderTxItem).join('');
   }).join('');
@@ -2234,8 +2315,8 @@ function saveTransfer() {
   if(fromW.balance<amt){showToast('Not enough balance in '+fromW.name);return;}
   fromW.balance-=amt; toW.balance+=amt;
   var date=new Date().toISOString().split('T')[0];
-  txns.unshift({id:Date.now(),  type:'debit', cat:'other', amt:amt,desc:'Transfer → '+toW.name,  wallet:fromW.name,date:date,notes:'Wallet transfer'});
-  txns.unshift({id:Date.now()+1,type:'credit',cat:'income',amt:amt,desc:'Transfer ← '+fromW.name,wallet:toW.name,  date:date,notes:'Wallet transfer'});
+  txns.unshift({id:Date.now(),  type:'debit',  cat:'transfer', amt:amt, desc:'Transfer → '+toW.name,   wallet:fromW.name, date:date, notes:'Wallet transfer', isTransfer:true});
+  txns.unshift({id:Date.now()+1,type:'credit', cat:'transfer', amt:amt, desc:'Transfer ← '+fromW.name,  wallet:toW.name,   date:date, notes:'Wallet transfer', isTransfer:true});
   saveData();
   // close modal directly (no override)
   document.getElementById('modalTransfer').classList.remove('open');
@@ -2364,8 +2445,8 @@ function saveTxWithRecurring() {
 function refreshReportsPage() {
   var now    = new Date();
   var thisM  = txns.filter(function(t){ var d=new Date(t.date); return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth(); });
-  var income = thisM.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
-  var expense= thisM.filter(function(t){return t.type==='debit'; }).reduce(function(s,t){return s+t.amt;},0);
+  var income = thisM.filter(function(t){return t.type==='credit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
+  var expense= thisM.filter(function(t){return t.type==='debit'&&!t.isTransfer; }).reduce(function(s,t){return s+t.amt;},0);
   setText('repIncome',  fmtC(income));
   setText('repExpense', fmtC(expense));
 
@@ -2380,8 +2461,8 @@ function refreshReportsPage() {
     var d = new Date(now.getFullYear(), now.getMonth()-i, 1);
     var y = d.getFullYear(), m = d.getMonth();
     var mt = txns.filter(function(t){ var td=new Date(t.date); return td.getFullYear()===y&&td.getMonth()===m; });
-    var inc = mt.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
-    var exp = mt.filter(function(t){return t.type==='debit'; }).reduce(function(s,t){return s+t.amt;},0);
+    var inc = mt.filter(function(t){return t.type==='credit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
+    var exp = mt.filter(function(t){return t.type==='debit'&&!t.isTransfer; }).reduce(function(s,t){return s+t.amt;},0);
     months.push({ label:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m], inc:inc, exp:exp });
   }
   var maxVal = Math.max.apply(null, months.map(function(m){ return Math.max(m.inc, m.exp); })) || 1;
@@ -2402,7 +2483,7 @@ function refreshReportsPage() {
 
   /* Category pie donut */
   var catSpend = {};
-  thisM.filter(function(t){return t.type==='debit';}).forEach(function(t){ catSpend[t.cat]=(catSpend[t.cat]||0)+t.amt; });
+  thisM.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){ catSpend[t.cat]=(catSpend[t.cat]||0)+t.amt; });
   var cats = Object.keys(catSpend).sort(function(a,b){return catSpend[b]-catSpend[a];});
   var totalExp = cats.reduce(function(s,c){return s+catSpend[c];},0)||1;
   var pieSvg = document.getElementById('repPie');
@@ -2446,7 +2527,7 @@ function refreshReportsPage() {
 
   /* top spending days */
   var dayMap = {};
-  thisM.filter(function(t){return t.type==='debit';}).forEach(function(t){ dayMap[t.date]=(dayMap[t.date]||0)+t.amt; });
+  thisM.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){ dayMap[t.date]=(dayMap[t.date]||0)+t.amt; });
   var days = Object.keys(dayMap).sort(function(a,b){return dayMap[b]-dayMap[a];}).slice(0,3);
   var tdEl = document.getElementById('repTopDays');
   if (tdEl) {
@@ -2476,7 +2557,7 @@ function refreshSafeToSpend() {
     var d=new Date(t.date);
     return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
   });
-  var spent    = thisM.filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+  var spent    = thisM.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
   var remain   = Math.max(0, totalLimit - spent);
   var daysInM  = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
   var daysLeft = Math.max(1, daysInM - now.getDate() + 1);
@@ -2897,6 +2978,112 @@ function refreshWishlistPage() {
       + '<button style="margin-left:auto;padding:8px 10px;border-radius:10px;border:none;background:var(--red-s);color:var(--red);font-size:12px;cursor:pointer;" onclick="deleteWishItem('+w.id+')">✕</button>'
       + '</div>'
       + '</div>';
+  }).join('');
+}
+
+/* ════ PHASE 16 — Warranty Vault ════════════════════════════ */
+
+function openAddWarranty() {
+  document.getElementById('editWarId').value   = '';
+  document.getElementById('warName').value     = '';
+  document.getElementById('warEmoji').value    = '📦';
+  document.getElementById('warPrice').value    = '';
+  document.getElementById('warBrand').value    = '';
+  document.getElementById('warModalTitle').textContent = 'Add Product Warranty';
+  try { document.getElementById('warBuyDate').valueAsDate = new Date(); } catch(e){}
+  document.getElementById('warExpiry').value   = '';
+  openModal('modalWarranty');
+}
+function saveWarranty() {
+  var name   = document.getElementById('warName').value.trim();
+  var emoji  = document.getElementById('warEmoji').value || '📦';
+  var price  = parseFloat(document.getElementById('warPrice').value) || 0;
+  var buyDate= document.getElementById('warBuyDate').value;
+  var expiry = document.getElementById('warExpiry').value;
+  var brand  = document.getElementById('warBrand').value.trim();
+  if (!name)   { showToast('Enter product name'); return; }
+  if (!expiry) { showToast('Enter warranty expiry date'); return; }
+  var editId = document.getElementById('editWarId').value;
+  if (editId) {
+    var id=parseInt(editId);
+    for(var i=0;i<warranties.length;i++){
+      if(warranties[i].id===id){warranties[i].name=name;warranties[i].emoji=emoji;warranties[i].price=price;warranties[i].buyDate=buyDate;warranties[i].expiry=expiry;warranties[i].brand=brand;break;}
+    }
+    showToast('Warranty updated');
+  } else {
+    warranties.unshift({id:Date.now(),name:name,emoji:emoji,price:price,buyDate:buyDate,expiry:expiry,brand:brand});
+    showToast('Warranty saved! We\'ll alert you before it expires.');
+  }
+  saveData(); closeModal('modalWarranty'); refreshWarrantyPage();
+}
+function editWarranty(id) {
+  var w=null; for(var i=0;i<warranties.length;i++){if(warranties[i].id===id){w=warranties[i];break;}} if(!w) return;
+  document.getElementById('editWarId').value  = id;
+  document.getElementById('warName').value    = w.name;
+  document.getElementById('warEmoji').value   = w.emoji;
+  document.getElementById('warPrice').value   = w.price||'';
+  document.getElementById('warBuyDate').value = w.buyDate||'';
+  document.getElementById('warExpiry').value  = w.expiry;
+  document.getElementById('warBrand').value   = w.brand||'';
+  document.getElementById('warModalTitle').textContent = 'Edit Warranty';
+  openModal('modalWarranty');
+}
+function deleteWarranty(id) {
+  if(!confirm('Remove this warranty?')) return;
+  warranties=warranties.filter(function(w){return w.id!==id;});
+  saveData(); refreshWarrantyPage(); showToast('Removed');
+}
+function refreshWarrantyPage() {
+  var el=document.getElementById('warrantyList'); if(!el) return;
+  var banner=document.getElementById('warrantyAlertBanner');
+  var today=new Date(); today.setHours(0,0,0,0);
+
+  // Find expiring soon (within 30 days)
+  var expiringSoon=warranties.filter(function(w){
+    var exp=new Date(w.expiry); exp.setHours(0,0,0,0);
+    var diff=Math.round((exp-today)/86400000);
+    return diff>=0 && diff<=30;
+  });
+  if (banner) {
+    if (expiringSoon.length>0) {
+      banner.style.display='block';
+      banner.innerHTML='⚠️ <b>'+expiringSoon.length+' warranty'+(expiringSoon.length>1?'s':'')+' expiring soon:</b> '
+        +expiringSoon.map(function(w){ var d=Math.round((new Date(w.expiry)-today)/86400000); return w.emoji+' '+w.name+' ('+d+'d left)'; }).join(', ');
+    } else { banner.style.display='none'; }
+  }
+
+  if (warranties.length===0) {
+    el.innerHTML='<div class="empty-state" style="padding:40px 0;">'
+      +'<div style="font-size:48px;text-align:center;margin-bottom:14px;">🛡️</div>'
+      +'<p>No warranties saved yet.<br/>Add a product to track its warranty.</p></div>';
+    return;
+  }
+  el.innerHTML=warranties.map(function(w){
+    var exp=new Date(w.expiry); exp.setHours(0,0,0,0);
+    var daysLeft=Math.round((exp-today)/86400000);
+    var isExpired=daysLeft<0;
+    var expiringSoon30=!isExpired&&daysLeft<=30;
+    var expiringSoon90=!isExpired&&daysLeft<=90;
+    var statusColor=isExpired?'var(--red)':expiringSoon30?'var(--red)':expiringSoon90?'#f59e0b':'var(--green)';
+    var statusBg=isExpired?'var(--red-s)':expiringSoon30?'var(--red-s)':expiringSoon90?'rgba(245,158,11,0.12)':'var(--green-s)';
+    var statusTxt=isExpired?'EXPIRED':expiringSoon30?daysLeft+'d left ⚠️':expiringSoon90?daysLeft+'d left':daysLeft+'d left ✓';
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;">'
+      +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">'
+      +'<div style="font-size:30px;flex-shrink:0;">'+w.emoji+'</div>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:15px;font-weight:600;">'+w.name+'</div>'
+      +(w.brand?'<div style="font-size:12px;color:var(--text2);">'+w.brand+'</div>':'')
+      +(w.price>0?'<div style="font-size:12px;color:var(--text2);">Bought for '+fmtC(w.price)+'</div>':'')
+      +'</div>'
+      +'<div style="text-align:right;flex-shrink:0;">'
+      +'<div style="font-size:11px;font-weight:bold;background:'+statusBg+';color:'+statusColor+';border-radius:6px;padding:4px 8px;">'+statusTxt+'</div>'
+      +'<div style="font-size:10px;color:var(--text2);margin-top:4px;">Exp: '+w.expiry+'</div>'
+      +'</div></div>'
+      +'<div style="display:flex;gap:8px;">'
+      +(w.buyDate?'<span style="font-size:11px;color:var(--text2);">Bought: '+w.buyDate+'</span>':'')
+      +'<button onclick="editWarranty('+w.id+')" style="margin-left:auto;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);font-size:12px;cursor:pointer;">✏️ Edit</button>'
+      +'<button onclick="deleteWarranty('+w.id+')" style="padding:6px 10px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);font-size:12px;cursor:pointer;">✕</button>'
+      +'</div></div>';
   }).join('');
 }
 
