@@ -280,6 +280,27 @@ svg{display:block;}
 .toggle-sw::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left 0.2s;}
 .toggle-sw.on::after{left:23px;}
 .tx-recurring{font-size:9px;background:var(--accent-s);color:var(--accent);border-radius:4px;padding:1px 5px;margin-left:4px;}
+/* ══ PHASE 18 — Bill Splitter ═════════════════════════════ */
+.split-tip-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text2);font-size:11px;cursor:pointer;font-weight:500;}
+.split-tip-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.split-person-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.split-person-row:last-child{border-bottom:none;}
+.split-person-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;flex-shrink:0;background:var(--accent-s);color:var(--accent);}
+.split-result-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
+.split-result-row:last-child{border-bottom:none;}
+.split-paid-badge{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600;cursor:pointer;}
+.split-paid-badge.paid{background:var(--green-s);color:var(--green);}
+.split-paid-badge.unpaid{background:var(--red-s);color:var(--red);}
+/* ══ PHASE 19 — Streaks & Badges ══════════════════════════ */
+.badge-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
+.badge-icon{font-size:36px;flex-shrink:0;line-height:1;}
+.badge-info{flex:1;}
+.badge-name{font-size:14px;font-weight:700;margin-bottom:2px;}
+.badge-desc{font-size:12px;color:var(--text2);margin-bottom:6px;}
+.badge-prog{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.badge-prog-fill{height:100%;border-radius:3px;transition:width 0.6s;}
+.badge-earned{background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:11px;font-weight:800;}
+.badge-locked{font-size:11px;color:var(--text2);}
 /* ══ PHASE 15 — Wishlist Vault ════════════════════════════ */
 .wish-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
 .wish-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);transition:background 0.4s;}
@@ -505,6 +526,10 @@ svg{display:block;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#ec4899"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Wishlist</button>
         <button onclick="goPage('Warranty')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--green)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Warranty</button>
+        <button onclick="goPage('Splitter')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#f59e0b"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/><line x1="20" y1="8" x2="20" y2="14"/></svg>Splitter</button>
+        <button onclick="goPage('Streaks')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#f59e0b"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Streaks</button>
       </div>
       <!-- home currency -->
       <div class="section-title" style="margin-bottom:10px;">Home Currency</div>
@@ -636,6 +661,14 @@ svg{display:block;}
         </div>
         <div style="padding:10px 16px 14px;font-size:11px;color:var(--text2);line-height:1.6;">
           Alerts for: subscription due dates · warranty expiry · wishlist cooloff done · budget exceeded · debt reminders
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--border);">
+          <button onclick="testNotification()" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;cursor:pointer;">
+            🔔 Send Test Notification
+          </button>
+          <button onclick="runNotificationChecks()" style="flex:1;padding:10px;border-radius:10px;border:none;background:var(--accent-s);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;">
+            ▶ Run All Checks
+          </button>
         </div>
       </div>
 
@@ -895,6 +928,126 @@ svg{display:block;}
         <button class="section-link" onclick="openAddWarranty()">+ Add Product</button>
       </div>
       <div id="warrantyList"></div>
+    </div>
+
+    <!-- ═══ BILL SPLITTER PAGE ═══ -->
+    <div class="page" id="pageSplitter">
+      <button class="back-btn" onclick="goPage('More')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+      </button>
+      <div class="page-title">Bill Splitter 🍽️</div>
+      <div class="page-sub">Split any bill fairly between friends</div>
+
+      <!-- input panel -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:18px;">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Total Bill Amount</label>
+            <input type="number" id="splitTotal" placeholder="1200" inputmode="decimal" oninput="calcSplit()"/>
+          </div>
+          <div class="form-group">
+            <label>Split Type</label>
+            <select id="splitType" onchange="toggleSplitMode()">
+              <option value="equal">Equal Split</option>
+              <option value="percent">By Percentage</option>
+              <option value="custom">Custom Amounts</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tip / Extra (%)</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="split-tip-btn active" onclick="setTip(0,this)">No tip</button>
+            <button class="split-tip-btn" onclick="setTip(5,this)">5%</button>
+            <button class="split-tip-btn" onclick="setTip(10,this)">10%</button>
+            <button class="split-tip-btn" onclick="setTip(18,this)">18% GST</button>
+            <button class="split-tip-btn" onclick="setTip(28,this)">28% GST</button>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <input type="number" id="splitTipCustom" placeholder="other%" inputmode="decimal"
+                style="width:72px;padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;"
+                oninput="setTipCustom()"/>
+            </div>
+          </div>
+        </div>
+        <!-- people -->
+        <div class="section-header" style="margin-bottom:10px;">
+          <div style="font-size:13px;font-weight:600;">People</div>
+          <button class="section-link" onclick="addSplitPerson()">+ Add Person</button>
+        </div>
+        <div id="splitPeopleList"></div>
+      </div>
+
+      <!-- result panel -->
+      <div id="splitResult" style="display:none;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:12px;color:var(--text2);letter-spacing:0.5px;">TOTAL WITH EXTRAS</div>
+            <div id="splitGrandTotal" style="font-size:16px;font-weight:bold;"></div>
+          </div>
+          <div id="splitBreakdown"></div>
+          <div style="display:flex;gap:10px;margin-top:14px;">
+            <button onclick="saveBill()" style="flex:1;padding:12px;border-radius:12px;border:none;background:var(--green);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;">
+              💾 Save Bill
+            </button>
+            <button onclick="shareSplit()" style="flex:1;padding:12px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:bold;cursor:pointer;">
+              📤 WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- saved bills section -->
+      <div id="savedBillsSection" style="display:none;">
+        <div class="section-header" style="margin-bottom:12px;">
+          <div class="section-title">Saved Bills</div>
+          <span id="savedBillsCount" style="font-size:12px;color:var(--text2);"></span>
+        </div>
+        <div id="savedBillsList"></div>
+      </div>
+    </div>
+
+    <!-- ═══ STREAKS & BADGES PAGE ═══ -->
+    <div class="page" id="pageStreaks">
+      <button class="back-btn" onclick="goPage('More')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+      </button>
+      <div class="page-title">Streaks & Badges 🏆</div>
+      <div class="page-sub">Build good money habits every day</div>
+
+      <!-- streak cards -->
+      <div style="display:flex;gap:10px;margin-bottom:18px;">
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:28px;margin-bottom:4px;">🔥</div>
+          <div id="streakDays" style="font-size:26px;font-weight:bold;color:#f59e0b;">0</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">Day Streak</div>
+        </div>
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:28px;margin-bottom:4px;">🏅</div>
+          <div id="streakBadgeCount" style="font-size:26px;font-weight:bold;color:var(--accent);">0</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">Badges Earned</div>
+        </div>
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-size:28px;margin-bottom:4px;">📅</div>
+          <div id="streakLoggedDays" style="font-size:26px;font-weight:bold;color:var(--green);">0</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">Days Logged</div>
+        </div>
+      </div>
+
+      <!-- active streak bar -->
+      <div id="streakBar" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:600;">Logging Streak</div>
+          <div id="streakBarLabel" style="font-size:12px;color:var(--text2);"></div>
+        </div>
+        <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;">
+          <div id="streakBarFill" style="height:100%;background:linear-gradient(90deg,#f59e0b,#ef4444);border-radius:4px;transition:width 0.6s;width:0%;"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-top:8px;" id="streakBarSub"></div>
+      </div>
+
+      <!-- badges -->
+      <div class="section-title" style="margin-bottom:12px;">All Badges</div>
+      <div id="badgeGrid"></div>
     </div>
 
   </div><!-- /pages -->
@@ -1216,7 +1369,7 @@ svg{display:block;}
 
 <script>
 /* ════ DATA ════════════════════════════════════════════════ */
-var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [], wishlist = [], warranties = [];
+var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [], wishlist = [], warranties = [], splitBills = [];
 
 function saveData() {
   try {
@@ -1228,6 +1381,7 @@ function saveData() {
     localStorage.setItem('sxt_debts',    JSON.stringify(debts));
     localStorage.setItem('sxt_wishlist',   JSON.stringify(wishlist));
     localStorage.setItem('sxt_warranties', JSON.stringify(warranties));
+    localStorage.setItem('sxt_splitbills', JSON.stringify(splitBills));
   } catch(e) {}
 }
 function loadData() {
@@ -1240,6 +1394,7 @@ function loadData() {
     if(s) subs=JSON.parse(s);   if(d) debts=JSON.parse(d);
     var wl=localStorage.getItem('sxt_wishlist');    if(wl) wishlist=JSON.parse(wl);
     var wa=localStorage.getItem('sxt_warranties');  if(wa) warranties=JSON.parse(wa);
+    var sb=localStorage.getItem('sxt_splitbills');  if(sb) splitBills=JSON.parse(sb);
   } catch(e) {}
 }
 
@@ -1440,6 +1595,8 @@ function goPage(name) {
   if(name==='Debt')      refreshDebtPage();
   if(name==='Wishlist')  refreshWishlistPage();
   if(name==='Warranty')  refreshWarrantyPage();
+  if(name==='Splitter')  refreshSplitterPage();
+  if(name==='Streaks')   refreshStreaksPage();
 }
 
 /* ════ THEME ════════════════════════════════════════════════ */
@@ -2011,15 +2168,29 @@ function refreshAll() {
   /* home subs teaser */
   var el=document.getElementById('homeSubsTeaser'); if(!el) return;
   var active=subs.filter(function(s){return s.active!==false;});
-  if(active.length===0){el.innerHTML='<div style="font-size:13px;color:var(--text2);padding:8px 0">No subscriptions tracked. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer" onclick="goPage(\'Subs\')">Add one →</button></div>';return;}
+  if(active.length===0){
+    el.innerHTML='<div style="font-size:13px;color:var(--text2);padding:8px 0 4px;">No subscriptions yet. <button style="background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer;" onclick="goPage(\'Subs\')">Add one →</button></div>';
+    return;
+  }
   var sorted=active.slice().sort(function(a,b){return new Date(a.due)-new Date(b.due);});
-  el.innerHTML=sorted.slice(0,2).map(function(s){
-    var days=daysUntil(s.due), bColor=days<=0?'var(--red)':days<=3?'#f59e0b':'var(--text2)', daysLbl=days<0?'Overdue':days===0?'Due today':'Due in '+days+'d', clr=SUB_COLORS[s.cat]||'#7c6dfa';
-    return '<div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
-      +'<div style="width:36px;height:36px;border-radius:10px;background:'+clr+'22;color:'+clr+';display:flex;align-items:center;justify-content:center;flex-shrink:0">'+(SUB_ICONS[s.cat]||SUB_ICONS.other)+'</div>'
-      +'<div style="flex:1"><div style="font-size:13px;font-weight:500">'+s.name+'</div><div style="font-size:11px;color:'+bColor+'">'+daysLbl+'</div></div>'
-      +'<div style="font-size:14px;font-weight:bold"'+fmtC(s.amt)+'</div></div>';
-  }).join('');
+  el.innerHTML='<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;">'
+    +sorted.slice(0,3).map(function(s,i){
+      var days=daysUntil(s.due);
+      var bColor=days<=0?'var(--red)':days<=3?'#f59e0b':'var(--text2)';
+      var daysLbl=days<0?'Overdue ⚠️':days===0?'Due today!':'Due in '+days+'d';
+      var clr=SUB_COLORS[s.cat]||'#7c6dfa';
+      var border=i>0?'border-top:1px solid var(--border);':'';
+      return '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;'+border+'">'
+        +'<div style="width:34px;height:34px;border-radius:9px;background:'+clr+'22;color:'+clr+';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+( SUB_ICONS[s.cat]||SUB_ICONS.other)+'</div>'
+        +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+s.name+'</div>'
+          +'<div style="font-size:11px;color:'+bColor+';">'+daysLbl+'</div>'
+        +'</div>'
+        +'<div style="font-size:13px;font-weight:bold;flex-shrink:0;">'+fmtC(s.amt)+'</div>'
+        +'</div>';
+    }).join('')
+    +(active.length>3?'<div style="text-align:center;padding:8px;font-size:12px;color:var(--text2);border-top:1px solid var(--border);">+' +(active.length-3)+' more</div>':'')
+    +'</div>';
 }
 
 /* ════ GREETING ═════════════════════════════════════════════ */
@@ -3117,6 +3288,20 @@ function refreshWarrantyPage() {
 /* ════ PHASE 17 — Notifications + Backup & Restore ══════════ */
 
 /* ── WEB NOTIFICATIONS ── */
+function testNotification() {
+  if (!('Notification' in window)) { showToast('Notifications not supported on this browser'); return; }
+  if (Notification.permission !== 'granted') {
+    showToast('Enable notifications first using the toggle above');
+    return;
+  }
+  sendNotif(
+    'sXt Test Notification ✅',
+    'Notifications are working! You will receive alerts for subscriptions, warranties and more when you open the app.',
+    '🔔'
+  );
+  showToast('Test notification sent! Check your notification bar.');
+}
+
 function updateNotifUI() {
   var toggle = document.getElementById('notifToggle');
   var label  = document.getElementById('notifStatusLabel');
@@ -3239,7 +3424,8 @@ function exportFullBackup() {
     subs:       subs,
     debts:      debts,
     wishlist:   wishlist,
-    warranties: warranties
+    warranties: warranties,
+    splitBills: splitBills
   };
   var json = JSON.stringify(data, null, 2);
   var blob = new Blob([json], {type:'application/json'});
@@ -3274,6 +3460,7 @@ function importBackup(input) {
       debts      = data.debts      || [];
       wishlist   = data.wishlist   || [];
       warranties = data.warranties || [];
+      splitBills = data.splitBills  || [];
       saveData();
       showToast('✅ Backup restored! ' + txns.length + ' transactions, ' + wallets.length + ' wallets loaded.');
       refreshAll();
@@ -3284,6 +3471,572 @@ function importBackup(input) {
     input.value = '';
   };
   reader.readAsText(file);
+}
+
+/* ════ PHASE 18 — Bill Splitter ════════════════════════════ */
+
+var splitPeople  = []; // [{name, percent, custom, paid}]
+var splitTipPct  = 0;
+
+function refreshSplitterPage() {
+  if (splitPeople.length === 0) {
+    splitPeople = [
+      {name:'You',    percent:50, custom:0, paid:false},
+      {name:'Friend', percent:50, custom:0, paid:false}
+    ];
+  }
+  renderSplitPeople();
+  calcSplit();
+  renderSavedBills();
+}
+
+function setTip(pct, btn) {
+  splitTipPct = pct;
+  document.querySelectorAll('.split-tip-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('splitTipCustom').value = '';
+  calcSplit();
+}
+function setTipCustom() {
+  var v = parseFloat(document.getElementById('splitTipCustom').value) || 0;
+  splitTipPct = v;
+  document.querySelectorAll('.split-tip-btn').forEach(function(b){ b.classList.remove('active'); });
+  calcSplit();
+}
+
+function toggleSplitMode() {
+  renderSplitPeople(); calcSplit();
+}
+
+function addSplitPerson() {
+  var n = splitPeople.length + 1;
+  splitPeople.push({name:'Person '+n, percent: Math.round(100/splitPeople.length), custom:0, paid:false});
+  // rebalance percents
+  rebalancePercents();
+  renderSplitPeople(); calcSplit();
+}
+function removeSplitPerson(i) {
+  if (splitPeople.length <= 2) { showToast('Need at least 2 people'); return; }
+  splitPeople.splice(i,1);
+  rebalancePercents();
+  renderSplitPeople(); calcSplit();
+}
+function rebalancePercents() {
+  var each = Math.floor(100 / splitPeople.length);
+  var rem  = 100 - each * splitPeople.length;
+  splitPeople.forEach(function(p, i){ p.percent = each + (i===0 ? rem : 0); });
+}
+
+function renderSplitPeople() {
+  var el   = document.getElementById('splitPeopleList'); if(!el) return;
+  var mode = (document.getElementById('splitType')||{}).value || 'equal';
+  var colors = ['var(--accent)','var(--green)','#f59e0b','#ec4899','#14b8a6','#818cf8'];
+
+  el.innerHTML = splitPeople.map(function(p, i) {
+    var avatarBg = colors[i % colors.length] + '22';
+    var avatarClr= colors[i % colors.length];
+    var initial  = (p.name||'?').charAt(0).toUpperCase();
+    var extraInput = '';
+    if (mode === 'percent') {
+      extraInput = '<input type="number" value="'+p.percent+'" min="0" max="100" inputmode="decimal" '
+        +'onchange="splitPeople['+i+'].percent=parseFloat(this.value)||0;calcSplit();" '
+        +'style="width:56px;padding:5px 6px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;"/>'
+        +'<span style="font-size:11px;color:var(--text2);">%</span>';
+    } else if (mode === 'custom') {
+      extraInput = '<span style="font-size:12px;color:var(--text2);">'+homeCurrencySymbol+'</span>'
+        +'<input type="number" value="'+(p.custom||'')+'" placeholder="0" inputmode="decimal" '
+        +'onchange="splitPeople['+i+'].custom=parseFloat(this.value)||0;calcSplit();" '
+        +'style="width:70px;padding:5px 6px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;"/>';
+    }
+    return '<div class="split-person-row">'
+      +'<div class="split-person-avatar" style="background:'+avatarBg+';color:'+avatarClr+';">'+initial+'</div>'
+      +'<input type="text" value="'+p.name+'" placeholder="Name" '
+        +'onchange="splitPeople['+i+'].name=this.value;renderSplitPeople();" '
+        +'style="flex:1;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;min-width:0;"/>'
+      +(extraInput ? '<div style="display:flex;align-items:center;gap:4px;">'+extraInput+'</div>' : '')
+      +(splitPeople.length > 2
+        ? '<button onclick="removeSplitPerson('+i+')" style="width:26px;height:26px;border-radius:6px;border:none;background:var(--red-s);color:var(--red);cursor:pointer;font-size:14px;flex-shrink:0;padding:0;line-height:1;">✕</button>'
+        : '')
+      +'</div>';
+  }).join('');
+}
+
+function calcSplit() {
+  var totalEl = document.getElementById('splitTotal');
+  var total   = parseFloat((totalEl||{}).value) || 0;
+  var mode    = (document.getElementById('splitType')||{}).value || 'equal';
+  var grand   = Math.round(total * (1 + splitTipPct / 100) * 100) / 100;
+  var resultEl= document.getElementById('splitResult');
+  var bdEl    = document.getElementById('splitBreakdown');
+  var gtEl    = document.getElementById('splitGrandTotal');
+  if (!resultEl || !bdEl || !gtEl) return;
+
+  if (total <= 0 || splitPeople.length === 0) { resultEl.style.display='none'; return; }
+  resultEl.style.display = 'block';
+  gtEl.textContent = fmtC(grand) + (splitTipPct > 0 ? ' (incl. '+splitTipPct+'%)' : '');
+
+  var shares = [];
+  if (mode === 'equal') {
+    var each = grand / splitPeople.length;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:each, paid:p.paid}; });
+  } else if (mode === 'percent') {
+    var totalPct = splitPeople.reduce(function(s,p){return s+p.percent;},0) || 100;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:grand*(p.percent/totalPct), paid:p.paid}; });
+  } else {
+    var totalCustom = splitPeople.reduce(function(s,p){return s+p.custom;},0) || 1;
+    var scale = grand / totalCustom;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:p.custom*scale, paid:p.paid}; });
+  }
+
+  bdEl.innerHTML = shares.map(function(s, i) {
+    return '<div class="split-result-row">'
+      +'<div>'
+        +'<div style="font-size:14px;font-weight:600;">'+s.name+'</div>'
+        +(mode==='percent'?'<div style="font-size:11px;color:var(--text2);">'+splitPeople[i].percent+'% of bill</div>':'')
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px;">'
+        +'<div style="font-size:16px;font-weight:bold;">'+fmtC(Math.round(s.share*100)/100)+'</div>'
+        +'<span class="split-paid-badge '+(s.paid?'paid':'unpaid')+'" onclick="toggleSplitPaid('+i+')">'
+          +(s.paid?'✓ Paid':'Unpaid')
+        +'</span>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function toggleSplitPaid(i) {
+  splitPeople[i].paid = !splitPeople[i].paid;
+  calcSplit();
+  var unpaid = splitPeople.filter(function(p){ return !p.paid; });
+  if (unpaid.length === 0) {
+    showToast('Everyone has paid! 🎉');
+    sendNotif('Bill Settled! 🎉', 'Everyone has paid their share. Bill is fully settled!', '🎉');
+  }
+}
+
+function saveBill() {
+  var totalEl = document.getElementById('splitTotal');
+  var total   = parseFloat((totalEl||{}).value) || 0;
+  var mode    = (document.getElementById('splitType')||{}).value || 'equal';
+  if (total <= 0) { showToast('Enter a bill amount first'); return; }
+  var grand = Math.round(total * (1 + splitTipPct / 100) * 100) / 100;
+
+  // Compute each person's share
+  var shares;
+  if (mode === 'equal') {
+    var each = grand / splitPeople.length;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:Math.round(each*100)/100, paid:p.paid}; });
+  } else if (mode === 'percent') {
+    var tp = splitPeople.reduce(function(s,p){return s+p.percent;},0) || 100;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:Math.round(grand*(p.percent/tp)*100)/100, paid:p.paid}; });
+  } else {
+    var tc = splitPeople.reduce(function(s,p){return s+p.custom;},0) || 1;
+    var sc = grand / tc;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:Math.round(p.custom*sc*100)/100, paid:p.paid}; });
+  }
+
+  // Ask for a label
+  var label = window.prompt('Give this bill a name (e.g. "Dinner at Barbeque Nation"):');
+  if (label === null) return; // cancelled
+  if (!label.trim()) label = 'Bill on ' + new Date().toLocaleDateString('en-IN');
+
+  splitBills.unshift({
+    id:        Date.now(),
+    label:     label.trim(),
+    total:     grand,
+    tipPct:    splitTipPct,
+    mode:      mode,
+    date:      new Date().toISOString().split('T')[0],
+    members:   shares,
+    expanded:  false
+  });
+  saveData();
+  renderSavedBills();
+  showToast('Bill saved! ✅ Track payments in Saved Bills below.');
+}
+
+function renderSavedBills() {
+  var section = document.getElementById('savedBillsSection');
+  var listEl  = document.getElementById('savedBillsList');
+  var countEl = document.getElementById('savedBillsCount');
+  if (!section || !listEl) return;
+
+  if (splitBills.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+  if (countEl) countEl.textContent = splitBills.length + ' bill' + (splitBills.length>1?'s':'') + ' saved';
+
+  listEl.innerHTML = splitBills.map(function(bill) {
+    var paidCount   = bill.members.filter(function(m){ return m.paid; }).length;
+    var totalCount  = bill.members.length;
+    var allPaid     = paidCount === totalCount;
+    var statusColor = allPaid ? 'var(--green)' : paidCount > 0 ? '#f59e0b' : 'var(--red)';
+    var statusTxt   = allPaid ? '✓ Settled' : paidCount + '/' + totalCount + ' paid';
+    var pct         = Math.round((paidCount / totalCount) * 100);
+
+    var memberRows = '';
+    if (bill.expanded) {
+      memberRows = '<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">'
+        + bill.members.map(function(m, mi) {
+            var isPaid = m.paid;
+            return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">'
+              + '<div style="width:32px;height:32px;border-radius:50%;background:var(--accent-s);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;flex-shrink:0;">'
+                + (m.name||'?').charAt(0).toUpperCase()
+              + '</div>'
+              + '<div style="flex:1;min-width:0;">'
+                + '<div style="font-size:13px;font-weight:600;">' + m.name + '</div>'
+                + '<div style="font-size:12px;font-weight:bold;color:var(--text);">' + fmtC(m.share) + '</div>'
+              + '</div>'
+              + '<button onclick="toggleSavedMemberPaid('+bill.id+','+mi+')" '
+                + 'style="padding:7px 14px;border-radius:8px;border:none;font-size:12px;font-weight:600;cursor:pointer;'
+                + (isPaid ? 'background:var(--green-s);color:var(--green);' : 'background:var(--red-s);color:var(--red);') + '">'
+                + (isPaid ? '✓ Paid' : 'Mark Paid')
+              + '</button>'
+            + '</div>';
+          }).join('')
+        + '<div style="padding-top:10px;display:flex;gap:8px;">'
+          + '<button onclick="shareSavedBill('+bill.id+')" style="flex:1;padding:8px;border-radius:8px;border:none;background:var(--accent-s);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;">📤 WhatsApp</button>'
+          + '<button onclick="deleteSavedBill('+bill.id+')" style="padding:8px 12px;border-radius:8px;border:none;background:var(--red-s);color:var(--red);font-size:12px;cursor:pointer;">🗑️ Delete</button>'
+        + '</div>'
+        + '</div>';
+    }
+
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;">'
+      // header row — tap to expand/collapse
+      + '<div onclick="toggleSavedBill('+bill.id+')" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;">'
+        + '<div style="width:40px;height:40px;border-radius:12px;background:var(--accent-s);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🍽️</div>'
+        + '<div style="flex:1;min-width:0;">'
+          + '<div style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + bill.label + '</div>'
+          + '<div style="font-size:11px;color:var(--text2);">' + bill.date + ' · ' + totalCount + ' people · ' + fmtC(bill.total) + '</div>'
+        + '</div>'
+        + '<div style="text-align:right;flex-shrink:0;">'
+          + '<div style="font-size:12px;font-weight:700;color:'+statusColor+';">' + statusTxt + '</div>'
+          // progress bar
+          + '<div style="width:60px;height:4px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden;">'
+            + '<div style="height:100%;width:'+pct+'%;background:'+statusColor+';border-radius:2px;transition:width 0.4s;"></div>'
+          + '</div>'
+        + '</div>'
+        + '<div style="margin-left:6px;color:var(--text2);font-size:14px;">' + (bill.expanded ? '▲' : '▼') + '</div>'
+      + '</div>'
+      + memberRows
+    + '</div>';
+  }).join('');
+}
+
+function toggleSavedBill(id) {
+  for (var i=0; i<splitBills.length; i++) {
+    if (splitBills[i].id === id) {
+      splitBills[i].expanded = !splitBills[i].expanded;
+      break;
+    }
+  }
+  renderSavedBills();
+}
+
+function toggleSavedMemberPaid(billId, memberIdx) {
+  for (var i=0; i<splitBills.length; i++) {
+    if (splitBills[i].id === billId) {
+      splitBills[i].members[memberIdx].paid = !splitBills[i].members[memberIdx].paid;
+      var allPaid = splitBills[i].members.every(function(m){ return m.paid; });
+      if (allPaid) {
+        showToast('🎉 ' + splitBills[i].label + ' is fully settled!');
+        sendNotif('Bill Fully Settled! 🎉', splitBills[i].label + ' — everyone has paid their share!', '🎉');
+      }
+      break;
+    }
+  }
+  saveData();
+  renderSavedBills();
+}
+
+function deleteSavedBill(id) {
+  if (!confirm('Delete this saved bill?')) return;
+  splitBills = splitBills.filter(function(b){ return b.id !== id; });
+  saveData();
+  renderSavedBills();
+  showToast('Bill removed');
+}
+
+function shareSavedBill(id) {
+  var bill = null;
+  for (var i=0; i<splitBills.length; i++) { if (splitBills[i].id===id){bill=splitBills[i];break;} }
+  if (!bill) return;
+  var msg = '💰 *' + bill.label + '*\n';
+  msg += 'Total: ' + fmtC(bill.total) + (bill.tipPct>0?' (incl. '+bill.tipPct+'%)':'') + '\n\n';
+  bill.members.forEach(function(m){
+    msg += (m.paid ? '✅ ' : '⏳ ') + m.name + ': *' + fmtC(m.share) + '* — ' + (m.paid ? 'Paid' : 'Pending') + '\n';
+  });
+  msg += '\n_Sent via sXt Finance App_';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');
+}
+
+function shareSplit() {
+  var totalEl = document.getElementById('splitTotal');
+  var total   = parseFloat((totalEl||{}).value) || 0;
+  var grand   = Math.round(total * (1 + splitTipPct / 100) * 100) / 100;
+  var mode    = (document.getElementById('splitType')||{}).value || 'equal';
+
+  var shares = [];
+  if (mode === 'equal') {
+    var each = grand / splitPeople.length;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:each}; });
+  } else if (mode === 'percent') {
+    var totalPct = splitPeople.reduce(function(s,p){return s+p.percent;},0) || 100;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:grand*(p.percent/totalPct)}; });
+  } else {
+    var totalCustom = splitPeople.reduce(function(s,p){return s+p.custom;},0) || 1;
+    var scale = grand / totalCustom;
+    shares = splitPeople.map(function(p){ return {name:p.name, share:p.custom*scale}; });
+  }
+
+  var msg = '💰 *Bill Split Summary*\n';
+  msg += 'Total: ' + fmtC(grand) + (splitTipPct>0?' (incl. '+splitTipPct+'% tip/tax)':'') + '\n\n';
+  shares.forEach(function(s){
+    msg += '• ' + s.name + ': *' + fmtC(Math.round(s.share*100)/100) + '*\n';
+  });
+  msg += '\n_Sent via sXt Finance App_';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');
+}
+
+/* ════ PHASE 19 — Streaks & Badges ══════════════════════════ */
+
+/* Badge definitions: id, icon, name, desc, check(data) → {earned, progress 0-100, detail} */
+var BADGE_DEFS = [
+  {
+    id:'first_tx', icon:'🎯', name:'First Step',
+    desc:'Log your first transaction',
+    check: function(d) {
+      var e=d.txns.length>0;
+      return {earned:e, progress:e?100:0, detail:e?'Done!':'Add 1 transaction'};
+    }
+  },
+  {
+    id:'txn10', icon:'📝', name:'Getting Started',
+    desc:'Log 10 transactions',
+    check: function(d) {
+      var n=d.txns.length, p=Math.min(Math.round(n/10*100),100);
+      return {earned:n>=10, progress:p, detail:n+'/ 10 transactions'};
+    }
+  },
+  {
+    id:'txn50', icon:'📚', name:'Habit Builder',
+    desc:'Log 50 transactions',
+    check: function(d) {
+      var n=d.txns.length, p=Math.min(Math.round(n/50*100),100);
+      return {earned:n>=50, progress:p, detail:n+'/ 50 transactions'};
+    }
+  },
+  {
+    id:'budget1', icon:'🎯', name:'Budget Setter',
+    desc:'Set your first budget limit',
+    check: function(d) {
+      var e=d.budgets.length>0;
+      return {earned:e, progress:e?100:0, detail:e?'Done!':'Set 1 budget limit'};
+    }
+  },
+  {
+    id:'goal1', icon:'🌟', name:'Dream Chaser',
+    desc:'Create your first savings goal',
+    check: function(d) {
+      var e=d.goals.length>0;
+      return {earned:e, progress:e?100:0, detail:e?'Done!':'Create 1 goal'};
+    }
+  },
+  {
+    id:'goal_done', icon:'🏆', name:'Goal Crusher',
+    desc:'Fully achieve a savings goal',
+    check: function(d) {
+      var done=d.goals.filter(function(g){return g.saved>=g.target&&g.target>0;});
+      return {earned:done.length>0, progress:done.length>0?100:0, detail:done.length>0?done.length+' goal(s) reached!':'Reach 100% on any goal'};
+    }
+  },
+  {
+    id:'wallet3', icon:'👛', name:'Multi-Banker',
+    desc:'Add 3 or more wallets',
+    check: function(d) {
+      var n=d.wallets.length, p=Math.min(Math.round(n/3*100),100);
+      return {earned:n>=3, progress:p, detail:n+'/ 3 wallets'};
+    }
+  },
+  {
+    id:'sub1', icon:'📅', name:'Subscription Tracker',
+    desc:'Track your first subscription',
+    check: function(d) {
+      var e=d.subs.length>0;
+      return {earned:e, progress:e?100:0, detail:e?'Done!':'Add 1 subscription'};
+    }
+  },
+  {
+    id:'debt_settle', icon:'🤝', name:'Debt Cleared',
+    desc:'Settle a debt with a friend',
+    check: function(d) {
+      var done=d.debts.filter(function(d){return d.settled;});
+      return {earned:done.length>0, progress:done.length>0?100:0, detail:done.length>0?done.length+' settled!':'Settle 1 debt'};
+    }
+  },
+  {
+    id:'wishlist_skip', icon:'🧊', name:'Impulse Resistor',
+    desc:'Skip a wishlist item instead of buying',
+    check: function(d) {
+      var skipped=d.wishlist.filter(function(w){return w.status==='skipped';});
+      return {earned:skipped.length>0, progress:skipped.length>0?100:0, detail:skipped.length>0?skipped.length+' item(s) skipped!':'Skip a wishlist item'};
+    }
+  },
+  {
+    id:'wishlist3skip', icon:'💎', name:'Smart Spender',
+    desc:'Skip 3 wishlist items — saving money the smart way',
+    check: function(d) {
+      var s=d.wishlist.filter(function(w){return w.status==='skipped';}).length;
+      return {earned:s>=3, progress:Math.min(Math.round(s/3*100),100), detail:s+'/ 3 items skipped'};
+    }
+  },
+  {
+    id:'streak7', icon:'🔥', name:'Week Warrior',
+    desc:'Log transactions 7 days in a row',
+    check: function(d) {
+      var streak=calcStreak(d.txns);
+      return {earned:streak>=7, progress:Math.min(Math.round(streak/7*100),100), detail:streak+'/ 7 day streak'};
+    }
+  },
+  {
+    id:'streak30', icon:'🌙', name:'Monthly Master',
+    desc:'Log transactions 30 days in a row',
+    check: function(d) {
+      var streak=calcStreak(d.txns);
+      return {earned:streak>=30, progress:Math.min(Math.round(streak/30*100),100), detail:streak+'/ 30 day streak'};
+    }
+  },
+  {
+    id:'saver', icon:'💰', name:'Smart Saver',
+    desc:'Save more than you spend in a month',
+    check: function(d) {
+      var now=new Date();
+      var thisM=d.txns.filter(function(t){var dd=new Date(t.date);return dd.getFullYear()===now.getFullYear()&&dd.getMonth()===now.getMonth()&&!t.isTransfer;});
+      var inc=thisM.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+t.amt;},0);
+      var exp=thisM.filter(function(t){return t.type==='debit';}).reduce(function(s,t){return s+t.amt;},0);
+      var saved=inc>0&&exp<inc;
+      var pct=inc>0?Math.min(Math.round(((inc-exp)/inc)*100),100):0;
+      return {earned:saved, progress:Math.max(0,pct), detail:saved?'Saved '+pct+'% this month!':'Save more than you spend this month'};
+    }
+  },
+  {
+    id:'split1', icon:'🍽️', name:'Bill Splitter',
+    desc:'Save your first split bill',
+    check: function(d) {
+      var e=d.splitBills.length>0;
+      return {earned:e, progress:e?100:0, detail:e?'Done!':'Save 1 split bill'};
+    }
+  }
+];
+
+function calcStreak(txnArr) {
+  if (!txnArr || txnArr.length===0) return 0;
+  // Get unique dates with transactions, sorted desc
+  var dates = {};
+  txnArr.forEach(function(t){ if(t.date) dates[t.date]=true; });
+  var sorted = Object.keys(dates).sort().reverse();
+  if (sorted.length===0) return 0;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var todayStr = today.toISOString().split('T')[0];
+  var yest = new Date(today); yest.setDate(yest.getDate()-1);
+  var yestStr = yest.toISOString().split('T')[0];
+  // Streak must include today or yesterday to be active
+  if (sorted[0] !== todayStr && sorted[0] !== yestStr) return 0;
+  var streak=1, prev=new Date(sorted[0]);
+  for (var i=1; i<sorted.length; i++) {
+    var cur = new Date(sorted[i]);
+    var diff = Math.round((prev-cur)/86400000);
+    if (diff===1) { streak++; prev=cur; }
+    else break;
+  }
+  return streak;
+}
+
+function getStreakData() {
+  return {
+    txns:      txns,
+    budgets:   budgets,
+    goals:     goals,
+    wallets:   wallets,
+    subs:      subs,
+    debts:     debts,
+    wishlist:  wishlist,
+    splitBills:splitBills
+  };
+}
+
+function refreshStreaksPage() {
+  var data   = getStreakData();
+  var streak = calcStreak(txns);
+  var earned = BADGE_DEFS.filter(function(b){ return b.check(data).earned; });
+  // unique logged days
+  var days = {};
+  txns.forEach(function(t){ if(t.date&&!t.isTransfer) days[t.date]=true; });
+  var loggedDays = Object.keys(days).length;
+
+  setText('streakDays',       streak);
+  setText('streakBadgeCount', earned.length);
+  setText('streakLoggedDays', loggedDays);
+
+  // Streak progress bar (target: 30)
+  var target = streak < 7 ? 7 : streak < 30 ? 30 : 100;
+  var pct    = Math.min(Math.round((streak/target)*100), 100);
+  var fillEl = document.getElementById('streakBarFill');
+  var lblEl  = document.getElementById('streakBarLabel');
+  var subEl  = document.getElementById('streakBarSub');
+  if (fillEl) fillEl.style.width = pct + '%';
+  if (lblEl)  lblEl.textContent  = streak + ' / ' + target + ' days';
+  if (subEl)  subEl.textContent  = streak === 0 ? 'Log a transaction today to start your streak! 🚀'
+                                  : streak < 7  ? 'Keep going! ' + (7-streak) + ' more days to earn Week Warrior 🔥'
+                                  : streak < 30 ? 'Amazing! ' + (30-streak) + ' more days to earn Monthly Master 🌙'
+                                  : 'Incredible streak! You\'re a finance legend 🏆';
+
+  // Badge grid
+  var grid = document.getElementById('badgeGrid'); if (!grid) return;
+  var earnedFirst = BADGE_DEFS.slice().sort(function(a,b){
+    var ae=a.check(data).earned, be=b.check(data).earned;
+    return (be?1:0)-(ae?1:0);
+  });
+  grid.innerHTML = earnedFirst.map(function(b) {
+    var res   = b.check(data);
+    var isEarned = res.earned;
+    return '<div class="badge-card" style="opacity:'+(isEarned?'1':'0.55')+'">'
+      +'<div class="badge-icon" style="filter:'+(isEarned?'none':'grayscale(1)')+'">' + b.icon + '</div>'
+      +'<div class="badge-info">'
+        +'<div class="badge-name">' + b.name + (isEarned?' <span style="font-size:14px;">✨</span>':'') + '</div>'
+        +'<div class="badge-desc">' + b.desc + '</div>'
+        +(isEarned
+          ? '<div class="badge-earned">✓ EARNED</div>'
+          : '<div class="badge-prog"><div class="badge-prog-fill" style="width:'+res.progress+'%;background:var(--accent);"></div></div>'
+            +'<div class="badge-locked">' + res.detail + '</div>'
+        )
+      +'</div>'
+    +'</div>';
+  }).join('');
+
+  // Notify on new badges
+  checkBadgeNotifications(data);
+}
+
+function checkBadgeNotifications(data) {
+  var earnedIds = [];
+  try { earnedIds = JSON.parse(localStorage.getItem('sxt_earned_badges')||'[]'); } catch(e){}
+  var newBadges = [];
+  BADGE_DEFS.forEach(function(b){
+    if (b.check(data).earned && earnedIds.indexOf(b.id) === -1) {
+      newBadges.push(b);
+      earnedIds.push(b.id);
+    }
+  });
+  if (newBadges.length > 0) {
+    try { localStorage.setItem('sxt_earned_badges', JSON.stringify(earnedIds)); } catch(e){}
+    newBadges.forEach(function(b){
+      sendNotif('New Badge Earned! ' + b.icon, 'You earned "' + b.name + '" — ' + b.desc, b.icon);
+      showToast('🏅 Badge unlocked: ' + b.name + ' ' + b.icon);
+    });
+  }
 }
 
 init();
