@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#0d0d14"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="st"/>
+  <meta name="apple-mobile-web-app-title" content="ST"/>
   <link rel="apple-touch-icon" href="logo.png"/>
-  <title>st</title>
+  <title>ST — Secret Transactions</title>
   <style>
 /* ══ THEMES ══════════════════════════════════════════════ */
 [data-theme="dark"] {
@@ -301,6 +301,29 @@ svg{display:block;}
 .badge-prog-fill{height:100%;border-radius:3px;transition:width 0.6s;}
 .badge-earned{background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:11px;font-weight:800;}
 .badge-locked{font-size:11px;color:var(--text2);}
+/* ══ PHASE 20 — Transaction Templates ════════════════════ */
+.tpl-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:0;margin-bottom:10px;overflow:hidden;}
+.tpl-main{display:flex;align-items:center;gap:12px;padding:13px 14px;}
+.tpl-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
+.tpl-info{flex:1;min-width:0;}
+.tpl-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tpl-meta{font-size:11px;color:var(--text2);margin-top:1px;}
+.tpl-amt{font-size:16px;font-weight:bold;flex-shrink:0;}
+.tpl-actions{display:flex;border-top:1px solid var(--border);}
+.tpl-btn{flex:1;padding:10px;border:none;background:none;font-size:12px;font-weight:600;cursor:pointer;border-right:1px solid var(--border);}
+.tpl-btn:last-child{border-right:none;}
+.tpl-btn-use{color:var(--accent);}
+.tpl-btn-edit{color:var(--text2);}
+.tpl-btn-del{color:var(--red);}
+/* ══ PHASE 21 — Monthly Wrapped ═══════════════════════════ */
+.wrapped-hero{background:linear-gradient(145deg,#1e1b4b,#312e81,#4c1d95);color:#fff;padding:28px 22px 22px;text-align:center;}
+.wrapped-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);}
+.wrapped-stat{background:var(--surface);padding:18px 14px;text-align:center;}
+.wrapped-stat-val{font-size:20px;font-weight:700;color:var(--accent);}
+.wrapped-stat-lbl{font-size:11px;color:var(--text2);margin-top:3px;}
+.wrapped-cat-bar{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.wrapped-cat-bar:last-child{border-bottom:none;}
+.wrapped-bar-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#a78bfa,#7c3aed);transition:width 0.5s;}
 /* ══ PHASE 15 — Wishlist Vault ════════════════════════════ */
 .wish-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
 .wish-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);transition:background 0.4s;}
@@ -328,8 +351,8 @@ svg{display:block;}
 <!-- ════════ PIN SCREEN ════════ -->
 <div id="pinScreen">
   <div style="text-align:center;margin-bottom:6px;">
-    <img src="logo.png" alt="st" style="height:72px;width:auto;display:inline-block;" onerror="this.style.display='none';document.getElementById('pinTextLogo').style.display='block'"/>
-    <h1 id="pinTextLogo" style="display:none;">st</h1>
+    <img src="logo.png" alt="ST" style="height:72px;width:auto;display:inline-block;" onerror="this.style.display='none';document.getElementById('pinTextLogo').style.display='block'"/>
+    <h1 id="pinTextLogo" style="display:none;">ST</h1>
   </div>
   <p class="sub">Secret Transactions</p>
   <div class="dots">
@@ -354,8 +377,8 @@ svg{display:block;}
   <!-- header -->
   <div class="header">
     <div class="header-logo">
-      <img src="logo.png" alt="st" style="height:32px;width:auto;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-      <span style="display:none;font-size:20px;font-weight:bold;color:var(--accent)">st</span>
+      <img src="logo.png" alt="ST" style="height:32px;width:auto;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <span style="display:none;font-size:20px;font-weight:bold;color:var(--accent)">ST</span>
     </div>
     <div class="header-right">
       <div class="theme-toggle">
@@ -530,6 +553,10 @@ svg{display:block;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#f59e0b"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/><line x1="20" y1="8" x2="20" y2="14"/></svg>Splitter</button>
         <button onclick="goPage('Streaks')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#f59e0b"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Streaks</button>
+        <button onclick="goPage('Templates')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:var(--accent)"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>Templates</button>
+        <button onclick="goPage('Wrapped')" style="flex:1;min-width:70px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="color:#a78bfa"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-5"/></svg>Wrapped</button>
       </div>
       <!-- home currency -->
       <div class="section-title" style="margin-bottom:10px;">Home Currency</div>
@@ -730,8 +757,9 @@ svg{display:block;}
       </div>
 
       <div style="text-align:center;padding:20px 0;color:var(--text2);font-size:12px;">
-        <img src="logo.png" style="height:36px;margin:0 auto 8px;display:block;" onerror="this.style.display='none'"/>
-        st — Secret Transactions<br/>v11.0 · Your money. Your secret.
+        <img src="logo.png" style="height:48px;margin:0 auto 6px;display:block;" onerror="this.style.display='none'"/>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px;">Secret Transactions</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px;">v21.0 · Your money. Your secret.</div>
       </div>
     </div>
 
@@ -1050,6 +1078,44 @@ svg{display:block;}
       <div id="badgeGrid"></div>
     </div>
 
+    <!-- ═══ TRANSACTION TEMPLATES PAGE ═══ -->
+    <div class="page" id="pageTemplates">
+      <button class="back-btn" onclick="goPage('More')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+      </button>
+      <div class="page-title">Quick Templates ⚡</div>
+      <div class="page-sub">One-tap to add frequent transactions</div>
+
+      <!-- tip banner -->
+      <div style="background:var(--accent-s);border:1px solid var(--accent);border-radius:12px;padding:12px 15px;margin-bottom:18px;font-size:12px;color:var(--text2);line-height:1.6;">
+        <b style="color:var(--text);">💡 Tip:</b> Save your frequent expenses here — office lunch, petrol, chai, gym fee. One tap adds the full transaction instantly, no typing needed.
+      </div>
+
+      <div class="section-header" style="margin-bottom:14px;">
+        <div class="section-title">My Templates</div>
+        <button class="section-link" onclick="openAddTemplate()">+ New</button>
+      </div>
+      <div id="templatesList"></div>
+    </div>
+
+    <!-- MONTHLY WRAPPED PAGE -->
+    <div class="page" id="pageWrapped">
+      <button class="back-btn" onclick="goPage('More')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
+      </button>
+      <div class="page-title">Monthly Wrapped 🎁</div>
+      <div class="page-sub">Your money story, beautifully summarised</div>
+      <div class="month-nav" style="margin-bottom:18px;">
+        <button class="month-nav-btn" onclick="shiftWrappedMonth(-1)">&#8249;</button>
+        <span id="wrappedMonthLabel"></span>
+        <button class="month-nav-btn" onclick="shiftWrappedMonth(1)">&#8250;</button>
+      </div>
+      <div id="wrappedCard" style="border-radius:20px;overflow:hidden;margin-bottom:18px;"></div>
+      <button id="wrappedShareBtn" onclick="shareWrapped()" style="display:none;width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#a78bfa,#7c3aed);color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">
+        📸 Save Recap Card
+      </button>
+    </div>
+
   </div><!-- /pages -->
 
   <!-- bottom nav -->
@@ -1352,6 +1418,56 @@ svg{display:block;}
   </div>
 </div>
 
+<!-- ═══ MODAL: ADD / EDIT TEMPLATE ═══ -->
+<div class="modal-overlay" id="modalTemplate">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="tplModalTitle">New Template</div>
+    <input type="hidden" id="editTplId" value=""/>
+    <div class="form-group">
+      <label>Template Name</label>
+      <input type="text" id="tplLabel" placeholder="e.g. Office Lunch, Petrol, Chai…"/>
+    </div>
+    <div style="display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;">
+      <button class="type-btn active" id="tplTypeDebit"  onclick="setTplType('debit')"  style="flex:1;padding:10px;border:none;background:var(--red-s);color:var(--red);font-weight:bold;cursor:pointer;">↓ Expense</button>
+      <button class="type-btn"        id="tplTypeCredit" onclick="setTplType('credit')" style="flex:1;padding:10px;border:none;background:none;color:var(--text2);cursor:pointer;">↑ Income</button>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <div id="tplCatBtns" style="display:flex;flex-wrap:wrap;gap:8px;">
+        <button class="cat-btn active" id="tplcat-food"      onclick="setTplCat('food',this)">🍽 Food</button>
+        <button class="cat-btn"        id="tplcat-transport" onclick="setTplCat('transport',this)">🚗 Transport</button>
+        <button class="cat-btn"        id="tplcat-shopping"  onclick="setTplCat('shopping',this)">🛍 Shopping</button>
+        <button class="cat-btn"        id="tplcat-bills"     onclick="setTplCat('bills',this)">📄 Bills</button>
+        <button class="cat-btn"        id="tplcat-health"    onclick="setTplCat('health',this)">❤️ Health</button>
+        <button class="cat-btn"        id="tplcat-income"    onclick="setTplCat('income',this)">💰 Income</button>
+        <button class="cat-btn"        id="tplcat-other"     onclick="setTplCat('other',this)">⊙ Other</button>
+      </div>
+    </div>
+    <div id="tplOtherCatRow" style="display:none;margin-bottom:14px;">
+      <label style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Custom Name *</label>
+      <input type="text" id="tplOtherName" placeholder="e.g. Brother, Gym, Doctor…"
+        style="width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:14px;"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="number" id="tplAmt" placeholder="120" inputmode="decimal"/>
+      </div>
+      <div class="form-group">
+        <label>Wallet</label>
+        <select id="tplWallet"></select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description (optional)</label>
+      <input type="text" id="tplDesc" placeholder="e.g. Swiggy lunch, Shell petrol…"/>
+    </div>
+    <button class="save-btn" onclick="saveTemplate()">Save Template</button>
+    <button class="cancel-btn" onclick="closeModal('modalTemplate')">Cancel</button>
+  </div>
+</div>
+
 <!-- ═══ MODAL: CHANGE PIN ═══ -->
 <div class="modal-overlay" id="modalChangePin">
   <div class="modal-sheet">
@@ -1369,32 +1485,34 @@ svg{display:block;}
 
 <script>
 /* ════ DATA ════════════════════════════════════════════════ */
-var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [], wishlist = [], warranties = [], splitBills = [];
+var wallets = [], txns = [], budgets = [], goals = [], subs = [], debts = [], wishlist = [], warranties = [], splitBills = [], txTemplates = [];
 
 function saveData() {
   try {
-    localStorage.setItem('st_wallets', JSON.stringify(wallets));
-    localStorage.setItem('st_txns',    JSON.stringify(txns));
-    localStorage.setItem('st_budgets', JSON.stringify(budgets));
-    localStorage.setItem('st_goals',   JSON.stringify(goals));
-    localStorage.setItem('st_subs',    JSON.stringify(subs));
-    localStorage.setItem('st_debts',    JSON.stringify(debts));
-    localStorage.setItem('st_wishlist',   JSON.stringify(wishlist));
-    localStorage.setItem('st_warranties', JSON.stringify(warranties));
-    localStorage.setItem('st_splitbills', JSON.stringify(splitBills));
+    localStorage.setItem('sxt_wallets', JSON.stringify(wallets));
+    localStorage.setItem('sxt_txns',    JSON.stringify(txns));
+    localStorage.setItem('sxt_budgets', JSON.stringify(budgets));
+    localStorage.setItem('sxt_goals',   JSON.stringify(goals));
+    localStorage.setItem('sxt_subs',    JSON.stringify(subs));
+    localStorage.setItem('sxt_debts',    JSON.stringify(debts));
+    localStorage.setItem('sxt_wishlist',   JSON.stringify(wishlist));
+    localStorage.setItem('sxt_warranties', JSON.stringify(warranties));
+    localStorage.setItem('sxt_splitbills',  JSON.stringify(splitBills));
+    localStorage.setItem('sxt_templates',   JSON.stringify(txTemplates));
   } catch(e) {}
 }
 function loadData() {
   try {
-    var w=localStorage.getItem('st_wallets'), t=localStorage.getItem('st_txns'),
-        b=localStorage.getItem('st_budgets'), g=localStorage.getItem('st_goals'),
-        s=localStorage.getItem('st_subs'),    d=localStorage.getItem('st_debts');
+    var w=localStorage.getItem('sxt_wallets'), t=localStorage.getItem('sxt_txns'),
+        b=localStorage.getItem('sxt_budgets'), g=localStorage.getItem('sxt_goals'),
+        s=localStorage.getItem('sxt_subs'),    d=localStorage.getItem('sxt_debts');
     if(w) wallets=JSON.parse(w); if(t) txns=JSON.parse(t);
     if(b) budgets=JSON.parse(b); if(g) goals=JSON.parse(g);
     if(s) subs=JSON.parse(s);   if(d) debts=JSON.parse(d);
-    var wl=localStorage.getItem('st_wishlist');    if(wl) wishlist=JSON.parse(wl);
-    var wa=localStorage.getItem('st_warranties');  if(wa) warranties=JSON.parse(wa);
-    var sb=localStorage.getItem('st_splitbills');  if(sb) splitBills=JSON.parse(sb);
+    var wl=localStorage.getItem('sxt_wishlist');    if(wl) wishlist=JSON.parse(wl);
+    var wa=localStorage.getItem('sxt_warranties');  if(wa) warranties=JSON.parse(wa);
+    var sb=localStorage.getItem('sxt_splitbills');  if(sb) splitBills=JSON.parse(sb);
+    var tp=localStorage.getItem('sxt_templates');   if(tp) txTemplates=JSON.parse(tp);
   } catch(e) {}
 }
 
@@ -1415,14 +1533,14 @@ document.querySelectorAll('.modal-overlay').forEach(function(o){
 /* ════ PIN ══════════════════════════════════════════════════ */
 var stored=null, mode='enter', attempt='', newBuf='', waiting=false;
 function makeHash(pin) {
-  var s=pin+'st2026', h=5381;
+  var s=pin+'sxt2026', h=5381;
   for(var i=0;i<s.length;i++){h=((h<<5)+h)+s.charCodeAt(i);h=h&h;}
   return 'p'+Math.abs(h).toString(16);
 }
 function init() {
   loadData(); loadHomeCurrency(); loadDisplayCurrency(); loadBioCredId();
-  try { stored=localStorage.getItem('st_pin')||null; } catch(e) {}
-  var t; try { t=localStorage.getItem('st_theme'); } catch(e) {}
+  try { stored=localStorage.getItem('sxt_pin')||null; } catch(e) {}
+  var t; try { t=localStorage.getItem('sxt_theme'); } catch(e) {}
   if(t) setTheme(t);
   setMsg(stored?'Enter your PIN':'Create a 4-digit PIN','');
   mode=stored?'enter':'set';
@@ -1439,11 +1557,11 @@ function tapDel() { if(waiting) return; attempt=attempt.slice(0,-1); paint(); }
 var bioCredId = null; // stored as base64 in localStorage
 
 function loadBioCredId() {
-  try { var s=localStorage.getItem('st_biocred'); bioCredId=s||null; } catch(e){}
+  try { var s=localStorage.getItem('sxt_biocred'); bioCredId=s||null; } catch(e){}
 }
 function saveBioCredId(id) {
   bioCredId=id;
-  try { localStorage.setItem('st_biocred',id); } catch(e){}
+  try { localStorage.setItem('sxt_biocred',id); } catch(e){}
 }
 function strToUint8(str) {
   var b=[]; for(var i=0;i<str.length;i++) b.push(str.charCodeAt(i)&0xff); return new Uint8Array(b);
@@ -1491,9 +1609,9 @@ function bioRegister() {
   if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(userId);
   navigator.credentials.create({
     publicKey: {
-      challenge:          strToUint8('st-register-challenge'),
-      rp:                 { name:'st Finance', id: window.location.hostname||'localhost' },
-      user:               { id:userId, name:'st-user', displayName:'st User' },
+      challenge:          strToUint8('sxt-register-challenge'),
+      rp:                 { name:'ST Finance', id: window.location.hostname||'localhost' },
+      user:               { id:userId, name:'sxt-user', displayName:'ST User' },
       pubKeyCredParams:   [{ type:'public-key', alg:-7 },{ type:'public-key', alg:-257 }],
       authenticatorSelection: { authenticatorAttachment:'platform', userVerification:'required' },
       timeout:            60000
@@ -1517,7 +1635,7 @@ function bioAuthenticate() {
   var allowCreds = credId ? [{ type:'public-key', id:credId, transports:['internal'] }] : [];
   navigator.credentials.get({
     publicKey: {
-      challenge:        strToUint8('st-auth-challenge'),
+      challenge:        strToUint8('sxt-auth-challenge'),
       rpId:             window.location.hostname||'localhost',
       allowCredentials: allowCreds,
       userVerification: 'required',
@@ -1542,7 +1660,7 @@ function check() {
   } else if(mode==='confirm') {
     if(attempt===newBuf) {
       var h=makeHash(attempt);
-      try { localStorage.setItem('st_pin',h); } catch(e) {}
+      try { localStorage.setItem('sxt_pin',h); } catch(e) {}
       stored=h; dotState('ok'); setMsg('PIN saved!','ok'); setTimeout(unlock,600);
     } else {
       dotState('err'); setMsg('No match. Try again.','err');
@@ -1597,12 +1715,14 @@ function goPage(name) {
   if(name==='Warranty')  refreshWarrantyPage();
   if(name==='Splitter')  refreshSplitterPage();
   if(name==='Streaks')   refreshStreaksPage();
+  if(name==='Templates') refreshTemplatesPage();
+  if(name==='Wrapped')   refreshWrappedPage();
 }
 
 /* ════ THEME ════════════════════════════════════════════════ */
 function setTheme(t) {
   document.documentElement.setAttribute('data-theme',t);
-  try { localStorage.setItem('st_theme',t); } catch(e) {}
+  try { localStorage.setItem('sxt_theme',t); } catch(e) {}
   var map={dark:'D',color:'C',light:'L',oled:'O'};
   ['D','C','L','O'].forEach(function(b){ var el=document.getElementById('t'+b); if(el) el.classList.remove('active'); });
   var btn=document.getElementById('t'+(map[t]||'D')); if(btn) btn.classList.add('active');
@@ -2142,7 +2262,7 @@ function saveNewPin() {
   var o=document.getElementById('cpOld').value.trim(), n=document.getElementById('cpNew').value.trim(), c=document.getElementById('cpConfirm').value.trim();
   if(o.length!==4){showToast('Enter your 4-digit current PIN');return;} if(n.length!==4){showToast('New PIN must be 4 digits');return;} if(n!==c){showToast('New PINs do not match');return;}
   if(stored&&makeHash(o)!==stored){showToast('Current PIN is incorrect');return;}
-  var h=makeHash(n); try{localStorage.setItem('st_pin',h);}catch(e){} stored=h; closeModal('modalChangePin'); showToast('PIN changed successfully');
+  var h=makeHash(n); try{localStorage.setItem('sxt_pin',h);}catch(e){} stored=h; closeModal('modalChangePin'); showToast('PIN changed successfully');
 }
 
 /* ════ EXPORT / CLEAR ═══════════════════════════════════════ */
@@ -2151,12 +2271,12 @@ function exportCSV() {
   var rows=['Date,Description,Category,Type,Amount,Wallet,Notes'];
   txns.forEach(function(t){rows.push([t.date,'"'+t.desc+'"',t.cat,t.type,t.amt,'"'+t.wallet+'"','"'+(t.notes||'')+'"'].join(','));});
   var blob=new Blob([rows.join('\n')],{type:'text/csv'}), a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download='st-transactions.csv'; a.click(); URL.revokeObjectURL(a.href); showToast('CSV downloaded');
+  a.href=URL.createObjectURL(blob); a.download='sxt-transactions.csv'; a.click(); URL.revokeObjectURL(a.href); showToast('CSV downloaded');
 }
 function clearAllData() {
   if(!confirm('Delete ALL data? Cannot be undone.')) return;
   wallets=[]; txns=[]; budgets=[]; goals=[]; subs=[];
-  try{localStorage.removeItem('st_wallets');localStorage.removeItem('st_txns');localStorage.removeItem('st_budgets');localStorage.removeItem('st_goals');localStorage.removeItem('st_subs');}catch(e){}
+  try{localStorage.removeItem('sxt_wallets');localStorage.removeItem('sxt_txns');localStorage.removeItem('sxt_budgets');localStorage.removeItem('sxt_goals');localStorage.removeItem('sxt_subs');}catch(e){}
   showToast('All data cleared'); refreshAll(); refreshWalletList();
 }
 
@@ -2213,7 +2333,7 @@ function setHomeCurrency(code, symbol) {
   displayCode    = code;
   convRate       = 1;
   isConverted    = false;
-  try { localStorage.setItem('st_homecur', JSON.stringify({code:code,symbol:symbol})); } catch(e) {}
+  try { localStorage.setItem('sxt_homecur', JSON.stringify({code:code,symbol:symbol})); } catch(e) {}
   document.querySelectorAll('[id^="home-"]').forEach(function(b){ b.classList.remove('active'); });
   var btn = document.getElementById('home-'+code); if(btn) btn.classList.add('active');
   // update display tab active button
@@ -2227,7 +2347,7 @@ function setHomeCurrency(code, symbol) {
 
 function loadHomeCurrency() {
   try {
-    var h = localStorage.getItem('st_homecur');
+    var h = localStorage.getItem('sxt_homecur');
     if(h){ var p=JSON.parse(h); homeCurrencyCode=p.code; homeCurrencySymbol=p.symbol; displaySymbol=p.symbol; displayCode=p.code; }
   } catch(e) {}
   document.querySelectorAll('[id^="home-"]').forEach(function(b){ b.classList.remove('active'); });
@@ -2250,7 +2370,7 @@ function fmtC(n) {
 
 function setCurrency(code, symbol) {
   displaySymbol = symbol; displayCode = code; convRate = 1; isConverted = false;
-  try { localStorage.setItem('st_displaycur', JSON.stringify({code:code,symbol:symbol})); } catch(e) {}
+  try { localStorage.setItem('sxt_displaycur', JSON.stringify({code:code,symbol:symbol})); } catch(e) {}
   document.querySelectorAll('[id^="cur-"]').forEach(function(b){ b.classList.remove('active'); });
   var btn = document.getElementById('cur-'+code); if(btn) btn.classList.add('active');
   showToast('Display symbol changed to '+symbol);
@@ -2261,7 +2381,7 @@ function setCurrency(code, symbol) {
 
 function loadDisplayCurrency() {
   try {
-    var d = localStorage.getItem('st_displaycur');
+    var d = localStorage.getItem('sxt_displaycur');
     if(d){ var p=JSON.parse(d); displaySymbol=p.symbol; displayCode=p.code; }
   } catch(e) {}
   document.querySelectorAll('[id^="cur-"]').forEach(function(b){ b.classList.remove('active'); });
@@ -2586,13 +2706,13 @@ function toggleAutoLock() {
   if (btn) btn.classList.toggle('on', autoLockEnabled);
   var sub = document.getElementById('autoLockSub');
   if (sub) sub.textContent = autoLockEnabled ? 'Lock after '+autoLockMinutes+' min of inactivity' : 'Auto-lock disabled';
-  try { localStorage.setItem('st_autolock', autoLockEnabled ? '1' : '0'); } catch(e) {}
+  try { localStorage.setItem('sxt_autolock', autoLockEnabled ? '1' : '0'); } catch(e) {}
   if (autoLockEnabled) resetAutoLockTimer(); else clearTimeout(autoLockTimer);
   showToast(autoLockEnabled ? 'Auto-lock enabled' : 'Auto-lock disabled');
 }
 function setAutoLockMins() {
   autoLockMinutes = parseInt(document.getElementById('autoLockMins').value) || 5;
-  try { localStorage.setItem('st_autolock_mins', autoLockMinutes); } catch(e) {}
+  try { localStorage.setItem('sxt_autolock_mins', autoLockMinutes); } catch(e) {}
   var sub = document.getElementById('autoLockSub');
   if (sub) sub.textContent = autoLockEnabled ? 'Lock after '+autoLockMinutes+' min of inactivity' : 'Auto-lock disabled';
   if (autoLockEnabled) resetAutoLockTimer();
@@ -2600,23 +2720,23 @@ function setAutoLockMins() {
 function toggleRecurringAlerts() {
   recurringAlerts = !recurringAlerts;
   var btn = document.getElementById('recurringAlertToggle'); if(btn) btn.classList.toggle('on', recurringAlerts);
-  try { localStorage.setItem('st_recurring_alerts', recurringAlerts ? '1' : '0'); } catch(e) {}
+  try { localStorage.setItem('sxt_recurring_alerts', recurringAlerts ? '1' : '0'); } catch(e) {}
   showToast(recurringAlerts ? 'Recurring alerts on' : 'Recurring alerts off');
 }
 function toggleCompact() {
   compactView = !compactView;
   var btn = document.getElementById('compactToggle'); if(btn) btn.classList.toggle('on', compactView);
   document.body.classList.toggle('compact', compactView);
-  try { localStorage.setItem('st_compact', compactView ? '1' : '0'); } catch(e) {}
+  try { localStorage.setItem('sxt_compact', compactView ? '1' : '0'); } catch(e) {}
   showToast(compactView ? 'Compact view on' : 'Compact view off');
   refreshTxList();
 }
 function loadSettings() {
   try {
-    var al = localStorage.getItem('st_autolock');
-    var am = localStorage.getItem('st_autolock_mins');
-    var ra = localStorage.getItem('st_recurring_alerts');
-    var cv = localStorage.getItem('st_compact');
+    var al = localStorage.getItem('sxt_autolock');
+    var am = localStorage.getItem('sxt_autolock_mins');
+    var ra = localStorage.getItem('sxt_recurring_alerts');
+    var cv = localStorage.getItem('sxt_compact');
     if (al !== null) autoLockEnabled = al === '1';
     if (am !== null) autoLockMinutes = parseInt(am) || 5;
     if (ra !== null) recurringAlerts = ra === '1';
@@ -2784,12 +2904,12 @@ function refreshSafeToSpend() {
 /* Stored as {keyword: cat} in localStorage */
 function loadCatMemory() {
   try {
-    var c = localStorage.getItem('st_catmem');
+    var c = localStorage.getItem('sxt_catmem');
     return c ? JSON.parse(c) : {};
   } catch(e) { return {}; }
 }
 function saveCatMemory(mem) {
-  try { localStorage.setItem('st_catmem', JSON.stringify(mem)); } catch(e) {}
+  try { localStorage.setItem('sxt_catmem', JSON.stringify(mem)); } catch(e) {}
 }
 function learnCatFromDesc(desc, cat) {
   if (!desc || !cat) return;
@@ -2888,7 +3008,7 @@ document.addEventListener('click', function(e) {
 function resetBiometric() {
   if (confirm('Remove saved fingerprint? You will need to re-register it next time you tap the fingerprint button.')) {
     bioCredId = null;
-    try { localStorage.removeItem('st_biocred'); } catch(e) {}
+    try { localStorage.removeItem('sxt_biocred'); } catch(e) {}
     var lbl = document.getElementById('bioStatusLabel');
     if (lbl) lbl.textContent = 'Fingerprint removed. Tap fingerprint icon to re-register.';
     showToast('Fingerprint reset. Use PIN to unlock.');
@@ -3295,7 +3415,7 @@ function testNotification() {
     return;
   }
   sendNotif(
-    'st Test Notification ✅',
+    'ST Test Notification ✅',
     'Notifications are working! You will receive alerts for subscriptions, warranties and more when you open the app.',
     '🔔'
   );
@@ -3327,7 +3447,7 @@ function requestNotifPermission() {
   Notification.requestPermission().then(function(perm) {
     updateNotifUI();
     if (perm === 'granted') {
-      sendNotif('st Notifications Enabled 🔔', 'You will now receive alerts for subscriptions, warranties, wishlists and more!', '🔔');
+      sendNotif('ST Notifications Enabled 🔔', 'You will now receive alerts for subscriptions, warranties and more!', '🔔');
       showToast('Notifications enabled!');
     } else {
       showToast('Notifications permission denied');
@@ -3335,17 +3455,59 @@ function requestNotifPermission() {
   });
 }
 
-function sendNotif(title, body, icon) {
+/* ── SERVICE WORKER for Android notifications ── */
+var _swReg = null;
+function initServiceWorker() {
+  if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
+  // Inline SW as a blob — no separate file needed
+  var swCode = [
+    "self.addEventListener('notificationclick',function(e){e.notification.close();});",
+    "self.addEventListener('push',function(e){});"
+  ].join('\n');
+  var blob = new Blob([swCode], {type:'application/javascript'});
+  var swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).then(function(reg) {
+    _swReg = reg;
+    // Update SW reference when it becomes active
+    if (reg.installing) {
+      reg.installing.addEventListener('statechange', function() {
+        if (this.state === 'activated') _swReg = reg;
+      });
+    }
+  }).catch(function() { _swReg = null; });
+}
+initServiceWorker();
+
+function sendNotif(title, body) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  try {
-    new Notification(title, {
-      body:  body,
-      icon:  'logo.png',
-      badge: 'logo.png',
-      tag:   title, // prevents duplicate notifications
-      silent: false
+  // Try Service Worker first (required on Android Chrome)
+  if (_swReg && _swReg.showNotification) {
+    _swReg.showNotification(title, {
+      body:    body,
+      icon:    'logo.png',
+      badge:   'logo.png',
+      vibrate: [200, 100, 200]
     });
-  } catch(e) { /* notification failed silently */ }
+    return;
+  }
+  // Fallback: wait for SW to be ready
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(function(reg) {
+      _swReg = reg;
+      reg.showNotification(title, {
+        body:    body,
+        icon:    'logo.png',
+        badge:   'logo.png',
+        vibrate: [200, 100, 200]
+      });
+    }).catch(function() {
+      // Final fallback for desktop
+      try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
+    });
+    return;
+  }
+  // Desktop fallback
+  try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
 }
 
 /* ── SMART NOTIFICATION CHECKS — runs on every app open ── */
@@ -3400,11 +3562,11 @@ function runNotificationChecks() {
     var daysLeft2 = Math.max(1, daysInM - now2.getDate() + 1);
     var daily = Math.round(remain / daysLeft2);
     var lastNotifDay = '';
-    try { lastNotifDay = localStorage.getItem('st_last_daily_notif')||''; } catch(e){}
+    try { lastNotifDay = localStorage.getItem('sxt_last_daily_notif')||''; } catch(e){}
     var todayStr = now2.toISOString().split('T')[0];
     if (lastNotifDay !== todayStr && daily >= 0) {
       sendNotif('Your Safe to Spend Today 💰', 'You can safely spend ' + fmtC(daily) + ' today without breaking your budget.', '💰');
-      try { localStorage.setItem('st_last_daily_notif', todayStr); } catch(e){}
+      try { localStorage.setItem('sxt_last_daily_notif', todayStr); } catch(e){}
     }
   }
 
@@ -3416,7 +3578,7 @@ function exportFullBackup() {
   var data = {
     version:    17,
     exportedAt: new Date().toISOString(),
-    app:        'st Secret Transactions',
+    app:        'ST Secret Transactions',
     wallets:    wallets,
     txns:       txns,
     budgets:    budgets,
@@ -3425,18 +3587,19 @@ function exportFullBackup() {
     debts:      debts,
     wishlist:   wishlist,
     warranties: warranties,
-    splitBills: splitBills
+    splitBills: splitBills,
+    txTemplates:txTemplates
   };
   var json = JSON.stringify(data, null, 2);
   var blob = new Blob([json], {type:'application/json'});
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
   a.href   = url;
-  a.download = 'st-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  a.download = 'sxt-backup-' + new Date().toISOString().split('T')[0] + '.json';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
   showToast('Backup downloaded! Save it to Google Drive or email it to yourself.');
-  sendNotif('st Backup Complete ✅', 'Your backup file has been downloaded. Store it safely!', '✅');
+  sendNotif('ST Backup Complete ✅', 'Your backup file has been downloaded. Store it safely!', '✅');
 }
 
 /* ── JSON RESTORE ── */
@@ -3460,7 +3623,8 @@ function importBackup(input) {
       debts      = data.debts      || [];
       wishlist   = data.wishlist   || [];
       warranties = data.warranties || [];
-      splitBills = data.splitBills  || [];
+      splitBills  = data.splitBills   || [];
+      txTemplates = data.txTemplates  || [];
       saveData();
       showToast('✅ Backup restored! ' + txns.length + ' transactions, ' + wallets.length + ' wallets loaded.');
       refreshAll();
@@ -3768,7 +3932,7 @@ function shareSavedBill(id) {
   bill.members.forEach(function(m){
     msg += (m.paid ? '✅ ' : '⏳ ') + m.name + ': *' + fmtC(m.share) + '* — ' + (m.paid ? 'Paid' : 'Pending') + '\n';
   });
-  msg += '\n_Sent via st Finance App_';
+  msg += '\n_Sent via ST Finance App_';
   window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');
 }
 
@@ -3796,7 +3960,7 @@ function shareSplit() {
   shares.forEach(function(s){
     msg += '• ' + s.name + ': *' + fmtC(Math.round(s.share*100)/100) + '*\n';
   });
-  msg += '\n_Sent via st Finance App_';
+  msg += '\n_Sent via ST Finance App_';
   window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');
 }
 
@@ -4022,7 +4186,7 @@ function refreshStreaksPage() {
 
 function checkBadgeNotifications(data) {
   var earnedIds = [];
-  try { earnedIds = JSON.parse(localStorage.getItem('st_earned_badges')||'[]'); } catch(e){}
+  try { earnedIds = JSON.parse(localStorage.getItem('sxt_earned_badges')||'[]'); } catch(e){}
   var newBadges = [];
   BADGE_DEFS.forEach(function(b){
     if (b.check(data).earned && earnedIds.indexOf(b.id) === -1) {
@@ -4031,7 +4195,7 @@ function checkBadgeNotifications(data) {
     }
   });
   if (newBadges.length > 0) {
-    try { localStorage.setItem('st_earned_badges', JSON.stringify(earnedIds)); } catch(e){}
+    try { localStorage.setItem('sxt_earned_badges', JSON.stringify(earnedIds)); } catch(e){}
     newBadges.forEach(function(b){
       sendNotif('New Badge Earned! ' + b.icon, 'You earned "' + b.name + '" — ' + b.desc, b.icon);
       showToast('🏅 Badge unlocked: ' + b.name + ' ' + b.icon);
@@ -4039,10 +4203,332 @@ function checkBadgeNotifications(data) {
   }
 }
 
+/* ════ PHASE 20 — Transaction Templates ══════════════════════ */
+
+var tplType = 'debit';
+var tplCat  = 'food';
+
+function setTplType(t) {
+  tplType = t;
+  var d = document.getElementById('tplTypeDebit');
+  var c = document.getElementById('tplTypeCredit');
+  if (d) { d.style.background = t==='debit'  ? 'var(--red-s)'   : 'none'; d.style.color = t==='debit'  ? 'var(--red)'  : 'var(--text2)'; d.style.fontWeight = t==='debit'  ? 'bold' : 'normal'; }
+  if (c) { c.style.background = t==='credit' ? 'var(--green-s)' : 'none'; c.style.color = t==='credit' ? 'var(--green)' : 'var(--text2)'; c.style.fontWeight = t==='credit' ? 'bold' : 'normal'; }
+}
+
+function setTplCat(c, btn) {
+  tplCat = c;
+  document.querySelectorAll('#tplCatBtns .cat-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var row = document.getElementById('tplOtherCatRow');
+  if (row) row.style.display = c==='other' ? 'block' : 'none';
+  if (c !== 'other') { var inp = document.getElementById('tplOtherName'); if (inp) inp.value = ''; }
+}
+
+function openAddTemplate() {
+  document.getElementById('editTplId').value  = '';
+  document.getElementById('tplLabel').value   = '';
+  document.getElementById('tplAmt').value     = '';
+  document.getElementById('tplDesc').value    = '';
+  document.getElementById('tplModalTitle').textContent = 'New Template';
+  var row = document.getElementById('tplOtherCatRow'); if (row) row.style.display = 'none';
+  var oname = document.getElementById('tplOtherName'); if (oname) oname.value = '';
+  setTplType('debit');
+  // Reset category buttons
+  document.querySelectorAll('#tplCatBtns .cat-btn').forEach(function(b){ b.classList.remove('active'); });
+  var foodBtn = document.getElementById('tplcat-food'); if (foodBtn) foodBtn.classList.add('active');
+  tplCat = 'food';
+  // Populate wallet select
+  var sel = document.getElementById('tplWallet');
+  if (sel) {
+    sel.innerHTML = wallets.map(function(w){ return '<option value="'+w.name+'">'+w.name+'</option>'; }).join('');
+  }
+  openModal('modalTemplate');
+}
+
+function openEditTemplate(id) {
+  var t = null; for (var i=0;i<txTemplates.length;i++){if(txTemplates[i].id===id){t=txTemplates[i];break;}} if(!t) return;
+  document.getElementById('editTplId').value  = id;
+  document.getElementById('tplLabel').value   = t.label;
+  document.getElementById('tplAmt').value     = t.amt;
+  document.getElementById('tplDesc').value    = t.desc || '';
+  document.getElementById('tplModalTitle').textContent = 'Edit Template';
+  setTplType(t.type);
+  tplCat = t.cat;
+  // Handle custom category
+  document.querySelectorAll('#tplCatBtns .cat-btn').forEach(function(b){ b.classList.remove('active'); });
+  var std = ['food','transport','shopping','bills','health','income'];
+  if (std.indexOf(t.cat) >= 0) {
+    var catBtn = document.getElementById('tplcat-'+t.cat); if (catBtn) catBtn.classList.add('active');
+    var row = document.getElementById('tplOtherCatRow'); if (row) row.style.display = 'none';
+  } else {
+    var otherBtn = document.getElementById('tplcat-other'); if (otherBtn) otherBtn.classList.add('active');
+    tplCat = 'other';
+    var row2 = document.getElementById('tplOtherCatRow'); if (row2) row2.style.display = 'block';
+    var oname = document.getElementById('tplOtherName'); if (oname) oname.value = t.cat;
+  }
+  var sel = document.getElementById('tplWallet');
+  if (sel) {
+    sel.innerHTML = wallets.map(function(w){ return '<option value="'+w.name+'"'+(w.name===t.wallet?' selected':'')+'>'+w.name+'</option>'; }).join('');
+  }
+  openModal('modalTemplate');
+}
+
+function saveTemplate() {
+  var label  = document.getElementById('tplLabel').value.trim();
+  var amt    = parseFloat(document.getElementById('tplAmt').value) || 0;
+  var desc   = document.getElementById('tplDesc').value.trim();
+  var wallet = (document.getElementById('tplWallet')||{}).value || (wallets[0]||{}).name || '';
+  if (!label) { showToast('Enter a template name'); return; }
+  if (amt <= 0) { showToast('Enter a valid amount'); return; }
+  if (!wallet) { showToast('Add a wallet first'); return; }
+
+  var resolvedCat = tplCat;
+  if (tplCat === 'other') {
+    var cname = (document.getElementById('tplOtherName')||{}).value;
+    if (cname && cname.trim()) resolvedCat = cname.trim().toLowerCase();
+    else { showToast('Enter a custom category name'); return; }
+  }
+
+  var editId = document.getElementById('editTplId').value;
+  if (editId) {
+    var id = parseInt(editId);
+    for (var i=0;i<txTemplates.length;i++){
+      if(txTemplates[i].id===id){
+        txTemplates[i].label=label; txTemplates[i].type=tplType; txTemplates[i].cat=resolvedCat;
+        txTemplates[i].amt=amt; txTemplates[i].wallet=wallet; txTemplates[i].desc=desc;
+        break;
+      }
+    }
+    showToast('Template updated');
+  } else {
+    txTemplates.unshift({id:Date.now(), label:label, type:tplType, cat:resolvedCat, amt:amt, wallet:wallet, desc:desc, usageCount:0});
+    showToast('Template saved! ⚡ Tap "Use" to add it instantly.');
+  }
+  saveData(); closeModal('modalTemplate'); refreshTemplatesPage();
+}
+
+function useTemplate(id) {
+  var t = null; for (var i=0;i<txTemplates.length;i++){if(txTemplates[i].id===id){t=txTemplates[i];break;}} if(!t) return;
+  // Check wallet exists
+  var wExists = wallets.filter(function(w){ return w.name === t.wallet; });
+  if (wExists.length === 0) { showToast('Wallet "'+t.wallet+'" not found. Edit template.'); return; }
+  // Auto-add the transaction
+  var today = new Date().toISOString().split('T')[0];
+  var newTx = {id:Date.now(), type:t.type, cat:t.cat, amt:t.amt, desc:t.desc||t.label, wallet:t.wallet, date:today, notes:'From template: '+t.label, recurring:false};
+  txns.unshift(newTx);
+  // Update wallet balance
+  for (var j=0;j<wallets.length;j++){
+    if(wallets[j].name===t.wallet){ wallets[j].balance+=(t.type==='credit'?t.amt:-t.amt); break; }
+  }
+  // Increment usage count
+  for (var k=0;k<txTemplates.length;k++){if(txTemplates[k].id===id){txTemplates[k].usageCount=(txTemplates[k].usageCount||0)+1;break;}}
+  saveData(); refreshAll();
+  showToast('⚡ Added: '+(t.type==='debit'?'−':'+')+fmtC(t.amt)+' · '+t.label);
+}
+
+function deleteTemplate(id) {
+  if (!confirm('Delete this template?')) return;
+  txTemplates = txTemplates.filter(function(t){ return t.id !== id; });
+  saveData(); refreshTemplatesPage(); showToast('Template removed');
+}
+
+function refreshTemplatesPage() {
+  var el = document.getElementById('templatesList'); if (!el) return;
+  if (txTemplates.length === 0) {
+    el.innerHTML = '<div class="empty-state" style="padding:40px 0;">'
+      +'<div style="font-size:48px;text-align:center;margin-bottom:14px;">⚡</div>'
+      +'<p>No templates yet.<br/>Save a frequent transaction to get started.</p></div>';
+    return;
+  }
+  var CAT_CLR = {food:'#fb923c',transport:'#818cf8',shopping:'#ec4899',bills:'#eab308',health:'#14b8a6',income:'#22c55e',other:'#7c6dfa'};
+  el.innerHTML = txTemplates.map(function(t) {
+    var clr    = CAT_CLR[t.cat] || '#7c6dfa';
+    var sign   = t.type === 'debit' ? '−' : '+';
+    var amtClr = t.type === 'debit' ? 'var(--red)' : 'var(--green)';
+    var catLbl = t.cat.charAt(0).toUpperCase() + t.cat.slice(1);
+    var uses   = t.usageCount || 0;
+    return '<div class="tpl-card">'
+      +'<div class="tpl-main">'
+        +'<div class="tpl-icon" style="background:'+clr+'22;color:'+clr+';">⚡</div>'
+        +'<div class="tpl-info">'
+          +'<div class="tpl-name">'+t.label+'</div>'
+          +'<div class="tpl-meta">'+catLbl+' · '+t.wallet+(uses>0?' · Used '+uses+'×':'')+'</div>'
+          +(t.desc?'<div style="font-size:11px;color:var(--text2);margin-top:1px;">'+t.desc+'</div>':'')
+        +'</div>'
+        +'<div class="tpl-amt" style="color:'+amtClr+';">'+sign+fmtC(t.amt)+'</div>'
+      +'</div>'
+      +'<div class="tpl-actions">'
+        +'<button class="tpl-btn tpl-btn-use" onclick="useTemplate('+t.id+')">⚡ Use Now</button>'
+        +'<button class="tpl-btn tpl-btn-edit" onclick="openEditTemplate('+t.id+')">✏️ Edit</button>'
+        +'<button class="tpl-btn tpl-btn-del" onclick="deleteTemplate('+t.id+')">🗑️ Delete</button>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
 init();
 loadSettings();
 setGreeting();
 resetAutoLockTimer();
+
+/* ════ PHASE 21 — Monthly Wrapped ════════════════════════════ */
+var wrappedOffset = 0;
+
+function shiftWrappedMonth(d) {
+  var now = new Date();
+  var newOffset = wrappedOffset + d;
+  var target = new Date(now.getFullYear(), now.getMonth() + newOffset, 1);
+  var curr   = new Date(now.getFullYear(), now.getMonth(), 1);
+  if(target > curr) return;
+  wrappedOffset = newOffset;
+  refreshWrappedPage();
+}
+
+function refreshWrappedPage() {
+  var now = new Date();
+  var d   = new Date(now.getFullYear(), now.getMonth() + wrappedOffset, 1);
+  var yr  = d.getFullYear();
+  var mo  = d.getMonth();
+  var moName = d.toLocaleString('default',{month:'long'});
+  setText('wrappedMonthLabel', moName + ' ' + yr);
+
+  var mTxns = txns.filter(function(t){
+    var td = new Date(t.date);
+    return td.getFullYear()===yr && td.getMonth()===mo && !t.isTransfer;
+  });
+
+  var card = document.getElementById('wrappedCard');
+  var shareBtn = document.getElementById('wrappedShareBtn');
+  if(!card) return;
+
+  if(!mTxns.length) {
+    card.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:12px;">&#128219;</div><div style="font-size:15px;">No transactions in '+moName+' '+yr+'</div></div>';
+    shareBtn.style.display='none';
+    return;
+  }
+
+  var totalIncome=0, totalExpense=0, catMap={}, dayMap={}, walletMap={};
+  mTxns.forEach(function(t){
+    var amt = parseFloat(t.amt)||0;
+    if(t.type==='credit') totalIncome += amt;
+    else                   totalExpense += amt;
+    if(t.type==='debit'){
+      catMap[t.cat] = (catMap[t.cat]||0) + amt;
+    }
+    var day = new Date(t.date).getDay();
+    if(t.type==='debit') dayMap['e'+day] = (dayMap['e'+day]||0)+amt;
+    walletMap[t.wallet] = (walletMap[t.wallet]||0)+1;
+  });
+
+  var savings     = totalIncome - totalExpense;
+  var savingsRate = totalIncome>0 ? Math.round((savings/totalIncome)*100) : 0;
+  var daysInMonth = new Date(yr, mo+1, 0).getDate();
+  var avgDaily    = totalExpense / daysInMonth;
+
+  var cats    = Object.keys(catMap).sort(function(a,b){return catMap[b]-catMap[a];});
+  var topCats = cats.slice(0,5);
+  var maxCat  = catMap[topCats[0]]||1;
+
+  var topWallet = Object.keys(walletMap).sort(function(a,b){return walletMap[b]-walletMap[a];})[0]||'--';
+  var bigTxn    = mTxns.filter(function(t){return t.type==='debit';}).sort(function(a,b){return (parseFloat(b.amt)||0)-(parseFloat(a.amt)||0);})[0];
+  var dayNames  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var topDay    = [0,1,2,3,4,5,6].sort(function(a,b){return (dayMap['e'+b]||0)-(dayMap['e'+a]||0);})[0];
+  var persona   = getSpendingPersonality(savingsRate);
+
+  var h = '';
+  h += '<div style="background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;">';
+
+  // Hero gradient header
+  h += '<div style="background:linear-gradient(145deg,#1e1b4b,#4c1d95);color:#fff;padding:28px 22px 22px;text-align:center;">';
+  h += '<img src="logo.png" style="height:38px;margin:0 auto 10px;display:block;" onerror="this.style.display=\'none\'">';
+  h += '<div style="font-size:12px;opacity:0.65;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">'+moName+' '+yr+' Wrapped</div>';
+  h += '<div style="font-size:26px;font-weight:800;margin-bottom:6px;">'+persona.emoji+' '+persona.title+'</div>';
+  h += '<div style="font-size:12px;opacity:0.75;line-height:1.5;">'+persona.desc+'</div>';
+  h += '</div>';
+
+  // Stats 2x3 grid
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">';
+  h += wstat('Total Received',  fmtC(totalIncome),  '&#128176;');
+  h += wstat('Total Spent',     fmtC(totalExpense), '&#128184;');
+  h += wstat(savings>=0?'Saved':'Overspent', fmtC(Math.abs(savings)), savings>=0?'&#127974;':'&#128565;');
+  h += wstat('Savings Rate',    (Math.max(0,savingsRate))+'%', savingsRate>=30?'&#11088;':savingsRate>=10?'&#9989;':'&#128201;');
+  h += wstat('Avg Daily Spend', fmtC(avgDaily),      '&#128197;');
+  h += wstat('Transactions',    mTxns.length+' txns','&#128290;');
+  h += '</div>';
+
+  // Top categories bar chart
+  if(topCats.length) {
+    h += '<div style="padding:16px 16px 8px;">';
+    h += '<div style="font-size:13px;font-weight:700;margin-bottom:12px;">&#128161; Where did your money go?</div>';
+    topCats.forEach(function(cat){
+      var pct = Math.round((catMap[cat]/maxCat)*100);
+      h += '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">';
+      h += '<div style="font-size:12px;min-width:88px;color:var(--text);">'+cat+'</div>';
+      h += '<div style="flex:1;background:var(--border);border-radius:3px;height:6px;">';
+      h += '<div style="width:'+pct+'%;height:6px;border-radius:3px;background:linear-gradient(90deg,#a78bfa,#7c3aed);"></div>';
+      h += '</div>';
+      h += '<div style="font-size:12px;font-weight:600;min-width:64px;text-align:right;">'+fmtC(catMap[cat])+'</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+  }
+
+  // Day & wallet highlights
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">';
+  h += '<div style="background:var(--surface);padding:14px 12px;">';
+  h += '<div style="font-size:10px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">&#128198; MOST SPENT DAY</div>';
+  h += '<div style="font-size:16px;font-weight:700;">'+dayNames[topDay]+'</div>';
+  h += '<div style="font-size:11px;color:var(--text2);">'+fmtC(dayMap['e'+topDay]||0)+' spent</div>';
+  h += '</div>';
+  h += '<div style="background:var(--surface);padding:14px 12px;">';
+  h += '<div style="font-size:10px;color:var(--text2);margin-bottom:4px;letter-spacing:0.5px;">&#128179; TOP WALLET</div>';
+  h += '<div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+topWallet+'</div>';
+  h += '<div style="font-size:11px;color:var(--text2);">'+(walletMap[topWallet]||0)+' txns</div>';
+  h += '</div>';
+  h += '</div>';
+
+  // Biggest single expense
+  if(bigTxn) {
+    h += '<div style="padding:14px 16px;border-top:1px solid var(--border);">';
+    h += '<div style="font-size:10px;color:var(--text2);margin-bottom:6px;letter-spacing:0.5px;">&#128163; BIGGEST EXPENSE</div>';
+    h += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+    h += '<div><div style="font-size:13px;font-weight:600;">'+bigTxn.desc+'</div><div style="font-size:11px;color:var(--text2);">'+bigTxn.cat+' &middot; '+bigTxn.date+'</div></div>';
+    h += '<div style="font-size:16px;font-weight:700;color:var(--red);">'+fmtC(bigTxn.amt)+'</div>';
+    h += '</div></div>';
+  }
+
+  // Footer
+  h += '<div style="padding:12px 16px;background:var(--accent-s);border-top:1px solid var(--border);text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;">';
+  h += '<img src="logo.png" style="height:20px;" onerror="this.style.display=\'none\'">';
+  h += '<span style="font-size:11px;color:var(--text2);">Secret Transactions &middot; Your money. Your secret.</span>';
+  h += '</div>';
+
+  h += '</div>';
+  card.innerHTML = h;
+  shareBtn.style.display='block';
+}
+
+function wstat(lbl, val, emoji) {
+  return '<div style="background:var(--surface);padding:18px 14px;text-align:center;">'
+    +'<div style="font-size:18px;margin-bottom:4px;">'+emoji+'</div>'
+    +'<div style="font-size:18px;font-weight:700;color:var(--accent);">'+val+'</div>'
+    +'<div style="font-size:11px;color:var(--text2);margin-top:3px;">'+lbl+'</div>'
+    +'</div>';
+}
+
+function getSpendingPersonality(sr) {
+  if(sr>=40) return {emoji:'&#129495;',title:'Zen Saver',      desc:'Incredible! You saved '+sr+'% of your income. True financial mindfulness.'};
+  if(sr>=20) return {emoji:'&#127919;',title:'Smart Spender',  desc:'Solid habits. You saved '+sr+'% while living your life well.'};
+  if(sr>=5)  return {emoji:'&#9878;&#65039;',title:'The Balancer',   desc:'Income and expenses nearly matched. Watch for lifestyle creep.'};
+  if(sr>=0)  return {emoji:'&#127939;',title:'Running Tight',  desc:'Almost every rupee was spent. Time to build a small buffer.'};
+  return         {emoji:'&#128293;',title:'Overspender!',   desc:'Spending exceeded income this month. Review your top categories!'};
+}
+
+function shareWrapped() {
+  showToast('Screenshot this card to save and share it! &#128248;');
+}
+
 </script>
 </body>
 </html>
