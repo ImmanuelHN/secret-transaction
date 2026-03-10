@@ -315,6 +315,18 @@ svg{display:block;}
 .tpl-btn-use{color:var(--accent);}
 .tpl-btn-edit{color:var(--text2);}
 .tpl-btn-del{color:var(--red);}
+/* ══ ANALYTICS ENHANCED ════════════════════════════════════ */
+.an-kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 12px 10px;text-align:center;}
+.an-kpi-lbl{font-size:10px;color:var(--text2);letter-spacing:0.6px;margin-bottom:4px;}
+.an-kpi-val{font-size:17px;font-weight:700;}
+.an-kpi-sub{font-size:10px;color:var(--text2);margin-top:3px;}
+.an-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;}
+.an-card-title{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.an-insight{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border);}
+.an-insight:last-child{border-bottom:none;}
+.an-insight-icon{font-size:18px;flex-shrink:0;width:28px;text-align:center;}
+.an-insight-body{flex:1;font-size:12px;line-height:1.5;color:var(--text2);}
+.an-insight-body b{color:var(--text);}
 /* ══ PHASE 21 — Monthly Wrapped ═══════════════════════════ */
 .wrapped-hero{background:linear-gradient(145deg,#1e1b4b,#312e81,#4c1d95);color:#fff;padding:28px 22px 22px;text-align:center;}
 .wrapped-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);}
@@ -345,6 +357,7 @@ svg{display:block;}
 .wish-ring svg{width:52px;height:52px;}
 .wish-ring-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -507,19 +520,98 @@ svg{display:block;}
     <div class="page" id="pageAnalytics">
       <button class="back-btn" onclick="goPage('More')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</button>
       <div class="page-title">Analytics</div>
-      <div class="page-sub">Monthly overview</div>
+      <div class="page-sub">Deep dive into your money</div>
       <div class="month-nav">
         <button class="month-nav-btn" onclick="shiftMonth(-1)">&#8249;</button>
         <span id="analyticsMonthLabel">Mar 2026</span>
         <button class="month-nav-btn" onclick="shiftMonth(1)">&#8250;</button>
       </div>
-      <div style="display:flex;gap:10px;margin-bottom:18px;">
-        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text2);margin-bottom:4px;">INCOME</div><div style="font-size:18px;font-weight:bold;color:var(--green);" id="aIncome">₹0</div></div>
-        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text2);margin-bottom:4px;">EXPENSES</div><div style="font-size:18px;font-weight:bold;color:var(--red);" id="aExpense">₹0</div></div>
-        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text2);margin-bottom:4px;">SAVED</div><div style="font-size:18px;font-weight:bold;color:var(--accent);" id="aSaved">₹0</div></div>
+
+      <!-- Top 3 KPI cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+        <div class="an-kpi" style="border-top:3px solid var(--green);">
+          <div class="an-kpi-lbl">RECEIVED</div>
+          <div class="an-kpi-val" id="aIncome" style="color:var(--green);">&#8377;0</div>
+        </div>
+        <div class="an-kpi" style="border-top:3px solid var(--red);">
+          <div class="an-kpi-lbl">SPENT</div>
+          <div class="an-kpi-val" id="aExpense" style="color:var(--red);">&#8377;0</div>
+        </div>
+        <div class="an-kpi" style="border-top:3px solid var(--accent);">
+          <div class="an-kpi-lbl">SAVED</div>
+          <div class="an-kpi-val" id="aSaved" style="color:var(--accent);">&#8377;0</div>
+        </div>
       </div>
-      <div class="section-title" style="margin-bottom:12px;">By Category</div>
-      <div id="catBreakdown"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg><p>Add transactions to see analytics</p></div></div>
+
+      <!-- Savings rate + daily avg row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+        <div class="an-kpi">
+          <div class="an-kpi-lbl">SAVINGS RATE</div>
+          <div class="an-kpi-val" id="aSavingsRate" style="color:var(--accent);">0%</div>
+          <div id="aSavingsBar" style="margin-top:6px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div id="aSavingsBarFill" style="height:100%;width:0%;background:var(--accent);border-radius:2px;transition:width 0.6s;"></div></div>
+        </div>
+        <div class="an-kpi">
+          <div class="an-kpi-lbl">AVG DAILY SPEND</div>
+          <div class="an-kpi-val" id="aAvgDaily" style="color:var(--text);">&#8377;0</div>
+          <div class="an-kpi-sub" id="aAvgDailySub">per day this month</div>
+        </div>
+      </div>
+
+      <!-- 6-month income vs expense bar chart -->
+      <div class="an-card" style="margin-bottom:16px;">
+        <div class="an-card-title">&#128200; 6-Month Trend</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:11px;color:var(--text2);">
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--green);margin-right:4px;"></span>Income</span>
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--red);margin-right:4px;"></span>Expense</span>
+        </div>
+        <div id="aTrendChart" style="display:flex;align-items:flex-end;gap:6px;height:100px;"></div>
+        <div id="aTrendLabels" style="display:flex;gap:6px;margin-top:6px;"></div>
+      </div>
+
+      <!-- Daily spending line chart (dots) -->
+      <div class="an-card" style="margin-bottom:16px;">
+        <div class="an-card-title">&#128197; Daily Spending — <span id="aDailyChartMonth"></span></div>
+        <div style="overflow-x:auto;">
+          <canvas id="aDailyCanvas" height="80" style="display:block;min-width:100%;"></canvas>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-top:4px;" id="aDailyAxisLabels"></div>
+      </div>
+
+      <!-- Category donut + breakdown -->
+      <div class="an-card" style="margin-bottom:16px;">
+        <div class="an-card-title">&#127811; Spending by Category</div>
+        <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px;">
+          <canvas id="aDonutCanvas" width="100" height="100" style="flex-shrink:0;"></canvas>
+          <div id="aDonutLegend" style="flex:1;font-size:12px;"></div>
+        </div>
+        <div id="catBreakdown"></div>
+      </div>
+
+      <!-- Top transactions this month -->
+      <div class="an-card" style="margin-bottom:16px;">
+        <div class="an-card-title">&#128163; Top 5 Expenses</div>
+        <div id="aTopExpenses"></div>
+      </div>
+
+      <!-- Income sources -->
+      <div class="an-card" style="margin-bottom:16px;">
+        <div class="an-card-title">&#128176; Income Sources</div>
+        <div id="aIncomeSources"></div>
+      </div>
+
+      <!-- Day-of-week heatmap -->
+      <div class="an-card" style="margin-bottom:16px;">
+        <div class="an-card-title">&#128293; Spending by Day of Week</div>
+        <div id="aDowChart" style="display:flex;gap:6px;align-items:flex-end;height:70px;margin-bottom:6px;"></div>
+        <div style="display:flex;gap:6px;" id="aDowLabels"></div>
+      </div>
+
+      <!-- Smart insights -->
+      <div class="an-card" style="margin-bottom:24px;">
+        <div class="an-card-title">&#129504; Smart Insights</div>
+        <div id="aInsights"></div>
+      </div>
+
     </div>
 
     <!-- MORE -->
@@ -1971,22 +2063,306 @@ function refreshTrend() {
 
 /* ════ ANALYTICS ════════════════════════════════════════════ */
 function refreshAnalytics() {
-  setText('analyticsMonthLabel',MONTHS[viewMonth]+' '+viewYear);
-  var mt=getMonthTxns();
-  var income=mt.filter(function(t){return t.type==='credit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
-  var expense=mt.filter(function(t){return t.type==='debit'&&!t.isTransfer; }).reduce(function(s,t){return s+t.amt;},0);
-  setText('aIncome',fmtC(income)); setText('aExpense',fmtC(expense)); setText('aSaved',fmtC(Math.max(0,income-expense)));
-  var byCat={};
-  mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){byCat[t.cat]=(byCat[t.cat]||0)+t.amt;});
-  var cats=Object.keys(byCat).sort(function(a,b){return byCat[b]-byCat[a];}), total=mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
-  var el=document.getElementById('catBreakdown'); if(!el) return;
-  if(cats.length===0){el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px;opacity:0.4"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg><p>No expenses in '+MONTHS[viewMonth]+' '+viewYear+'</p></div>';return;}
-  el.innerHTML=cats.map(function(c){
-    var pct=total>0?Math.round((byCat[c]/total)*100):0, clr=CAT_COLORS[c]||'#7c6dfa';
-    var budget=budgets.filter(function(b){return b.cat===c;})[0];
-    var budgetNote=budget?' / '+fmtC(budget.limit)+' budget':'';
-    return '<div style="margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span>'+c.charAt(0).toUpperCase()+c.slice(1)+'</span><span style="color:var(--text2)"'+fmtC(byCat[c])+budgetNote+' ('+pct+'%)</span></div><div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+clr+';border-radius:4px;transition:width 0.6s;"></div></div></div>';
-  }).join('');
+  setText('analyticsMonthLabel', MONTHS[viewMonth]+' '+viewYear);
+  var mt = getMonthTxns();
+  var income  = mt.filter(function(t){return t.type==='credit'&&!t.isTransfer;}).reduce(function(s,t){return s+(parseFloat(t.amt)||0);},0);
+  var expense = mt.filter(function(t){return t.type==='debit' &&!t.isTransfer;}).reduce(function(s,t){return s+(parseFloat(t.amt)||0);},0);
+  var saved   = income - expense;
+  var sr      = income>0 ? Math.round((saved/income)*100) : 0;
+  var daysInM = new Date(viewYear, viewMonth+1, 0).getDate();
+  var now     = new Date();
+  var isNow   = now.getFullYear()===viewYear && now.getMonth()===viewMonth;
+  var daysElapsed = isNow ? now.getDate() : daysInM;
+  var avgDaily = daysElapsed>0 ? expense/daysElapsed : 0;
+
+  setText('aIncome',  fmtC(income));
+  setText('aExpense', fmtC(expense));
+  setText('aSaved',   fmtC(Math.max(0,saved)));
+  setText('aSavingsRate', Math.max(0,sr)+'%');
+  setText('aAvgDaily', fmtC(avgDaily));
+  setText('aAvgDailySub', 'over '+daysElapsed+' day'+(daysElapsed!==1?'s':''));
+  var srFill = document.getElementById('aSavingsBarFill');
+  if(srFill) srFill.style.width = Math.min(100,Math.max(0,sr))+'%';
+
+  /* ── 6-MONTH TREND BARS ── */
+  var trendEl = document.getElementById('aTrendChart');
+  var trendLbl = document.getElementById('aTrendLabels');
+  if(trendEl) {
+    var months6 = [];
+    for(var m=5;m>=0;m--) {
+      var d = new Date(viewYear, viewMonth-m, 1);
+      var y2=d.getFullYear(), mo2=d.getMonth();
+      var mTx = txns.filter(function(t){
+        var td=new Date(t.date);
+        return td.getFullYear()===y2&&td.getMonth()===mo2&&!t.isTransfer;
+      });
+      var inc2 = mTx.filter(function(t){return t.type==='credit';}).reduce(function(s,t){return s+(parseFloat(t.amt)||0);},0);
+      var exp2 = mTx.filter(function(t){return t.type==='debit'; }).reduce(function(s,t){return s+(parseFloat(t.amt)||0);},0);
+      months6.push({label:MONTHS[mo2].slice(0,3), inc:inc2, exp:exp2, yr:y2, mo:mo2});
+    }
+    var maxVal = Math.max.apply(null, months6.map(function(m){return Math.max(m.inc,m.exp);})) || 1;
+    trendEl.innerHTML = months6.map(function(m){
+      var incH = Math.round((m.inc/maxVal)*90);
+      var expH = Math.round((m.exp/maxVal)*90);
+      var isCur = m.yr===viewYear && m.mo===viewMonth;
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">'
+        +'<div style="display:flex;gap:2px;align-items:flex-end;height:96px;">'
+        +'<div title="Income: '+fmtC(m.inc)+'" style="width:12px;background:var(--green);opacity:'+(isCur?1:0.55)+';border-radius:3px 3px 0 0;height:'+incH+'px;min-height:'+(m.inc>0?3:0)+'px;transition:height 0.5s;"></div>'
+        +'<div title="Expense: '+fmtC(m.exp)+'" style="width:12px;background:var(--red);opacity:'+(isCur?1:0.55)+';border-radius:3px 3px 0 0;height:'+expH+'px;min-height:'+(m.exp>0?3:0)+'px;transition:height 0.5s;"></div>'
+        +'</div>'
+        +'</div>';
+    }).join('');
+    trendLbl.innerHTML = months6.map(function(m){
+      var isCur = m.yr===viewYear && m.mo===viewMonth;
+      return '<div style="flex:1;text-align:center;font-size:10px;color:'+(isCur?'var(--accent)':'var(--text2)')+';font-weight:'+(isCur?700:400)+';">'+m.label+'</div>';
+    }).join('');
+  }
+
+  /* ── DAILY SPENDING CANVAS ── */
+  setText('aDailyChartMonth', MONTHS[viewMonth]+' '+viewYear);
+  var canvas = document.getElementById('aDailyCanvas');
+  if(canvas) {
+    var daySpend = {};
+    mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){
+      var day = parseInt((t.date||'').split('-')[2])||1;
+      daySpend[day] = (daySpend[day]||0)+(parseFloat(t.amt)||0);
+    });
+    var days = []; for(var d2=1;d2<=daysInM;d2++) days.push(daySpend[d2]||0);
+    var maxD = Math.max.apply(null,days)||1;
+    var W = canvas.parentElement.offsetWidth || 300;
+    canvas.width = W;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,W,80);
+    var barW = Math.max(2, (W/daysInM) - 2);
+    var gap = W/daysInM;
+    days.forEach(function(val,i){
+      var h = val>0 ? Math.max(3, Math.round((val/maxD)*68)) : 0;
+      var x = i*gap + gap/2 - barW/2;
+      var isToday = isNow && (i+1)===now.getDate();
+      ctx.fillStyle = isToday ? 'var(--accent)' : (val>0 ? '#818cf8' : 'transparent');
+      // Use hex since canvas may not support var()
+      ctx.fillStyle = isToday ? '#a78bfa' : (val>0 ? '#818cf8' : '#ffffff00');
+      ctx.beginPath();
+      ctx.roundRect(x, 80-h, barW, h, 2);
+      ctx.fill();
+    });
+    // axis labels (1, 8, 15, 22, last)
+    var axisEl = document.getElementById('aDailyAxisLabels');
+    if(axisEl) {
+      var labels = [1,8,15,22,daysInM];
+      axisEl.innerHTML = '<div style="position:relative;width:100%;height:14px;">'
+        + labels.map(function(d3){
+            var leftPct = ((d3-0.5)/daysInM)*100;
+            return '<span style="position:absolute;transform:translateX(-50%);left:'+leftPct+'%;">'+d3+'</span>';
+          }).join('')
+        + '</div>';
+    }
+  }
+
+  /* ── CATEGORY DONUT + BREAKDOWN ── */
+  var byCat = {};
+  mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){
+    byCat[t.cat] = (byCat[t.cat]||0)+(parseFloat(t.amt)||0);
+  });
+  var cats = Object.keys(byCat).sort(function(a,b){return byCat[b]-byCat[a];});
+
+  // Donut canvas
+  var dCanvas = document.getElementById('aDonutCanvas');
+  var legendEl = document.getElementById('aDonutLegend');
+  if(dCanvas) {
+    var dCtx = dCanvas.getContext('2d');
+    dCtx.clearRect(0,0,100,100);
+    if(cats.length===0) {
+      dCtx.strokeStyle='#333'; dCtx.lineWidth=12;
+      dCtx.beginPath(); dCtx.arc(50,50,38,0,Math.PI*2); dCtx.stroke();
+    } else {
+      var total2 = cats.reduce(function(s,c){return s+byCat[c];},0)||1;
+      var startAng = -Math.PI/2;
+      var palette = ['#818cf8','#fb923c','#ec4899','#eab308','#14b8a6','#22c55e','#f43f5e','#a78bfa'];
+      cats.forEach(function(c,i){
+        var slice = (byCat[c]/total2)*Math.PI*2;
+        dCtx.beginPath(); dCtx.moveTo(50,50);
+        dCtx.arc(50,50,44,startAng,startAng+slice);
+        dCtx.closePath();
+        dCtx.fillStyle = CAT_COLORS[c]||palette[i%palette.length];
+        dCtx.fill();
+        startAng += slice;
+      });
+      // Center hole
+      dCtx.beginPath(); dCtx.arc(50,50,26,0,Math.PI*2);
+      dCtx.fillStyle = 'var(--surface)'; // may not work in canvas
+      // Use computed bg
+      dCtx.fillStyle = document.documentElement.style.getPropertyValue('--surface')||'#1a1a2e';
+      dCtx.fill();
+      // Center text
+      dCtx.fillStyle = '#ffffff';
+      dCtx.font = 'bold 10px sans-serif';
+      dCtx.textAlign = 'center';
+      dCtx.fillText(cats.length+' cats', 50, 53);
+    }
+  }
+  if(legendEl) {
+    var palette2 = ['#818cf8','#fb923c','#ec4899','#eab308','#14b8a6','#22c55e','#f43f5e','#a78bfa'];
+    var total3 = cats.reduce(function(s,c){return s+byCat[c];},0)||1;
+    legendEl.innerHTML = cats.slice(0,6).map(function(c,i){
+      var pct2 = Math.round((byCat[c]/total3)*100);
+      var clr2 = CAT_COLORS[c]||palette2[i%palette2.length];
+      return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">'
+        +'<div style="width:10px;height:10px;border-radius:2px;background:'+clr2+';flex-shrink:0;"></div>'
+        +'<div style="flex:1;font-size:11px;">'+c.charAt(0).toUpperCase()+c.slice(1)+'</div>'
+        +'<div style="font-size:11px;font-weight:600;">'+pct2+'%</div>'
+        +'</div>';
+    }).join('');
+  }
+
+  var cbEl = document.getElementById('catBreakdown');
+  if(cbEl) {
+    if(cats.length===0){
+      cbEl.innerHTML='<div style="text-align:center;padding:14px 0;color:var(--text2);font-size:13px;">No expenses yet</div>';
+    } else {
+      var total4 = cats.reduce(function(s,c){return s+byCat[c];},0)||1;
+      var palette3 = ['#818cf8','#fb923c','#ec4899','#eab308','#14b8a6','#22c55e','#f43f5e','#a78bfa'];
+      cbEl.innerHTML = cats.map(function(c,i){
+        var pct3 = Math.round((byCat[c]/total4)*100);
+        var clr3 = CAT_COLORS[c]||palette3[i%palette3.length];
+        var bgt = budgets.filter(function(b){return b.cat===c;})[0];
+        var over = bgt && byCat[c]>bgt.limit;
+        return '<div style="margin-bottom:12px;">'
+          +'<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:5px;">'
+          +'<span>'+c.charAt(0).toUpperCase()+c.slice(1)+'</span>'
+          +'<span style="color:'+(over?'var(--red)':'var(--text2)')+'">'+fmtC(byCat[c])+(bgt?' / '+fmtC(bgt.limit):'')+'</span>'
+          +'</div>'
+          +'<div style="height:7px;background:var(--border);border-radius:4px;overflow:hidden;">'
+          +'<div style="height:100%;width:'+pct3+'%;background:'+clr3+';border-radius:4px;transition:width 0.6s;"></div>'
+          +'</div>'
+          +'</div>';
+      }).join('');
+    }
+  }
+
+  /* ── TOP 5 EXPENSES ── */
+  var topEl = document.getElementById('aTopExpenses');
+  if(topEl) {
+    var topExp = mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;})
+      .sort(function(a,b){return (parseFloat(b.amt)||0)-(parseFloat(a.amt)||0);})
+      .slice(0,5);
+    if(!topExp.length) {
+      topEl.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:12px 0;">No expenses yet</div>';
+    } else {
+      topEl.innerHTML = topExp.map(function(t,i){
+        var medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+        return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">'
+          +'<div style="font-size:18px;width:26px;text-align:center;">'+medals[i]+'</div>'
+          +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+t.desc+'</div>'
+          +'<div style="font-size:11px;color:var(--text2);">'+t.cat+' · '+t.date+'</div>'
+          +'</div>'
+          +'<div style="font-size:14px;font-weight:700;color:var(--red);">'+fmtC(t.amt)+'</div>'
+          +'</div>';
+      }).join('');
+    }
+  }
+
+  /* ── INCOME SOURCES ── */
+  var incSrcEl = document.getElementById('aIncomeSources');
+  if(incSrcEl) {
+    var incTxns = mt.filter(function(t){return t.type==='credit'&&!t.isTransfer;});
+    if(!incTxns.length) {
+      incSrcEl.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:12px 0;">No income recorded</div>';
+    } else {
+      var srcMap = {};
+      incTxns.forEach(function(t){srcMap[t.desc]=(srcMap[t.desc]||0)+(parseFloat(t.amt)||0);});
+      var srcs = Object.keys(srcMap).sort(function(a,b){return srcMap[b]-srcMap[a];});
+      var maxSrc = srcMap[srcs[0]]||1;
+      incSrcEl.innerHTML = srcs.slice(0,5).map(function(s){
+        var pct4 = Math.round((srcMap[s]/maxSrc)*100);
+        return '<div style="margin-bottom:10px;">'
+          +'<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">'
+          +'<span>'+s+'</span><span style="color:var(--green);font-weight:600;">+'+fmtC(srcMap[s])+'</span>'
+          +'</div>'
+          +'<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;">'
+          +'<div style="height:100%;width:'+pct4+'%;background:var(--green);border-radius:3px;"></div>'
+          +'</div></div>';
+      }).join('');
+    }
+  }
+
+  /* ── DAY OF WEEK CHART ── */
+  var dowEl = document.getElementById('aDowChart');
+  var dowLbl = document.getElementById('aDowLabels');
+  if(dowEl) {
+    var dowSpend = [0,0,0,0,0,0,0];
+    mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){
+      var day2 = new Date(t.date).getDay();
+      dowSpend[day2] += parseFloat(t.amt)||0;
+    });
+    var maxDow = Math.max.apply(null,dowSpend)||1;
+    var dayNamesShort = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var topDow = dowSpend.indexOf(Math.max.apply(null,dowSpend));
+    dowEl.innerHTML = dowSpend.map(function(v,i){
+      var h2 = v>0 ? Math.max(4, Math.round((v/maxDow)*60)) : 4;
+      var isTop = i===topDow && v>0;
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">'
+        +'<div style="font-size:9px;color:var(--text2);">'+(v>0?'₹'+Math.round(v/1000>1?v/1000:v)+(v/1000>1?'k':''):'')+'</div>'
+        +'<div style="width:100%;max-width:30px;border-radius:4px 4px 0 0;background:'+(isTop?'var(--accent)':'#818cf8')+';height:'+h2+'px;opacity:'+(v>0?1:0.15)+';transition:height 0.5s;"></div>'
+        +'</div>';
+    }).join('');
+    if(dowLbl) {
+      dowLbl.innerHTML = dayNamesShort.map(function(n,i){
+        return '<div style="flex:1;text-align:center;font-size:10px;color:'+(i===topDow && dowSpend[i]>0?'var(--accent)':'var(--text2)')+';">'+n+'</div>';
+      }).join('');
+    }
+  }
+
+  /* ── SMART INSIGHTS ── */
+  var insEl = document.getElementById('aInsights');
+  if(insEl) {
+    var insights = [];
+
+    // 1. Savings rate insight
+    if(income > 0) {
+      if(sr >= 30) insights.push({icon:'🌟', text:'<b>Great savings rate!</b> You saved '+sr+'% of your income this month.'});
+      else if(sr >= 10) insights.push({icon:'✅', text:'<b>Decent savings rate</b> of '+sr+'%. Target 30% for long-term wealth.'});
+      else if(sr >= 0) insights.push({icon:'⚠️', text:'<b>Low savings rate</b> ('+sr+'%). Consider trimming discretionary expenses.'});
+      else insights.push({icon:'🔴', text:'<b>Overspending!</b> You spent '+fmtC(Math.abs(saved))+' more than you earned.'});
+    }
+
+    // 2. Top category insight
+    if(cats.length > 0) {
+      var topCatAmt = byCat[cats[0]];
+      var topCatPct = expense>0 ? Math.round((topCatAmt/expense)*100) : 0;
+      insights.push({icon:'📌', text:'<b>'+cats[0].charAt(0).toUpperCase()+cats[0].slice(1)+'</b> is your biggest expense category at '+fmtC(topCatAmt)+' ('+topCatPct+'% of total spend).'});
+    }
+
+    // 3. Budget alerts
+    var overBudgets = budgets.filter(function(b){ return byCat[b.cat] && byCat[b.cat] > b.limit; });
+    if(overBudgets.length > 0) {
+      overBudgets.forEach(function(b){
+        var over2 = byCat[b.cat] - b.limit;
+        insights.push({icon:'🚨', text:'<b>'+b.cat.charAt(0).toUpperCase()+b.cat.slice(1)+' budget exceeded</b> by '+fmtC(over2)+'. Limit: '+fmtC(b.limit)+', Spent: '+fmtC(byCat[b.cat])+'.'});
+      });
+    }
+
+    // 4. Avg daily vs projection
+    if(isNow && expense > 0) {
+      var projected = avgDaily * daysInM;
+      insights.push({icon:'📈', text:'At your current daily rate of '+fmtC(avgDaily)+', you\'re projected to spend <b>'+fmtC(projected)+'</b> by end of month.'});
+    }
+
+    // 5. Transaction frequency
+    if(mt.length > 0) {
+      var txPerDay = (mt.length/daysElapsed).toFixed(1);
+      insights.push({icon:'🔢', text:'You made <b>'+mt.length+' transactions</b> this month — about '+txPerDay+' per day.'});
+    }
+
+    if(insights.length === 0) {
+      insEl.innerHTML = '<div style="color:var(--text2);font-size:13px;text-align:center;padding:12px 0;">Add transactions to unlock insights</div>';
+    } else {
+      insEl.innerHTML = insights.map(function(ins){
+        return '<div class="an-insight"><div class="an-insight-icon">'+ins.icon+'</div><div class="an-insight-body">'+ins.text+'</div></div>';
+      }).join('');
+    }
+  }
 }
 
 /* ════ BUDGET ═══════════════════════════════════════════════ */
@@ -3457,59 +3833,71 @@ function requestNotifPermission() {
 
 /* ── SERVICE WORKER for Android notifications ── */
 var _swReg = null;
+var _swReady = false;
+
 function initServiceWorker() {
   if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
-  // Inline SW as a blob — no separate file needed
-  var swCode = [
-    "self.addEventListener('notificationclick',function(e){e.notification.close();});",
+  // Build SW code that handles notification clicks
+  var swLines = [
+    "self.addEventListener('install',function(e){self.skipWaiting();});",
+    "self.addEventListener('activate',function(e){e.waitUntil(clients.claim());});",
+    "self.addEventListener('notificationclick',function(e){e.notification.close();e.waitUntil(clients.matchAll({type:'window'}).then(function(list){if(list.length)list[0].focus();else clients.openWindow('/');})  );});",
     "self.addEventListener('push',function(e){});"
-  ].join('\n');
-  var blob = new Blob([swCode], {type:'application/javascript'});
-  var swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).then(function(reg) {
-    _swReg = reg;
-    // Update SW reference when it becomes active
-    if (reg.installing) {
-      reg.installing.addEventListener('statechange', function() {
-        if (this.state === 'activated') _swReg = reg;
-      });
-    }
-  }).catch(function() { _swReg = null; });
+  ];
+  var swBlob = new Blob([swLines.join('\n')], {type: 'application/javascript'});
+  var swUrl  = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl, {scope: '/'})
+    .then(function(reg) {
+      _swReg = reg;
+      // Wait for SW to become active
+      if (reg.active) {
+        _swReady = true;
+      } else {
+        var w = reg.installing || reg.waiting;
+        if (w) {
+          w.addEventListener('statechange', function() {
+            if (w.state === 'activated') { _swReg = reg; _swReady = true; }
+          });
+        }
+      }
+    })
+    .catch(function(err) {
+      // Blob SW failed (some browsers restrict blob SW scope)
+      // Fall back to serviceWorker.ready
+      navigator.serviceWorker.ready.then(function(reg) {
+        _swReg = reg; _swReady = true;
+      }).catch(function(){});
+    });
 }
 initServiceWorker();
 
 function sendNotif(title, body) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  // Try Service Worker first (required on Android Chrome)
-  if (_swReg && _swReg.showNotification) {
-    _swReg.showNotification(title, {
-      body:    body,
-      icon:    'logo.png',
-      badge:   'logo.png',
-      vibrate: [200, 100, 200]
-    });
-    return;
-  }
-  // Fallback: wait for SW to be ready
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(function(reg) {
-      _swReg = reg;
-      reg.showNotification(title, {
-        body:    body,
-        icon:    'logo.png',
-        badge:   'logo.png',
-        vibrate: [200, 100, 200]
-      });
-    }).catch(function() {
-      // Final fallback for desktop
-      try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
-    });
-    return;
-  }
-  // Desktop fallback
-  try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
-}
+  var opts = { body: body, icon: 'logo.png', badge: 'logo.png', vibrate: [200,100,200], tag: title };
 
+  // Path 1: We have an active SW registration
+  if (_swReg && _swReg.active) {
+    _swReg.showNotification(title, opts);
+    return;
+  }
+
+  // Path 2: Wait for SW ready (navigator.serviceWorker.ready always resolves)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready
+      .then(function(reg) {
+        _swReg = reg;
+        reg.showNotification(title, opts);
+      })
+      .catch(function() {
+        // Path 3: Desktop fallback
+        try { new Notification(title, {body: body, icon: 'logo.png'}); } catch(e) {}
+      });
+    return;
+  }
+
+  // Path 4: Desktop browsers without SW
+  try { new Notification(title, {body: body, icon: 'logo.png'}); } catch(e) {}
+}
 /* ── SMART NOTIFICATION CHECKS — runs on every app open ── */
 function runNotificationChecks() {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
@@ -4526,7 +4914,60 @@ function getSpendingPersonality(sr) {
 }
 
 function shareWrapped() {
-  showToast('Screenshot this card to save and share it! &#128248;');
+  var card = document.getElementById('wrappedCard');
+  if (!card) { showToast('Nothing to capture'); return; }
+  var btn = document.getElementById('wrappedShareBtn');
+  if (btn) { btn.textContent = '⏳ Capturing...'; btn.disabled = true; }
+
+  // Temporarily expand card for clean capture
+  var origOverflow = card.style.overflow;
+  card.style.overflow = 'visible';
+
+  if (typeof html2canvas === 'undefined') {
+    showToast('Tip: Screenshot this card manually to save it 📸');
+    if (btn) { btn.textContent = '📸 Save Recap Card'; btn.disabled = false; }
+    return;
+  }
+
+  html2canvas(card, {
+    backgroundColor: null,
+    scale: 2,
+    useCORS: true,
+    allowTaint: true,
+    logging: false
+  }).then(function(canvas) {
+    card.style.overflow = origOverflow;
+    if (btn) { btn.textContent = '📸 Save Recap Card'; btn.disabled = false; }
+
+    // Try Web Share API first (mobile)
+    canvas.toBlob(function(blob) {
+      if (navigator.canShare && navigator.canShare({files:[new File([blob],'ST-Wrapped.png',{type:'image/png'})]})) {
+        navigator.share({
+          files: [new File([blob], 'ST-Wrapped.png', {type:'image/png'})],
+          title: 'My Monthly Wrapped — ST'
+        }).catch(function() {
+          // Share cancelled, fall back to download
+          triggerDownload(canvas);
+        });
+      } else {
+        triggerDownload(canvas);
+      }
+    }, 'image/png');
+  }).catch(function(err) {
+    card.style.overflow = origOverflow;
+    if (btn) { btn.textContent = '📸 Save Recap Card'; btn.disabled = false; }
+    showToast('Screenshot manually to save this card 📸');
+  });
+}
+
+function triggerDownload(canvas) {
+  var link = document.createElement('a');
+  link.download = 'ST-Wrapped-' + new Date().toISOString().slice(0,7) + '.png';
+  link.href = canvas.toDataURL('image/png');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast('Recap card saved! Check your downloads 📸');
 }
 
 </script>
