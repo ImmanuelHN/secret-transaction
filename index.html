@@ -820,17 +820,21 @@ svg{display:block;}
             <div class="setting-title">🔔 Push Notifications</div>
             <div class="setting-sub" id="notifStatusLabel">Tap to enable alerts</div>
           </div>
-          <button class="toggle-sw" id="notifToggle" onclick="requestNotifPermission()"></button>
+          <button class="toggle-sw" id="notifToggle" onclick="toggleNotifications()"></button>
         </div>
-        <div style="padding:10px 16px 14px;font-size:11px;color:var(--text2);line-height:1.6;">
+        <div id="notifDeniedBanner" style="display:none;padding:10px 16px;background:var(--red-s);border-top:1px solid var(--border);">
+          <div style="font-size:12px;color:var(--red);font-weight:600;">⚠️ Blocked by browser</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">Go to browser Settings → Site Settings → Notifications → Allow for this site</div>
+        </div>
+        <div style="padding:10px 16px 14px;font-size:11px;color:var(--text2);line-height:1.6;border-top:1px solid var(--border);">
           Alerts for: subscription due dates · warranty expiry · wishlist cooloff done · budget exceeded · debt reminders
         </div>
         <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--border);">
           <button onclick="testNotification()" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;cursor:pointer;">
-            🔔 Send Test Notification
+            🔔 Send Test
           </button>
           <button onclick="runNotificationChecks()" style="flex:1;padding:10px;border-radius:10px;border:none;background:var(--accent-s);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;">
-            ▶ Run All Checks
+            ▶ Run Checks
           </button>
         </div>
       </div>
@@ -1764,6 +1768,8 @@ function init() {
   mode=stored?'enter':'set';
   try { document.getElementById('txDate').valueAsDate=new Date(); } catch(e) {}
   try { document.getElementById('subDue').valueAsDate=new Date(); } catch(e) {}
+  loadNotifPref();
+  setTimeout(updateNotifUI, 100);
 }
 function tap(d) {
   if(waiting||attempt.length>=4) return;
@@ -1898,7 +1904,15 @@ function unlock() {
   refreshSafeToSpend();
   restoreNavDots();
   updateGhostBadge();
-  setTimeout(runNotificationChecks, 1500); // run checks 1.5s after unlock
+  setTimeout(runNotificationChecks, 1500); // run checks on unlock
+  // Also schedule hourly checks while app is open
+  if (!window._notifInterval) {
+    window._notifInterval = setInterval(function() {
+      if (Notification.permission === 'granted' && _notifUserEnabled) {
+        runNotificationChecks();
+      }
+    }, 3600000); // every 1 hour
+  }
 }
 function lockApp() {
   attempt=''; newBuf=''; waiting=false; mode=stored?'enter':'set'; reset();
@@ -3958,128 +3972,141 @@ function refreshWarrantyPage() {
   }).join('');
 }
 
-/* ════ PHASE 17 — Notifications + Backup & Restore ══════════ */
+/* ════ PHASE 17 — Notifications ══════════════════════════════ */
 
-/* ── WEB NOTIFICATIONS ── */
-function testNotification() {
-  if (!('Notification' in window)) { showToast('Notifications not supported on this browser'); return; }
-  if (Notification.permission !== 'granted') {
-    showToast('Enable notifications first using the toggle above');
+/* ── IN-APP NOTIFICATION ENABLED FLAG ── */
+var _notifUserEnabled = true; // user's own toggle (stored in localStorage)
+
+function loadNotifPref() {
+  try {
+    var v = localStorage.getItem('sxt_notif_enabled');
+    _notifUserEnabled = (v === null) ? true : v === '1';
+  } catch(e) {}
+}
+
+function saveNotifPref(val) {
+  _notifUserEnabled = val;
+  try { localStorage.setItem('sxt_notif_enabled', val ? '1' : '0'); } catch(e) {}
+}
+
+/* ── TOGGLE HANDLER (ON/OFF button) ── */
+function toggleNotifications() {
+  if (!('Notification' in window)) {
+    showToast('Notifications not supported on this browser');
     return;
   }
-  sendNotif(
-    'ST Test Notification ✅',
-    'Notifications are working! You will receive alerts for subscriptions, warranties and more when you open the app.',
-    '🔔'
-  );
-  showToast('Test notification sent! Check your notification bar.');
+  var perm = Notification.permission;
+
+  if (perm === 'denied') {
+    // Blocked by browser — show the banner explaining how to fix
+    var banner = document.getElementById('notifDeniedBanner');
+    if (banner) banner.style.display = banner.style.display === 'none' ? 'block' : 'none';
+    showToast('Notifications are blocked. See instructions below.');
+    return;
+  }
+
+  if (perm === 'granted') {
+    // Toggle our own enabled flag
+    _notifUserEnabled = !_notifUserEnabled;
+    saveNotifPref(_notifUserEnabled);
+    updateNotifUI();
+    showToast(_notifUserEnabled ? 'Notifications ON ✅' : 'Notifications paused 🔕');
+    return;
+  }
+
+  // 'default' — need to request browser permission first
+  Notification.requestPermission().then(function(result) {
+    if (result === 'granted') {
+      saveNotifPref(true);
+      updateNotifUI();
+      // Immediately fire a welcome notification using the fixed sendNotif
+      setTimeout(function() {
+        sendNotif('ST Notifications Enabled 🔔', 'You will now get alerts for subscriptions, warranties, budgets & more!');
+      }, 400);
+      showToast('Notifications enabled! ✅');
+    } else if (result === 'denied') {
+      updateNotifUI();
+      showToast('Blocked by browser — see instructions to enable');
+    } else {
+      showToast('Permission dismissed — tap again to retry');
+    }
+  });
 }
 
 function updateNotifUI() {
   var toggle = document.getElementById('notifToggle');
   var label  = document.getElementById('notifStatusLabel');
+  var banner = document.getElementById('notifDeniedBanner');
   if (!('Notification' in window)) {
     if (label) label.textContent = 'Not supported on this browser';
+    if (toggle) toggle.classList.remove('on');
     return;
   }
   var perm = Notification.permission;
-  if (toggle) toggle.classList.toggle('on', perm === 'granted');
-  if (label)  label.textContent = perm === 'granted' ? 'Enabled — you will receive alerts' :
-                                   perm === 'denied'  ? 'Blocked — enable in browser settings' :
-                                                        'Tap to enable push alerts';
+  var isOn = (perm === 'granted') && _notifUserEnabled;
+  if (toggle) toggle.classList.toggle('on', isOn);
+  if (banner) banner.style.display = (perm === 'denied') ? 'block' : 'none';
+  if (label) {
+    if (perm === 'denied')    label.textContent = 'Blocked — see instructions below to fix';
+    else if (!_notifUserEnabled) label.textContent = 'Paused — tap toggle to resume';
+    else if (perm === 'granted') label.textContent = 'Enabled — you will receive alerts';
+    else                         label.textContent = 'Tap toggle to enable push alerts';
+  }
 }
 
-function requestNotifPermission() {
-  if (!('Notification' in window)) { showToast('Notifications not supported on this browser'); return; }
-  var perm = Notification.permission;
-  if (perm === 'granted') {
-    // Already on — ask if they want to disable (can't revoke programmatically, guide them)
-    showToast('To disable, go to browser Settings → Site settings → Notifications');
-    return;
-  }
-  if (perm === 'denied') {
-    showToast('Blocked — go to browser Settings → Site settings → Notifications → Allow');
-    return;
-  }
-  // 'default' — request permission
-  Notification.requestPermission().then(function(result) {
-    updateNotifUI();
-    if (result === 'granted') {
-      // Init SW immediately after grant for Android
-      initServiceWorker();
-      setTimeout(function() {
-        sendNotif('ST Notifications Enabled 🔔', 'Alerts active for subscriptions, warranties, budget & more!', '🔔');
-      }, 800);
-      showToast('Notifications enabled! ✅');
-    } else {
-      showToast('Permission denied — check browser settings');
-    }
-  });
-}
+/* ══ THE KEY FIX: sendNotif uses direct new Notification() ══ */
+/* Blob Service Workers are blocked on Android Chrome.        */
+/* Direct new Notification() works when permission is granted */
+function sendNotif(title, body) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  if (!_notifUserEnabled) return; // user paused notifications
 
-/* ── SERVICE WORKER for Android notifications ── */
-var _swReg = null;
-var _swReady = false;
-
-function initServiceWorker() {
-  if (!('serviceWorker' in navigator)) return;
-  // Use a blob SW — best effort for Android Chrome
-  var swCode = [
-    "self.addEventListener('install',function(e){self.skipWaiting();});",
-    "self.addEventListener('activate',function(e){e.waitUntil(clients.claim());});",
-    "self.addEventListener('notificationclick',function(e){",
-    "  e.notification.close();",
-    "  e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(function(list){",
-    "    if(list.length>0){list[0].focus();}else{clients.openWindow('/');}",
-    "  }));",
-    "});",
-    "self.addEventListener('push',function(e){});"
-  ].join('\n');
-  var blob = new Blob([swCode], {type:'application/javascript'});
-  var swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl)
-    .then(function(reg) {
-      function onActive(r) { _swReg = r; _swReady = true; }
-      if (reg.active) { onActive(reg); return; }
-      var worker = reg.installing || reg.waiting;
-      if (worker) {
-        worker.addEventListener('statechange', function() {
-          if (worker.state === 'activated') onActive(reg);
-        });
-      }
-    })
-    .catch(function() {
-      // Fallback: use existing SW if page already controlled
-      if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.ready.then(function(reg) { _swReg = reg; _swReady = true; }).catch(function(){});
-      }
+  try {
+    var notif = new Notification(title, {
+      body: body,
+      icon: 'logo.png',
+      badge: 'logo.png',
+      vibrate: [200, 100, 200],
+      tag: title,
+      renotify: true
     });
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    notif.onclick = function() { window.focus(); notif.close(); };
+  } catch(e) {
+    console.warn('Notification error:', e);
+  }
+}
+
+function testNotification() {
+  if (!('Notification' in window)) { showToast('Not supported on this browser'); return; }
+  if (Notification.permission !== 'granted') {
+    showToast('Enable notifications first — tap the toggle above');
+    return;
+  }
+  if (!_notifUserEnabled) {
+    showToast('Notifications are paused — tap toggle to resume');
+    return;
+  }
+  sendNotif('ST Test Notification ✅', 'Working! You will get alerts for subscriptions, warranties & budget.');
+  showToast('Test sent! Check your notification bar 🔔');
+}
+
+/* ── LEGACY: requestNotifPermission kept for backward compat ── */
+function requestNotifPermission() { toggleNotifications(); }
+
+/* ── SERVICE WORKER (kept but not required for sendNotif) ── */
+var _swReg = null;
+function initServiceWorker() {
+  // Service worker is optional — sendNotif uses direct Notification API
+  // Keeping init for future PWA install support
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    navigator.serviceWorker.ready.then(function(reg) { _swReg = reg; }).catch(function(){});
+  } catch(e) {}
 }
 initServiceWorker();
 
-function sendNotif(title, body) {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  var opts = {body:body, icon:'logo.png', badge:'logo.png', vibrate:[200,100,200], tag:title, renotify:true};
-
-  // Try SW showNotification first (required on Android Chrome for background)
-  if (_swReg) {
-    try { _swReg.showNotification(title, opts); return; } catch(e) {}
-  }
-
-  // Try serviceWorker.ready
-  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-    navigator.serviceWorker.ready.then(function(reg) {
-      try { reg.showNotification(title, opts); _swReg = reg; }
-      catch(e) { try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e2) {} }
-    }).catch(function() {
-      try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
-    });
-    return;
-  }
-
-  // Direct Notification (desktop / foreground)
-  try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
-}
 /* ── SMART NOTIFICATION CHECKS — runs on every app open ── */
 /* ════ NAV DOT SYSTEM ══════════════════════════════════════════ */
 // localStorage keys for persisting unread dots across sessions
@@ -5277,6 +5304,7 @@ function handleDailyCanvasClick(event, canvas) {
 
 init();
 loadSettings();
+loadNotifPref();
 setGreeting();
 resetAutoLockTimer();
 updateGhostBadge();
