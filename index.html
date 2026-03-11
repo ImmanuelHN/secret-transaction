@@ -511,7 +511,10 @@ svg{display:block;}
 
       <!-- 7-day trend -->
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:10px;letter-spacing:0.5px;">LAST 7 DAYS SPENDING</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-size:12px;color:var(--text2);letter-spacing:0.5px;">LAST 7 DAYS SPENDING</div>
+          <div id="trendTooltip" style="font-size:12px;font-weight:700;color:var(--accent);opacity:0;transition:opacity 0.2s;"></div>
+        </div>
         <div id="trendBars" style="display:flex;align-items:flex-end;gap:4px;height:44px;"></div>
         <div id="trendLabels" style="display:flex;gap:4px;margin-top:4px;"></div>
       </div>
@@ -602,7 +605,10 @@ svg{display:block;}
 
       <!-- 6-month income vs expense bar chart -->
       <div class="an-card" style="margin-bottom:16px;">
-        <div class="an-card-title">&#128200; 6-Month Trend</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div class="an-card-title" style="margin-bottom:0;">&#128200; 6-Month Trend</div>
+          <div id="aTrendTip" style="font-size:12px;font-weight:600;color:var(--accent);opacity:0;transition:opacity 0.2s;text-align:right;max-width:160px;"></div>
+        </div>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:11px;color:var(--text2);">
           <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--green);margin-right:4px;"></span>Income</span>
           <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--red);margin-right:4px;"></span>Expense</span>
@@ -613,9 +619,12 @@ svg{display:block;}
 
       <!-- Daily spending line chart (dots) -->
       <div class="an-card" style="margin-bottom:16px;">
-        <div class="an-card-title">&#128197; Daily Spending — <span id="aDailyChartMonth"></span></div>
-        <div style="overflow-x:auto;">
-          <canvas id="aDailyCanvas" height="80" style="display:block;min-width:100%;"></canvas>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <div class="an-card-title" style="margin-bottom:0;">&#128197; Daily Spending — <span id="aDailyChartMonth"></span></div>
+          <div id="aDailyTip" style="font-size:12px;font-weight:600;color:var(--accent);opacity:0;transition:opacity 0.2s;"></div>
+        </div>
+        <div style="overflow-x:auto;position:relative;">
+          <canvas id="aDailyCanvas" height="80" style="display:block;min-width:100%;cursor:pointer;" onclick="handleDailyCanvasClick(event,this)"></canvas>
         </div>
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-top:4px;" id="aDailyAxisLabels"></div>
       </div>
@@ -2175,17 +2184,40 @@ function refreshTrend() {
   var days=[], DAY=['Su','Mo','Tu','We','Th','Fr','Sa'], today=new Date(); today.setHours(0,0,0,0);
   for(var i=6;i>=0;i--){
     var d=new Date(today.getTime()-i*86400000), key=d.toISOString().split('T')[0];
-    var total=txns.filter(function(t){return t.date===key&&t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+t.amt;},0);
-    days.push({label:DAY[d.getDay()],amt:total,isToday:i===0});
+    var total=txns.filter(function(t){return t.date===key&&t.type==='debit'&&!t.isTransfer;}).reduce(function(s,t){return s+(parseFloat(t.amt)||0);},0);
+    days.push({label:DAY[d.getDay()],amt:total,isToday:i===0,key:key});
   }
   var maxAmt=Math.max.apply(null,days.map(function(d){return d.amt;}))||1;
-  barsEl.innerHTML=days.map(function(d){
-    var h=Math.max(Math.round((d.amt/maxAmt)*40),d.amt>0?4:2), color=d.isToday?'var(--accent)':(d.amt>0?'var(--text2)':'var(--border)');
-    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;"><div style="width:100%;height:'+h+'px;background:'+color+';border-radius:3px 3px 0 0;min-height:2px;"></div></div>';
+  var tipEl = document.getElementById('trendTooltip');
+  var tipTimer = null;
+  barsEl.innerHTML=days.map(function(d,idx){
+    var h=Math.max(Math.round((d.amt/maxAmt)*40),d.amt>0?4:2);
+    var color=d.isToday?'var(--accent)':(d.amt>0?'var(--accent)':'var(--border)');
+    var opacity = d.isToday ? 1 : (d.amt>0 ? 0.45 : 0.2);
+    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;" onclick="showTrendTip('+idx+','+d.amt+',\''+d.label+'\',\''+d.key+'\')">'+
+      '<div style="width:100%;height:'+h+'px;background:'+color+';opacity:'+opacity+';border-radius:3px 3px 0 0;min-height:2px;transition:opacity 0.15s;"></div></div>';
   }).join('');
-  labsEl.innerHTML=days.map(function(d){
-    return '<div style="flex:1;text-align:center;font-size:9px;color:'+(d.isToday?'var(--accent)':'var(--text2)')+'">'+d.label+'</div>';
+  labsEl.innerHTML=days.map(function(d,idx){
+    return '<div style="flex:1;text-align:center;font-size:9px;color:'+(d.isToday?'var(--accent)':'var(--text2)')+'" onclick="showTrendTip('+idx+','+d.amt+',\''+d.label+'\',\''+d.key+'\')">'+d.label+'</div>';
   }).join('');
+}
+
+function showTrendTip(idx, amt, label, key) {
+  var tipEl = document.getElementById('trendTooltip');
+  if(!tipEl) return;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var d = new Date(today.getTime()-(6-idx)*86400000);
+  var dateStr = d.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  tipEl.textContent = amt>0 ? label+' ('+dateStr+'): '+fmtC(amt) : label+' ('+dateStr+'): No spending';
+  tipEl.style.opacity='1';
+  clearTimeout(window._trendTipTimer);
+  window._trendTipTimer = setTimeout(function(){ tipEl.style.opacity='0'; }, 2500);
+  // Highlight selected bar
+  var bars = document.getElementById('trendBars');
+  if(bars) {
+    var divs = bars.querySelectorAll('div > div');
+    divs.forEach(function(b,i){ b.style.opacity = (i===idx) ? '1' : (b.style.opacity || '0.45'); });
+  }
 }
 
 /* ════ ANALYTICS ════════════════════════════════════════════ */
@@ -2232,10 +2264,10 @@ function refreshAnalytics() {
       var incH = Math.round((m.inc/maxVal)*90);
       var expH = Math.round((m.exp/maxVal)*90);
       var isCur = m.yr===viewYear && m.mo===viewMonth;
-      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">'
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;" onclick="showATrendTip(\''+m.label+'\','+m.inc+','+m.exp+')">'
         +'<div style="display:flex;gap:2px;align-items:flex-end;height:96px;">'
-        +'<div title="Income: '+fmtC(m.inc)+'" style="width:12px;background:var(--green);opacity:'+(isCur?1:0.55)+';border-radius:3px 3px 0 0;height:'+incH+'px;min-height:'+(m.inc>0?3:0)+'px;transition:height 0.5s;"></div>'
-        +'<div title="Expense: '+fmtC(m.exp)+'" style="width:12px;background:var(--red);opacity:'+(isCur?1:0.55)+';border-radius:3px 3px 0 0;height:'+expH+'px;min-height:'+(m.exp>0?3:0)+'px;transition:height 0.5s;"></div>'
+        +'<div style="width:12px;background:var(--green);opacity:'+(isCur?1:0.55)+';border-radius:3px 3px 0 0;height:'+incH+'px;min-height:'+(m.inc>0?3:0)+'px;transition:height 0.5s;"></div>'
+        +'<div style="width:12px;background:var(--red);opacity:'+(isCur?1:0.55)+';border-radius:3px 3px 0 0;height:'+expH+'px;min-height:'+(m.exp>0?3:0)+'px;transition:height 0.5s;"></div>'
         +'</div>'
         +'</div>';
     }).join('');
@@ -2249,7 +2281,11 @@ function refreshAnalytics() {
   setText('aDailyChartMonth', MONTHS[viewMonth]+' '+viewYear);
   var canvas = document.getElementById('aDailyCanvas');
   if(canvas) {
-    var daySpend = {};
+    window._analyticsDaySpend = {};
+    window._analyticsDaysInM = daysInM;
+    window._analyticsViewMonth = viewMonth;
+    window._analyticsViewYear = viewYear;
+    var daySpend = window._analyticsDaySpend;
     mt.filter(function(t){return t.type==='debit'&&!t.isTransfer;}).forEach(function(t){
       var day = parseInt((t.date||'').split('-')[2])||1;
       daySpend[day] = (daySpend[day]||0)+(parseFloat(t.amt)||0);
@@ -3954,20 +3990,29 @@ function updateNotifUI() {
 }
 
 function requestNotifPermission() {
-  if (!('Notification' in window)) { showToast('Notifications not supported'); return; }
-  if (Notification.permission === 'granted') {
-    showToast('Notifications already enabled!'); return;
+  if (!('Notification' in window)) { showToast('Notifications not supported on this browser'); return; }
+  var perm = Notification.permission;
+  if (perm === 'granted') {
+    // Already on — ask if they want to disable (can't revoke programmatically, guide them)
+    showToast('To disable, go to browser Settings → Site settings → Notifications');
+    return;
   }
-  if (Notification.permission === 'denied') {
-    showToast('Notifications blocked. Please enable in your browser settings.'); return;
+  if (perm === 'denied') {
+    showToast('Blocked — go to browser Settings → Site settings → Notifications → Allow');
+    return;
   }
-  Notification.requestPermission().then(function(perm) {
+  // 'default' — request permission
+  Notification.requestPermission().then(function(result) {
     updateNotifUI();
-    if (perm === 'granted') {
-      sendNotif('ST Notifications Enabled 🔔', 'You will now receive alerts for subscriptions, warranties and more!', '🔔');
-      showToast('Notifications enabled!');
+    if (result === 'granted') {
+      // Init SW immediately after grant for Android
+      initServiceWorker();
+      setTimeout(function() {
+        sendNotif('ST Notifications Enabled 🔔', 'Alerts active for subscriptions, warranties, budget & more!', '🔔');
+      }, 800);
+      showToast('Notifications enabled! ✅');
     } else {
-      showToast('Notifications permission denied');
+      showToast('Permission denied — check browser settings');
     }
   });
 }
@@ -3977,67 +4022,63 @@ var _swReg = null;
 var _swReady = false;
 
 function initServiceWorker() {
-  if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
-  // Build SW code that handles notification clicks
-  var swLines = [
+  if (!('serviceWorker' in navigator)) return;
+  // Use a blob SW — best effort for Android Chrome
+  var swCode = [
     "self.addEventListener('install',function(e){self.skipWaiting();});",
     "self.addEventListener('activate',function(e){e.waitUntil(clients.claim());});",
-    "self.addEventListener('notificationclick',function(e){e.notification.close();e.waitUntil(clients.matchAll({type:'window'}).then(function(list){if(list.length)list[0].focus();else clients.openWindow('/');})  );});",
+    "self.addEventListener('notificationclick',function(e){",
+    "  e.notification.close();",
+    "  e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(function(list){",
+    "    if(list.length>0){list[0].focus();}else{clients.openWindow('/');}",
+    "  }));",
+    "});",
     "self.addEventListener('push',function(e){});"
-  ];
-  var swBlob = new Blob([swLines.join('\n')], {type: 'application/javascript'});
-  var swUrl  = URL.createObjectURL(swBlob);
-  navigator.serviceWorker.register(swUrl, {scope: '/'})
+  ].join('\n');
+  var blob = new Blob([swCode], {type:'application/javascript'});
+  var swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl)
     .then(function(reg) {
-      _swReg = reg;
-      // Wait for SW to become active
-      if (reg.active) {
-        _swReady = true;
-      } else {
-        var w = reg.installing || reg.waiting;
-        if (w) {
-          w.addEventListener('statechange', function() {
-            if (w.state === 'activated') { _swReg = reg; _swReady = true; }
-          });
-        }
+      function onActive(r) { _swReg = r; _swReady = true; }
+      if (reg.active) { onActive(reg); return; }
+      var worker = reg.installing || reg.waiting;
+      if (worker) {
+        worker.addEventListener('statechange', function() {
+          if (worker.state === 'activated') onActive(reg);
+        });
       }
     })
-    .catch(function(err) {
-      // Blob SW failed (some browsers restrict blob SW scope)
-      // Fall back to serviceWorker.ready
-      navigator.serviceWorker.ready.then(function(reg) {
-        _swReg = reg; _swReady = true;
-      }).catch(function(){});
+    .catch(function() {
+      // Fallback: use existing SW if page already controlled
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.ready.then(function(reg) { _swReg = reg; _swReady = true; }).catch(function(){});
+      }
     });
 }
 initServiceWorker();
 
 function sendNotif(title, body) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  var opts = { body: body, icon: 'logo.png', badge: 'logo.png', vibrate: [200,100,200], tag: title };
+  var opts = {body:body, icon:'logo.png', badge:'logo.png', vibrate:[200,100,200], tag:title, renotify:true};
 
-  // Path 1: We have an active SW registration
-  if (_swReg && _swReg.active) {
-    _swReg.showNotification(title, opts);
+  // Try SW showNotification first (required on Android Chrome for background)
+  if (_swReg) {
+    try { _swReg.showNotification(title, opts); return; } catch(e) {}
+  }
+
+  // Try serviceWorker.ready
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.ready.then(function(reg) {
+      try { reg.showNotification(title, opts); _swReg = reg; }
+      catch(e) { try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e2) {} }
+    }).catch(function() {
+      try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
+    });
     return;
   }
 
-  // Path 2: Wait for SW ready (navigator.serviceWorker.ready always resolves)
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready
-      .then(function(reg) {
-        _swReg = reg;
-        reg.showNotification(title, opts);
-      })
-      .catch(function() {
-        // Path 3: Desktop fallback
-        try { new Notification(title, {body: body, icon: 'logo.png'}); } catch(e) {}
-      });
-    return;
-  }
-
-  // Path 4: Desktop browsers without SW
-  try { new Notification(title, {body: body, icon: 'logo.png'}); } catch(e) {}
+  // Direct Notification (desktop / foreground)
+  try { new Notification(title, {body:body, icon:'logo.png'}); } catch(e) {}
 }
 /* ── SMART NOTIFICATION CHECKS — runs on every app open ── */
 /* ════ NAV DOT SYSTEM ══════════════════════════════════════════ */
@@ -5174,6 +5215,63 @@ function updateGhostBadge() {
     }
   } else {
     if(existing) existing.remove();
+  }
+}
+
+/* ════ CHART TOOLTIP HELPERS ════════════════════════════════ */
+
+function showATrendTip(label, inc, exp) {
+  var tip = document.getElementById('aTrendTip');
+  if(!tip) return;
+  var parts = [];
+  if(inc > 0) parts.push('In: ' + fmtC(inc));
+  if(exp > 0) parts.push('Out: ' + fmtC(exp));
+  tip.textContent = label + (parts.length ? ' — ' + parts.join('  ') : ' — No data');
+  tip.style.opacity = '1';
+  clearTimeout(window._atTipTimer);
+  window._atTipTimer = setTimeout(function(){ tip.style.opacity='0'; }, 2800);
+}
+
+function handleDailyCanvasClick(event, canvas) {
+  var tip = document.getElementById('aDailyTip');
+  if(!tip || !window._analyticsDaySpend) return;
+  var rect = canvas.getBoundingClientRect();
+  var x = event.clientX - rect.left;
+  var daysInM = window._analyticsDaysInM || 30;
+  var gap = canvas.width / daysInM;
+  var dayIdx = Math.floor(x / gap); // 0-based
+  var day = dayIdx + 1;
+  if(day < 1 || day > daysInM) return;
+  var amt = window._analyticsDaySpend[day] || 0;
+  var mo = window._analyticsViewMonth;
+  var yr = window._analyticsViewYear;
+  var MONTHS_F = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var label = day + ' ' + MONTHS_F[mo];
+  tip.textContent = amt > 0 ? label + ': ' + fmtC(amt) : label + ': No spending';
+  tip.style.opacity = '1';
+  clearTimeout(window._adTipTimer);
+  window._adTipTimer = setTimeout(function(){ tip.style.opacity='0'; }, 2500);
+  // Redraw canvas with selected bar highlighted
+  var maxD = Math.max.apply(null, Object.values(window._analyticsDaySpend).concat([1]));
+  var W = canvas.width;
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,80);
+  var barW = Math.max(2, (W/daysInM) - 2);
+  for(var d=1;d<=daysInM;d++){
+    var val = window._analyticsDaySpend[d] || 0;
+    var h = val>0 ? Math.max(3, Math.round((val/maxD)*68)) : 0;
+    var bx = (d-1)*gap + gap/2 - barW/2;
+    var isSelected = d === day;
+    var isNow2 = (new Date().getDate()===d && mo===new Date().getMonth() && yr===new Date().getFullYear());
+    if(isSelected) ctx.fillStyle = '#f59e0b';
+    else if(isNow2) ctx.fillStyle = '#a78bfa';
+    else ctx.fillStyle = val>0 ? '#818cf8' : '#ffffff00';
+    if(h>0){
+      ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(bx, 80-h, barW, h, 2);
+      else ctx.rect(bx, 80-h, barW, h);
+      ctx.fill();
+    }
   }
 }
 
