@@ -9,6 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="ST"/>
   <link rel="apple-touch-icon" href="logo.png"/>
   <title>ST — Secret Transactions</title>
+  <link rel="manifest" href="manifest.json"/>
   <style>
 /* ══ THEMES ══════════════════════════════════════════════ */
 [data-theme="dark"] {
@@ -400,6 +401,8 @@ svg{display:block;}
 .wish-ring-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- PWA manifest inline -->
+  <link rel="manifest" href="data:application/json,{%22name%22:%22ST%20-%20Secret%20Transactions%22,%22short_name%22:%22ST%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22background_color%22:%22%23000000%22,%22theme_color%22:%22%237c6dfa%22,%22icons%22:[{%22src%22:%22logo.png%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]}"/>
 </head>
 <body>
 
@@ -3972,63 +3975,132 @@ function refreshWarrantyPage() {
   }).join('');
 }
 
-/* ════ PHASE 17 — Notifications ══════════════════════════════ */
+/* ════ NOTIFICATIONS ═══════════════════════════════════════════ */
 
-/* ── IN-APP NOTIFICATION ENABLED FLAG ── */
-var _notifUserEnabled = true; // user's own toggle (stored in localStorage)
+/* User preference flag */
+var _notifUserEnabled = true;
 
 function loadNotifPref() {
+  try { var v=localStorage.getItem('sxt_notif_enabled'); _notifUserEnabled=(v===null)?true:v==='1'; } catch(e){}
+}
+function saveNotifPref(v) {
+  _notifUserEnabled=v;
+  try { localStorage.setItem('sxt_notif_enabled',v?'1':'0'); } catch(e){}
+}
+
+/* ── SERVICE WORKER REGISTRATION ──
+   Must register a REAL .js file (not blob) for Android Chrome.
+   sw.js must be in the same GitHub repo folder as index.html */
+var _swReg = null;
+function initServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('./sw.js')
+    .then(function(reg) {
+      _swReg = reg;
+      // If SW is installing, wait for it to activate
+      if (reg.installing) {
+        reg.installing.addEventListener('statechange', function() {
+          if (this.state === 'activated') _swReg = reg;
+        });
+      }
+    })
+    .catch(function(err) {
+      console.warn('SW register failed:', err);
+    });
+}
+initServiceWorker();
+
+/* ── THE DEFINITIVE sendNotif ─────────────────────────────────
+   Strategy (in order):
+   1. SW registered + active  → SW.showNotification (works on Android)
+   2. SW not ready yet        → send message to SW via postMessage
+   3. Fallback                → direct new Notification (works on desktop/iOS)
+*/
+function sendNotif(title, body) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  if (!_notifUserEnabled) return;
+
+  var opts = {
+    body: body,
+    icon: './logo.png',
+    badge: './logo.png',
+    vibrate: [200, 100, 200],
+    tag: title,
+    renotify: true,
+    requireInteraction: false
+  };
+
+  if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+
+  /* Path 1: SW is active — most reliable on Android Chrome */
+  if (_swReg && _swReg.active) {
+    _swReg.showNotification(title, opts);
+    return;
+  }
+
+  /* Path 2: SW exists but might still be activating — use postMessage */
+  if (_swReg) {
+    navigator.serviceWorker.ready.then(function(reg) {
+      _swReg = reg;
+      reg.showNotification(title, opts);
+    }).catch(function() {
+      _fallbackNotif(title, opts);
+    });
+    return;
+  }
+
+  /* Path 3: Try serviceWorker.ready (may already be registered) */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(function(reg) {
+      _swReg = reg;
+      reg.showNotification(title, opts);
+    }).catch(function() {
+      _fallbackNotif(title, opts);
+    });
+    return;
+  }
+
+  _fallbackNotif(title, opts);
+}
+
+function _fallbackNotif(title, opts) {
   try {
-    var v = localStorage.getItem('sxt_notif_enabled');
-    _notifUserEnabled = (v === null) ? true : v === '1';
-  } catch(e) {}
+    var n = new Notification(title, opts);
+    n.onclick = function() { window.focus(); n.close(); };
+  } catch(e) { console.warn('Notification fallback failed:', e); }
 }
 
-function saveNotifPref(val) {
-  _notifUserEnabled = val;
-  try { localStorage.setItem('sxt_notif_enabled', val ? '1' : '0'); } catch(e) {}
-}
-
-/* ── TOGGLE HANDLER (ON/OFF button) ── */
+/* ── TOGGLE HANDLER ── */
 function toggleNotifications() {
-  if (!('Notification' in window)) {
-    showToast('Notifications not supported on this browser');
-    return;
-  }
+  if (!('Notification' in window)) { showToast('Not supported on this browser'); return; }
   var perm = Notification.permission;
-
   if (perm === 'denied') {
-    // Blocked by browser — show the banner explaining how to fix
-    var banner = document.getElementById('notifDeniedBanner');
-    if (banner) banner.style.display = banner.style.display === 'none' ? 'block' : 'none';
-    showToast('Notifications are blocked. See instructions below.');
+    var b = document.getElementById('notifDeniedBanner');
+    if(b) b.style.display = b.style.display==='none' ? 'block' : 'none';
+    showToast('Notifications blocked — see instructions below');
     return;
   }
-
   if (perm === 'granted') {
-    // Toggle our own enabled flag
     _notifUserEnabled = !_notifUserEnabled;
     saveNotifPref(_notifUserEnabled);
     updateNotifUI();
     showToast(_notifUserEnabled ? 'Notifications ON ✅' : 'Notifications paused 🔕');
     return;
   }
-
-  // 'default' — need to request browser permission first
+  /* 'default' — request permission */
   Notification.requestPermission().then(function(result) {
     if (result === 'granted') {
       saveNotifPref(true);
+      initServiceWorker(); /* Re-init SW after grant */
       updateNotifUI();
-      // Immediately fire a welcome notification using the fixed sendNotif
       setTimeout(function() {
-        sendNotif('ST Notifications Enabled 🔔', 'You will now get alerts for subscriptions, warranties, budgets & more!');
-      }, 400);
+        sendNotif('ST Notifications Enabled 🔔', 'Alerts active for subscriptions, warranties & budget!');
+      }, 1500);
       showToast('Notifications enabled! ✅');
-    } else if (result === 'denied') {
-      updateNotifUI();
-      showToast('Blocked by browser — see instructions to enable');
     } else {
-      showToast('Permission dismissed — tap again to retry');
+      updateNotifUI();
+      showToast(result === 'denied' ? 'Blocked — see settings' : 'Tap again to retry');
     }
   });
 }
@@ -4038,74 +4110,31 @@ function updateNotifUI() {
   var label  = document.getElementById('notifStatusLabel');
   var banner = document.getElementById('notifDeniedBanner');
   if (!('Notification' in window)) {
-    if (label) label.textContent = 'Not supported on this browser';
-    if (toggle) toggle.classList.remove('on');
+    if(label) label.textContent = 'Not supported on this browser';
+    if(toggle) toggle.classList.remove('on');
     return;
   }
   var perm = Notification.permission;
-  var isOn = (perm === 'granted') && _notifUserEnabled;
-  if (toggle) toggle.classList.toggle('on', isOn);
-  if (banner) banner.style.display = (perm === 'denied') ? 'block' : 'none';
-  if (label) {
-    if (perm === 'denied')    label.textContent = 'Blocked — see instructions below to fix';
-    else if (!_notifUserEnabled) label.textContent = 'Paused — tap toggle to resume';
-    else if (perm === 'granted') label.textContent = 'Enabled — you will receive alerts';
-    else                         label.textContent = 'Tap toggle to enable push alerts';
-  }
-}
-
-/* ══ THE KEY FIX: sendNotif uses direct new Notification() ══ */
-/* Blob Service Workers are blocked on Android Chrome.        */
-/* Direct new Notification() works when permission is granted */
-function sendNotif(title, body) {
-  if (!('Notification' in window)) return;
-  if (Notification.permission !== 'granted') return;
-  if (!_notifUserEnabled) return; // user paused notifications
-
-  try {
-    var notif = new Notification(title, {
-      body: body,
-      icon: 'logo.png',
-      badge: 'logo.png',
-      vibrate: [200, 100, 200],
-      tag: title,
-      renotify: true
-    });
-    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-    notif.onclick = function() { window.focus(); notif.close(); };
-  } catch(e) {
-    console.warn('Notification error:', e);
+  var isOn = perm === 'granted' && _notifUserEnabled;
+  if(toggle) toggle.classList.toggle('on', isOn);
+  if(banner) banner.style.display = perm === 'denied' ? 'block' : 'none';
+  if(label) {
+    if(perm === 'denied')         label.textContent = 'Blocked — enable in browser settings';
+    else if(!_notifUserEnabled)  label.textContent = 'Paused — tap toggle to resume';
+    else if(perm === 'granted')  label.textContent = 'Enabled — alerts are active ✅';
+    else                          label.textContent = 'Tap toggle to enable alerts';
   }
 }
 
 function testNotification() {
   if (!('Notification' in window)) { showToast('Not supported on this browser'); return; }
-  if (Notification.permission !== 'granted') {
-    showToast('Enable notifications first — tap the toggle above');
-    return;
-  }
-  if (!_notifUserEnabled) {
-    showToast('Notifications are paused — tap toggle to resume');
-    return;
-  }
-  sendNotif('ST Test Notification ✅', 'Working! You will get alerts for subscriptions, warranties & budget.');
-  showToast('Test sent! Check your notification bar 🔔');
+  if (Notification.permission !== 'granted') { showToast('Enable notifications first ↑'); return; }
+  if (!_notifUserEnabled) { showToast('Notifications paused — tap toggle to resume'); return; }
+  sendNotif('ST Test ✅', 'Notifications are working! Alerts will appear for subs, warranties & budget.');
+  showToast('Test sent — check your notification bar 🔔');
 }
 
-/* ── LEGACY: requestNotifPermission kept for backward compat ── */
 function requestNotifPermission() { toggleNotifications(); }
-
-/* ── SERVICE WORKER (kept but not required for sendNotif) ── */
-var _swReg = null;
-function initServiceWorker() {
-  // Service worker is optional — sendNotif uses direct Notification API
-  // Keeping init for future PWA install support
-  if (!('serviceWorker' in navigator)) return;
-  try {
-    navigator.serviceWorker.ready.then(function(reg) { _swReg = reg; }).catch(function(){});
-  } catch(e) {}
-}
-initServiceWorker();
 
 /* ── SMART NOTIFICATION CHECKS — runs on every app open ── */
 /* ════ NAV DOT SYSTEM ══════════════════════════════════════════ */
